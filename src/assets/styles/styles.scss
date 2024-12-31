@@ -1,0 +1,26 @@
+@use "./animations.css";
+
+html,
+body {
+  overscroll-behavior: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+
+#app {
+  height: 100vh;
+  max-height: -webkit-fill-available;
+}
+
+img {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.shake-horizontal {
+  -webkit-animation: shake-horizontal 0.8s
+    cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
+  animation: shake-horizontal 0.8s cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
+}

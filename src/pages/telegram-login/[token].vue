@@ -1,15 +1,30 @@
 <script setup>
 import { getUserInfo, token } from "@api/user";
 
+definePage({
+  meta: {
+    layout: "blank",
+  },
+});
+
 const route = useRoute();
 const router = useRouter();
-console.log(route, router);
+
+const user = ref();
 
 onMounted(async () => {
-  console.log(router);
-  token.value = router.params.token;
-  const user = await getUserInfo();
+  token.value = route.params.token;
+  user.value = await getUserInfo();
+  console.log(user.value);
 });
 </script>
 
-<template>loging in...</template>
+<template>
+  <div v-if="user">
+    Welcome {{ user.displayName }} ({{ user.username }}) <br />
+    Your balance {{ user.points }} points<br />
+  </div>
+  <div v-else >
+    loging in...
+  </div>
+</template>

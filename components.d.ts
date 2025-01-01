@@ -11,7 +11,7 @@ declare module 'vue' {
     AppBar: typeof import('./src/components/AppBar.vue')['default']
     Footer: typeof import('./src/views/Footer.vue')['default']
     I18n: typeof import('./src/components/I18n.vue')['default']
-    LeftSidebar: typeof import('./src/components/Sidebar.vue/LeftSidebar.vue')['default']
+    LeftSidebar: typeof import('./src/components/Sidebar/LeftSidebar.vue')['default']
     LoadingOverlay: typeof import('./src/components/LoadingOverlay.vue')['default']
     NewGameButton: typeof import('./src/components/NewGameButton.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

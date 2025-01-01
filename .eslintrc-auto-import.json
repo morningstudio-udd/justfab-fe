@@ -352,6 +352,8 @@
     "whenever": true,
     "playSound": true,
     "usePreferredReducedTransparency": true,
-    "useSSRWidth": true
+    "useSSRWidth": true,
+    "getUserInfo": true,
+    "token": true
   }
 }

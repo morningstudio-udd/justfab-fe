@@ -1,6 +1,5 @@
 <script setup>
 const appStore = useAppStore();
-const userStore = useUserStore();
 </script>
 
 <template>

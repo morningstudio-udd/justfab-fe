@@ -350,6 +350,8 @@
     "watchTriggerable": true,
     "watchWithFilter": true,
     "whenever": true,
-    "playSound": true
+    "playSound": true,
+    "usePreferredReducedTransparency": true,
+    "useSSRWidth": true
   }
 }

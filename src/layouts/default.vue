@@ -1,5 +1,4 @@
 <script setup>
-const userStore = useUserStore();
 const route = useRoute();
 const router = useRouter();
 

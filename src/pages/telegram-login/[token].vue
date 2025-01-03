@@ -22,7 +22,11 @@ onMounted(async () => {
 <template>
   <div v-if="user">
     Welcome {{ user.displayName }} ({{ user.username }}) <br />
-    Your balance {{ user.points }} points<br />
+    Your balance:<br />
+    <ul>
+      <li> - {{ user.points }} points</li>
+      <li> - {{ user.energy }} / {{ user.maxEnergy }} energy</li>
+    </ul>
   </div>
   <div v-else >
     loging in...

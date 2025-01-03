@@ -1,14 +1,16 @@
 import vue from "@vitejs/plugin-vue";
 import vuetify from "vite-plugin-vuetify";
-import VueRouter from 'unplugin-vue-router/vite'
+import VueRouter from "unplugin-vue-router/vite";
 import VueI18nPlugin from "@intlify/unplugin-vue-i18n/vite";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import Components from "unplugin-vue-components/vite";
 import Layouts from "vite-plugin-vue-layouts";
 import AutoImport from "unplugin-auto-import/vite";
-import { VueRouterAutoImports, getPascalCaseRouteName } from 'unplugin-vue-router'
-
+import {
+  VueRouterAutoImports,
+  getPascalCaseRouteName,
+} from "unplugin-vue-router";
 
 // import { Vuetify3Resolver } from "unplugin-vue-components/resolvers";
 
@@ -23,15 +25,15 @@ const config = defineConfig({
     // basicSsl(),
 
     VueRouter({
-      getRouteName: routeNode => {
+      getRouteName: (routeNode) => {
         // Convert pascal case to kebab case
         return getPascalCaseRouteName(routeNode)
-          .replace(/([a-z\d])([A-Z])/g, '$1-$2')
-          .toLowerCase()
+          .replace(/([a-z\d])([A-Z])/g, "$1-$2")
+          .toLowerCase();
       },
-      beforeWriteFiles: root => {
-       
-      },
+      beforeWriteFiles: (root) => {},
+      // where to generate the types
+      dts: "./typed-router.d.ts",
     }),
 
     vue({
@@ -50,24 +52,6 @@ const config = defineConfig({
       },
     }),
 
-    Layouts({
-      layoutsDirs: "./src/layouts",
-      defaultLayout: "default",
-      exclude: ["**/components/*.vue", "**/stores"],
-    }),
-
-    Components({
-      dirs: ["./src/views", "./src/components"],
-      dts: true,
-      // resolvers: [Vuetify3Resolver()],
-      types: [
-        {
-          from: "vue-router",
-          names: ["RouterLink", "RouterView"],
-        },
-      ],
-    }),
-
     AutoImport({
       /* options */
       eslintrc: {
@@ -77,7 +61,7 @@ const config = defineConfig({
       imports: [
         "vue",
         VueRouterAutoImports,
-        '@vueuse/core',
+        "@vueuse/core",
         {
           // add any other imports you were relying on
           "vue-router/auto": ["useLink"],
@@ -94,6 +78,24 @@ const config = defineConfig({
       vueTemplate: true,
       // ℹ️ Disabled to avoid confusion & accidental usage
       ignore: ["useCookies", "useStorage"],
+    }),
+
+    Layouts({
+      layoutsDirs: "./src/layouts",
+      defaultLayout: "default",
+      exclude: ["**/components/*.vue", "**/stores"],
+    }),
+
+    Components({
+      dirs: ["./src/views", "./src/components"],
+      dts: true,
+      // resolvers: [Vuetify3Resolver()],
+      types: [
+        {
+          from: "vue-router",
+          names: ["RouterLink", "RouterView"],
+        },
+      ],
     }),
 
     // Docs: https://github.com/intlify/bundle-tools/tree/main/packages/unplugin-vue-i18n#intlifyunplugin-vue-i18n

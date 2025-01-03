@@ -3,7 +3,8 @@
     "./vite.config.*",
     "./src/**/*",
     "./src/**/*.vue",
-    "./themeConfig.js"
+    "./themeConfig.js",
+    "./typed-router.d.ts",
   ],
   "exclude": [
     "./dist",
@@ -14,41 +15,19 @@
     "module": "esnext",
     "moduleResolution": "Bundler",
     "jsx": "preserve",
-    // "paths": {
-    //   "@/*": [
-    //     "./src/*"
-    //   ],
-    //   "@themeConfig": [
-    //     "./themeConfig.js"
-    //   ],
-    //   "@layouts/*": [
-    //     "./src/@layouts/*"
-    //   ],
-    //   "@layouts": [
-    //     "./src/@layouts"
-    //   ],
-    //   "@core/*": [
-    //     "./src/@core/*"
-    //   ],
-    //   "@core": [
-    //     "./src/@core"
-    //   ],
-    //   "@images/*": [
-    //     "./src/assets/images/*"
-    //   ],
-    //   "@styles/*": [
-    //     "./src/assets/styles/*"
-    //   ],
-    //   "@validators": [
-    //     "./src/@core/utils/validators"
-    //   ],
-    //   "@db/*": [
-    //     "./src/plugins/fake-api/handlers/*"
-    //   ],
-    //   "@api-utils/*": [
-    //     "./src/plugins/fake-api/utils/*"
-    //   ]
-    // },
+    // "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@themeConfig": ["./themeConfig.js"],
+      "@layouts/*": ["./src/layouts/*"],
+      "@images/*": ["./src/assets/images/*"],
+      "@sounds/*": ["./src/assets/sounds/*"],
+      "@styles/*": ["./src/assets/styles/*"],
+      "@store/*": ["./src/plugins/2.pinia/*"],
+      "@api/*": ["./src/api/*"],
+      "@plugins/*": ["./src/plugins/*"],
+      "@utils/*": ["./src/utils/*"]
+    },
     "types": [
       "vite/client",
       "unplugin-vue-router/client",

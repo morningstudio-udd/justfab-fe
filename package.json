@@ -13,8 +13,8 @@
     "url": "https://morningstudio.vn"
   },
   "scripts": {
-    "dev": "vite --port 5177 --force",
-    "build": "vite build",
+    "dev": "vite --port 5177 --force --mode development",
+    "build": "vite build --mode production",
     "preview": "vite preview",
     "build:icons": "tsx src/plugins/iconify/build-icons.js"
   },

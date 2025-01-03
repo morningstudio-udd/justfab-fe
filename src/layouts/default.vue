@@ -13,7 +13,7 @@ onMounted(async () => {});
 </script>
 
 <template>
-  <div class="">
+  <div class="default-layout">
     <Component
       :is="
         route.meta.nav === 'vertical' ? DefaultLayoutWithSidebar : DefaultLayout

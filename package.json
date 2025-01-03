@@ -28,6 +28,7 @@
     "@iconify/utils": "^2.2.0",
     "@iconify/vue": "^4.2.0",
     "@vueuse/core": "^12.0.0",
+    "@vueuse/integrations": "^12.3.0",
     "axios": "^1.7.9",
     "canvas-confetti": "^1.9.3",
     "cookie-es": "^1.2.2",

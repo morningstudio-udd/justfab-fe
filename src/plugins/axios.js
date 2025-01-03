@@ -1,39 +1,89 @@
 import axios from "axios";
+// import { refreshToken } from "@api/auth";
+import { store } from "@store";
 
-// const axiosAI = axios.create({
-//   // You can add your headers here
-//   // ================================
-//   baseURL: import.meta.env.VITE_AI_URL,
-// });
+const authStore = useAuthStore(store);
 
-// // ℹ️ Add request interceptor to send the authorization header on each subsequent request after login
-// axiosAI.interceptors.request.use(async (config) => {
-  
 
-//   // Return modified config
-//   return config;
-// });
+const $api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+  headers: {
+    "ngrok-skip-browser-warning": import.meta.env.VITE_NGROK_SKIP_BROWSER,
+  },
+});
+
+// ℹ️ Add request interceptor to send the authorization header on each subsequent request after login
+$api.interceptors.request.use(
+  function (config) {
+    if (config.useAuthToken === false) {
+      delete config.headers.Authorization;
+    } else {
+      if (authStore.token) {
+        config.headers["Authorization"] = "Bearer " + authStore.token;
+      }
+    }
+
+    delete config.useAuthToken;
+
+    return config;
+  },
+  function (error) {
+    return Promise.reject(error);
+  }
+);
 
 // ℹ️ Add response interceptor to handle 401 response
-// axiosAI.interceptors.response.use(response => {
-//   return response
-// }, error => {
-//   // Handle error
-//   if (error.response.status === 401) {
-//     // ℹ️ Logout user and redirect to login page
-//     // Remove "userData" from localStorage
-//     localStorage.removeItem('userData')
+let refreshingToken = false;
+let requestsQueue = [];
 
-//     // Remove "accessToken" from localStorage
-//     localStorage.removeItem('accessToken')
-//     localStorage.removeItem('userAbilities')
+$api.interceptors.response.use(
+  async function (response) {
+    refreshingToken = false;
+    return response;
+  },
+  async function (error) {
+    const originalRequest = error.config;
 
-//     // If 401 response returned from api
-//     router.push('/login')
-//   }
-//   else {
-//     return Promise.reject(error)
-//   }
-// })
+    if (error.response.status === 401) {
+      if (!refreshingToken) {
+        refreshingToken = true;
+        try {
+          // await refreshToken();
+          const updatedTokenData = authStore.token;
+          originalRequest.headers["Authorization"] =
+            "Bearer " + updatedTokenData;
 
-// export { axiosAI };
+          // Retry the original request
+          const response = await $api.request(originalRequest);
+
+          // Process the queued requests
+          requestsQueue.forEach((callback) => callback());
+          requestsQueue = [];
+
+          return response;
+        } catch (refreshError) {
+          refreshingToken = false;
+          // Handle refresh token failure here (e.g., redirect to login)
+          $cookies.remove("accessToken");
+
+          // Redirect to login page
+          // await router.push("/login");
+          return Promise.reject(refreshError);
+        }
+      }
+
+      // Queue the request
+      return new Promise((resolve, reject) => {
+        requestsQueue.push(() => {
+          originalRequest.headers["Authorization"] =
+            "Bearer " + authStore.token;
+          $api.request(originalRequest).then(resolve).catch(reject);
+        });
+      });
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+export { $api };

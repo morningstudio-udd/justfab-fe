@@ -1,19 +1,11 @@
-import axios from "axios";
-
-const baseUrl = "https://api-smk.morningstudio.vn/"
-
-axios.defaults.headers.common['ngrok-skip-browser-warning'] = "69420";
-
-export const token = ref();
+import { $api } from "@/plugins/axios";
 
 export const getUserInfo = async () => {
   try {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token.value}`;
+    const res = await $api.get(`/user/info`, {});
 
-    const res = await axios.get(`${baseUrl}user/info`, {});
     return res.data;
   } catch (e) {
-    throw (e);
+    throw e;
   }
-
-}
+};

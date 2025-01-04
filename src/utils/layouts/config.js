@@ -1,5 +1,6 @@
 import { AppContentLayoutNav, NavbarType } from '@utils/layouts/enums'
 import { injectionKeyIsVerticalNavHovered } from '@utils/layouts/symbols'
+import { useCookies } from '@vueuse/integrations/useCookies'
 // import { _setDirAttr } from '@layouts/utils'
 
 // ℹ️ We should not import themeConfig here but in urgency we are doing it for now
@@ -7,15 +8,31 @@ import { themeConfig } from '@themeConfig'
 
 export const namespaceConfig = str => `${themeConfig.app.title}-${str}`
 export const cookieRef = (key, defaultValue) => {
-  return useCookie(namespaceConfig(key), { default: () => defaultValue })
+  const cookies = useCookies() 
+  const cookieValue = ref(cookies.get(namespaceConfig(key)) ?? defaultValue)
+
+  // Update cookie value when cookie changes
+  cookies.addChangeListener(update => {
+    if (update.name === namespaceConfig(key)) {
+      cookieValue.value = update.value ?? defaultValue
+    }
+  })
+
+  // Update cookie value when ref value changes
+  watch(cookieValue, newVal => {
+    cookies.set(namespaceConfig(key), newVal, { path: '/', maxAge: 60 * 60 * 24 * 30 }) // 30 days
+  })
+
+  return cookieValue
 }
+
 export const useLayoutConfigStore = defineStore('themeConfig', () => {
   const route = useRoute()
 
   // 👉 Navbar Type
   const navbarType = ref(themeConfig.navbar.type)
 
-  // 👉 Navbar Type
+  // 👉 Navbar Blur
   const isNavbarBlurEnabled = cookieRef('isNavbarBlurEnabled', themeConfig.navbar.navbarBlur)
 
   // 👉 Vertical Nav Collapsed
@@ -36,7 +53,6 @@ export const useLayoutConfigStore = defineStore('themeConfig', () => {
     }
   })
 
-
   // 👉 Horizontal Nav Type
   const horizontalNavType = ref(themeConfig.horizontalNav.type)
 
@@ -49,11 +65,10 @@ export const useLayoutConfigStore = defineStore('themeConfig', () => {
   // 👉 Misc
   const isLessThanOverlayNavBreakpoint = computed(() => useMediaQuery(`(max-width: ${themeConfig.app.overlayNavFromBreakpoint}px)`).value)
 
-
   // 👉 Layout Classes
   const _layoutClasses = computed(() => {
     const { y: windowScrollY } = useWindowScroll()
-    
+
     return [
       `layout-nav-type-${appContentLayoutNav.value}`,
       `layout-navbar-${navbarType.value}`,
@@ -71,7 +86,6 @@ export const useLayoutConfigStore = defineStore('themeConfig', () => {
     ]
   })
 
-
   // 👉 RTL
   // const isAppRTL = ref(themeConfig.app.isRTL)
   // const isAppRTL = ref(false)
@@ -79,7 +93,6 @@ export const useLayoutConfigStore = defineStore('themeConfig', () => {
   // watch(isAppRTL, val => {
   //   _setDirAttr(val ? 'rtl' : 'ltr')
   // })
-
 
   // 👉 Is Vertical Nav Mini
   /*
@@ -94,7 +107,7 @@ export const useLayoutConfigStore = defineStore('themeConfig', () => {
     */
   const isVerticalNavMini = (isVerticalNavHovered = null) => {
     const isVerticalNavHoveredLocal = isVerticalNavHovered || inject(injectionKeyIsVerticalNavHovered) || ref(false)
-    
+
     return computed(() => isVerticalNavCollapsed.value && !isVerticalNavHoveredLocal.value && !isLessThanOverlayNavBreakpoint.value)
   }
 
@@ -108,7 +121,6 @@ export const useLayoutConfigStore = defineStore('themeConfig', () => {
     horizontalNavPopoverOffset,
     footerType,
     isLessThanOverlayNavBreakpoint,
-    isAppRTL,
     _layoutClasses,
     isVerticalNavMini,
   }

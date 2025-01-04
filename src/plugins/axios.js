@@ -1,6 +1,7 @@
 import axios from "axios";
-// import { refreshToken } from "@api/auth";
+import { refreshToken } from "@api/auth";
 import { store } from "@store";
+import {router} from "@plugins/1.router";
 
 const authStore = useAuthStore(store);
 
@@ -48,8 +49,12 @@ $api.interceptors.response.use(
       if (!refreshingToken) {
         refreshingToken = true;
         try {
-          // await refreshToken();
+          await refreshToken();
           const updatedTokenData = authStore.token;
+          if (!updatedTokenData) {
+            throw new Error("Token refresh failed");
+          }
+
           originalRequest.headers["Authorization"] =
             "Bearer " + updatedTokenData;
 
@@ -64,10 +69,10 @@ $api.interceptors.response.use(
         } catch (refreshError) {
           refreshingToken = false;
           // Handle refresh token failure here (e.g., redirect to login)
-          $cookies.remove("accessToken");
+          // $cookies.remove("accessToken");
 
           // Redirect to login page
-          // await router.push("/login");
+          await router.push("/");
           return Promise.reject(refreshError);
         }
       }

@@ -1,4 +1,8 @@
-import { canNavigate } from '@layouts/plugins/casl'
+import { canNavigate } from '@plugins/casl/casl'
+import { store } from "@store";
+
+const authStore = useAuthStore(store);
+const userStore = useAuthStore(store);
 
 export const setupGuards = router => {
   // 👉 router.beforeEach
@@ -15,7 +19,7 @@ export const setupGuards = router => {
          * Check if user is logged in by checking if token & user data exists in local storage
          * Feel free to update this logic to suit your needs
          */
-    const isLoggedIn = !!(useCookie('userData').value && useCookie('accessToken').value)
+    const isLoggedIn = !!(userStore.userData && authStore.token)
 
     /*
           If user is logged in and is trying to access login like page, redirect to home

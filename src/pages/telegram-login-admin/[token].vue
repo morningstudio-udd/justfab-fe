@@ -6,8 +6,10 @@ definePage({
 });
 
 const route = useRoute();
+const router = useRouter();
 const authStore = useAuthStore();
-const userStore = useUserStore();
+
+const user = ref();
 
 onMounted(async () => {
   authStore.token = route.params.token;
@@ -17,9 +19,15 @@ onMounted(async () => {
 
 const fetchData = async () => {
   try {
-    await getUserInfo();
+    user.value = await getUserInfo();
+
+    if (typeof user.value === "object" && user.value.role === UserRole.ADMIN) {
+      router.push("/admin");
+    }
   } catch (error) {
     console.error(error);
+
+    user.value = null;
   }
 };
 
@@ -34,17 +42,12 @@ watch(
 </script>
 
 <template>
-  <div v-if="userStore.userData && Object.keys(userStore.userData).length">
-    Welcome {{ userStore.userData.displayName }} ({{
-      userStore.userData.username
-    }}) <br />
+  <div v-if="user && Object.keys(user).length">
+    Welcome {{ user.displayName }} ({{ user.username }}) <br />
     Your balance:<br />
     <ul>
-      <li>- {{ userStore.userData.points }} points</li>
-      <li>
-        - {{ userStore.userData.energy }} /
-        {{ userStore.userData.maxEnergy }} energy
-      </li>
+      <li>- {{ user.points }} points</li>
+      <li>- {{ user.energy }} / {{ user.maxEnergy }} energy</li>
     </ul>
   </div>
   <div v-else>loging in...</div>

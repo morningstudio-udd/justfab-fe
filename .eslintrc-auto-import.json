@@ -340,6 +340,9 @@
     "watchTriggerable": true,
     "watchWithFilter": true,
     "whenever": true,
-    "useAuthStore": true
+    "useAuthStore": true,
+    "UserRole": true,
+    "useUserStore": true,
+    "refreshToken": true
   }
 }

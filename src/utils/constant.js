@@ -1,7 +1,6 @@
-export const CardStatus = {
-  NORMAL : "normal",
-  PICKED : "picked",
-  MATCHED : "matched",
+export const UserRole = {
+  USER : "USER",
+  ADMIN : "ADMIN",
 }
 
 export const ERROR_MESSAGE = {};

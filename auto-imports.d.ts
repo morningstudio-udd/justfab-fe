@@ -9,6 +9,7 @@ declare global {
   const CardStatus: typeof import('./src/utils/constant.js')['CardStatus']
   const ERROR_MESSAGE: typeof import('./src/utils/constant.js')['ERROR_MESSAGE']
   const EffectScope: typeof import('vue')['EffectScope']
+  const UserRole: typeof import('./src/utils/constant.js')['UserRole']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
   const alphaDashValidator: typeof import('./src/utils/validators.js')['alphaDashValidator']
   const alphaValidator: typeof import('./src/utils/validators.js')['alphaValidator']
@@ -114,6 +115,7 @@ declare global {
   const refDefault: typeof import('@vueuse/core')['refDefault']
   const refThrottled: typeof import('@vueuse/core')['refThrottled']
   const refWithControl: typeof import('@vueuse/core')['refWithControl']
+  const refreshToken: typeof import('./src/api/auth.js')['refreshToken']
   const regexValidator: typeof import('./src/utils/validators.js')['regexValidator']
   const registerPlugins: typeof import('./src/utils/plugins.js')['registerPlugins']
   const requiredValidator: typeof import('./src/utils/validators.js')['requiredValidator']
@@ -304,6 +306,7 @@ declare global {
   const useTransition: typeof import('@vueuse/core')['useTransition']
   const useUrlSearchParams: typeof import('@vueuse/core')['useUrlSearchParams']
   const useUserMedia: typeof import('@vueuse/core')['useUserMedia']
+  const useUserStore: typeof import('./src/plugins/2.pinia/modules/user.js')['useUserStore']
   const useVModel: typeof import('@vueuse/core')['useVModel']
   const useVModels: typeof import('@vueuse/core')['useVModels']
   const useVibrate: typeof import('@vueuse/core')['useVibrate']
@@ -346,9 +349,9 @@ import { UnwrapRef } from 'vue'
 declare module 'vue' {
   interface GlobalComponents {}
   interface ComponentCustomProperties {
-    readonly CardStatus: UnwrapRef<typeof import('./src/utils/constant.js')['CardStatus']>
     readonly ERROR_MESSAGE: UnwrapRef<typeof import('./src/utils/constant.js')['ERROR_MESSAGE']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
+    readonly UserRole: UnwrapRef<typeof import('./src/utils/constant.js')['UserRole']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
     readonly alphaDashValidator: UnwrapRef<typeof import('./src/utils/validators.js')['alphaDashValidator']>
     readonly alphaValidator: UnwrapRef<typeof import('./src/utils/validators.js')['alphaValidator']>
@@ -454,6 +457,7 @@ declare module 'vue' {
     readonly refDefault: UnwrapRef<typeof import('@vueuse/core')['refDefault']>
     readonly refThrottled: UnwrapRef<typeof import('@vueuse/core')['refThrottled']>
     readonly refWithControl: UnwrapRef<typeof import('@vueuse/core')['refWithControl']>
+    readonly refreshToken: UnwrapRef<typeof import('./src/api/auth.js')['refreshToken']>
     readonly regexValidator: UnwrapRef<typeof import('./src/utils/validators.js')['regexValidator']>
     readonly registerPlugins: UnwrapRef<typeof import('./src/utils/plugins.js')['registerPlugins']>
     readonly requiredValidator: UnwrapRef<typeof import('./src/utils/validators.js')['requiredValidator']>
@@ -519,7 +523,6 @@ declare module 'vue' {
     readonly useCloned: UnwrapRef<typeof import('@vueuse/core')['useCloned']>
     readonly useColorMode: UnwrapRef<typeof import('@vueuse/core')['useColorMode']>
     readonly useConfirmDialog: UnwrapRef<typeof import('@vueuse/core')['useConfirmDialog']>
-    readonly useCookie: UnwrapRef<typeof import('./src/utils/useCookie.js')['useCookie']>
     readonly useCounter: UnwrapRef<typeof import('@vueuse/core')['useCounter']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVar: UnwrapRef<typeof import('@vueuse/core')['useCssVar']>
@@ -643,6 +646,7 @@ declare module 'vue' {
     readonly useTransition: UnwrapRef<typeof import('@vueuse/core')['useTransition']>
     readonly useUrlSearchParams: UnwrapRef<typeof import('@vueuse/core')['useUrlSearchParams']>
     readonly useUserMedia: UnwrapRef<typeof import('@vueuse/core')['useUserMedia']>
+    readonly useUserStore: UnwrapRef<typeof import('./src/plugins/2.pinia/modules/user.js')['useUserStore']>
     readonly useVModel: UnwrapRef<typeof import('@vueuse/core')['useVModel']>
     readonly useVModels: UnwrapRef<typeof import('@vueuse/core')['useVModels']>
     readonly useVibrate: UnwrapRef<typeof import('@vueuse/core')['useVibrate']>

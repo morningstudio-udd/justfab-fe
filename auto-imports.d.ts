@@ -6,7 +6,7 @@
 // biome-ignore lint: disable
 export {}
 declare global {
-  const CardStatus: typeof import('./src/utils/constant.js')['CardStatus']
+  const CardStatus: typeof import("./src/utils/constant.js")["CardStatus"]
   const ERROR_MESSAGE: typeof import('./src/utils/constant.js')['ERROR_MESSAGE']
   const EffectScope: typeof import('vue')['EffectScope']
   const UserRole: typeof import('./src/utils/constant.js')['UserRole']
@@ -42,11 +42,13 @@ declare global {
   const defineComponent: typeof import('vue')['defineComponent']
   const defineStore: typeof import('pinia')['defineStore']
   const delay: typeof import('./src/utils/mixin.js')['delay']
+  const deleteAsset: typeof import('./src/api/admin.js')['deleteAsset']
   const eagerComputed: typeof import('@vueuse/core')['eagerComputed']
   const effectScope: typeof import('vue')['effectScope']
   const emailValidator: typeof import('./src/utils/validators.js')['emailValidator']
   const extendRef: typeof import('@vueuse/core')['extendRef']
   const getActivePinia: typeof import('pinia')['getActivePinia']
+  const getAllAssets: typeof import('./src/api/admin.js')['getAllAssets']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
   const getUserInfo: typeof import('./src/api/user.js')['getUserInfo']
@@ -140,7 +142,7 @@ declare global {
   const toRef: typeof import('vue')['toRef']
   const toRefs: typeof import('vue')['toRefs']
   const toValue: typeof import('vue')['toValue']
-  const token: typeof import('./src/api/user.js')['token']
+  const token: typeof import("./src/api/user.js")["token"]
   const triggerRef: typeof import('vue')['triggerRef']
   const tryOnBeforeMount: typeof import('@vueuse/core')['tryOnBeforeMount']
   const tryOnBeforeUnmount: typeof import('@vueuse/core')['tryOnBeforeUnmount']
@@ -150,6 +152,7 @@ declare global {
   const unref: typeof import('vue')['unref']
   const unrefElement: typeof import('@vueuse/core')['unrefElement']
   const until: typeof import('@vueuse/core')['until']
+  const uploadAsset: typeof import('./src/api/admin.js')['uploadAsset']
   const urlValidator: typeof import('./src/utils/validators.js')['urlValidator']
   const useActiveElement: typeof import('@vueuse/core')['useActiveElement']
   const useAnimate: typeof import('@vueuse/core')['useAnimate']
@@ -182,7 +185,7 @@ declare global {
   const useCloned: typeof import('@vueuse/core')['useCloned']
   const useColorMode: typeof import('@vueuse/core')['useColorMode']
   const useConfirmDialog: typeof import('@vueuse/core')['useConfirmDialog']
-  const useCookie: typeof import('./src/utils/useCookie.js')['useCookie']
+  const useCookie: typeof import("./src/utils/useCookie.js")["useCookie"]
   const useCounter: typeof import('@vueuse/core')['useCounter']
   const useCssModule: typeof import('vue')['useCssModule']
   const useCssVar: typeof import('@vueuse/core')['useCssVar']
@@ -384,11 +387,13 @@ declare module 'vue' {
     readonly defineComponent: UnwrapRef<typeof import('vue')['defineComponent']>
     readonly defineStore: UnwrapRef<typeof import('pinia')['defineStore']>
     readonly delay: UnwrapRef<typeof import('./src/utils/mixin.js')['delay']>
+    readonly deleteAsset: UnwrapRef<typeof import('./src/api/admin.js')['deleteAsset']>
     readonly eagerComputed: UnwrapRef<typeof import('@vueuse/core')['eagerComputed']>
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
     readonly emailValidator: UnwrapRef<typeof import('./src/utils/validators.js')['emailValidator']>
     readonly extendRef: UnwrapRef<typeof import('@vueuse/core')['extendRef']>
     readonly getActivePinia: UnwrapRef<typeof import('pinia')['getActivePinia']>
+    readonly getAllAssets: UnwrapRef<typeof import('./src/api/admin.js')['getAllAssets']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
     readonly getUserInfo: UnwrapRef<typeof import('./src/api/user.js')['getUserInfo']>
@@ -491,6 +496,7 @@ declare module 'vue' {
     readonly unref: UnwrapRef<typeof import('vue')['unref']>
     readonly unrefElement: UnwrapRef<typeof import('@vueuse/core')['unrefElement']>
     readonly until: UnwrapRef<typeof import('@vueuse/core')['until']>
+    readonly uploadAsset: UnwrapRef<typeof import('./src/api/admin.js')['uploadAsset']>
     readonly urlValidator: UnwrapRef<typeof import('./src/utils/validators.js')['urlValidator']>
     readonly useActiveElement: UnwrapRef<typeof import('@vueuse/core')['useActiveElement']>
     readonly useAnimate: UnwrapRef<typeof import('@vueuse/core')['useAnimate']>

@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 
-
 export const useAppStore = defineStore("app", () => {
   const provinces = ref([]);
   const expandVerticalNav = ref(true);
@@ -9,8 +8,10 @@ export const useAppStore = defineStore("app", () => {
   const isNotiSnackbarVisible = ref(false);
   const notiSnackbarContent = ref({
     timeout: 5000,
-    content: "",
+    message: "",
+    color: "info",
   });
+  const { t } = useI18n();
 
   const addAlert = (message, options) => {
     const { type = "info", color = "", icon = "", timeout = 3000 } = options;
@@ -32,7 +33,7 @@ export const useAppStore = defineStore("app", () => {
   };
 
   const showErrorsAlert = (errors) => {
-    const { t } = useI18n();
+    // const { t } = useI18n();
 
     const defaultMessage = t("error_occurred");
 
@@ -56,6 +57,26 @@ export const useAppStore = defineStore("app", () => {
     }
   };
 
+  const showNotiSnackbar = (content) => {
+    // const { t } = useI18n();
+
+    notiSnackbarContent.value = {
+      ...notiSnackbarContent.value,
+      ...content,
+      message: t(content.message),
+    };
+
+    isNotiSnackbarVisible.value = true;
+  };
+
+  const clearNotiSnackbar = () => {
+    notiSnackbarContent.value = {
+      timeout: 5000,
+      message: "",
+      color: "info",
+    };
+  };
+
   return {
     provinces,
     expandVerticalNav,
@@ -66,5 +87,7 @@ export const useAppStore = defineStore("app", () => {
     addAlert,
     removeAlert,
     showErrorsAlert,
+    showNotiSnackbar,
+    clearNotiSnackbar,
   };
 });

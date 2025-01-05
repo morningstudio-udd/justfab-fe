@@ -9,14 +9,19 @@ declare module 'vue' {
   export interface GlobalComponents {
     AlertMessage: typeof import('./src/components/AlertMessage.vue')['default']
     AppBar: typeof import('./src/components/AppBar.vue')['default']
+    AssetsManagerDialog: typeof import('./src/components/Dialog/AssetsManagerDialog.vue')['default']
+    ConfirmDialog: typeof import('./src/components/Dialog/ConfirmDialog.vue')['default']
+    DialogCloseBtn: typeof import('./src/components/DialogCloseBtn.vue')['default']
     Footer: typeof import('./src/views/Footer.vue')['default']
     I18n: typeof import('./src/components/I18n.vue')['default']
+    InputUploadFiles: typeof import('./src/components/InputUploadFiles.vue')['default']
     LeftSidebar: typeof import('./src/components/Sidebar/LeftSidebar.vue')['default']
     LoadingOverlay: typeof import('./src/components/LoadingOverlay.vue')['default']
     NewGameButton: typeof import('./src/components/NewGameButton.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SnackbarMessage: typeof import('./src/components/SnackbarMessage.vue')['default']
+    UploadFile: typeof import('./src/components/UploadFile.vue')['default']
     UserAvatar: typeof import('./src/components/UserAvatar.vue')['default']
   }
 }

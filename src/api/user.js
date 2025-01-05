@@ -7,7 +7,6 @@ const userStore = useUserStore(store);
 export const getUserInfo = async () => {
   try {
     const res = await $api.get(`/user/info`);
-    console.log(res.status, res.data);
 
     if (res.status === 200 && res.data) {
       userStore.userData = res.data;

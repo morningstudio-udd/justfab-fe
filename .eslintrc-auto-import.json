@@ -343,6 +343,9 @@
     "useAuthStore": true,
     "UserRole": true,
     "useUserStore": true,
-    "refreshToken": true
+    "refreshToken": true,
+    "uploadAsset": true,
+    "getAllAssets": true,
+    "deleteAsset": true
   }
 }

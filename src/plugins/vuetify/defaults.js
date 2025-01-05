@@ -3,6 +3,10 @@ export default {
     icon: true,
     color: 'default',
     variant: 'text',
+    density: 'comfortable',
+    VIcon: {
+      size: 24,
+    },
   },
   VAlert: {
     density: 'comfortable',

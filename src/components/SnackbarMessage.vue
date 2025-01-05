@@ -1,5 +1,13 @@
 <script setup>
 const appStore = useAppStore();
+
+const onModelValueUpdate = (value) => {
+  console.log("value", value);
+
+  if (value === false) {
+    appStore.clearNotiSnackbar();
+  }
+};
 </script>
 
 <template>
@@ -8,11 +16,16 @@ const appStore = useAppStore();
     vertical
     :timeout="appStore.notiSnackbarContent?.timeout"
     :color="appStore.notiSnackbarContent?.color"
+    @update:modelValue="onModelValueUpdate"
   >
-    {{ appStore.notiSnackbarContent?.content }}
+    {{ $t(appStore.notiSnackbarContent?.message) }}
 
     <template #actions>
-      <VBtn color="secondary" @click="appStore.isNotiSnackbarVisible = false">
+      <VBtn
+        color="secondary"
+        @click="appStore.isNotiSnackbarVisible = false"
+        variant="flat"
+      >
         Close
       </VBtn>
     </template>

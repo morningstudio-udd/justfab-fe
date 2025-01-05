@@ -8,6 +8,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        primary: "rgba(var(--v-theme-primary),1)",
         activated: "rgba(var(--v-theme-activated),1)",
         "playtiful-primary-1": "rgba(var(--v-theme-playtiful-primary-1),1)",
       },

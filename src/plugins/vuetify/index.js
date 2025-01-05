@@ -1,4 +1,4 @@
-// import "vuetify/styles";
+import "vuetify/styles";
 
 import { deepMerge } from "@antfu/utils";
 import { createVuetify } from "vuetify";
@@ -42,10 +42,10 @@ export default function (app) {
   const optionTheme = deepMerge({ themes }, cookieThemeValues);
 
   const vuetify = createVuetify({
-    // aliases: {
-    //   IconBtn: VBtn,
-    // },
-    components: defaults,
+    aliases: {
+      IconBtn: VBtn,
+    },
+    defaults,
     icons,
     theme: optionTheme,
     locale: {
@@ -55,4 +55,3 @@ export default function (app) {
 
   app.use(vuetify);
 }
-

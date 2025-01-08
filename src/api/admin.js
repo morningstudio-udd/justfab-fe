@@ -13,9 +13,9 @@ export const uploadAsset = async (file) => {
     console.log(res.status, res.data);
 
     return res.data;
-  } catch (e) {
-    console.error(e);
-    throw e;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
   }
 };
 
@@ -24,9 +24,9 @@ export const getAllAssets = async () => {
     const res = await $api.get(`/asset/all`);
 
     return res.data;
-  } catch (e) {
-    console.error(e);
-    throw e;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
   }
 };
 
@@ -37,8 +37,8 @@ export const deleteAsset = async (payload) => {
     });
 
     return res.data;
-  } catch (e) {
-    console.error(e);
-    throw e;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
   }
 };

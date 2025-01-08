@@ -21,7 +21,6 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SnackbarMessage: typeof import('./src/components/SnackbarMessage.vue')['default']
-    UploadFile: typeof import('./src/components/UploadFile.vue')['default']
     UserAvatar: typeof import('./src/components/UserAvatar.vue')['default']
   }
 }

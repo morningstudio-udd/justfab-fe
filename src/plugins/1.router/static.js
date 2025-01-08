@@ -12,6 +12,7 @@ export const staticRoutes = [
     component: () => import("@/pages/home/index.vue"),
     meta: {
       layout: "blank",
+      public: true,
     },
   },
 ];

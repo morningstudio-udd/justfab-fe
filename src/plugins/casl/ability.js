@@ -1,3 +1,4 @@
-import { createMongoAbility } from '@casl/ability'
+import { createMongoAbility } from "@casl/ability";
 
-export const ability = createMongoAbility()
+// Default ability when the user is not authenticated
+export const ability = createMongoAbility([]);

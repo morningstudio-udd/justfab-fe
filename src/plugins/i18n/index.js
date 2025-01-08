@@ -19,8 +19,6 @@ export const getI18n = () => {
     });
   }
 
-  console.log("i18n", _i18n);
-
   return _i18n;
 };
 export default function (app) {

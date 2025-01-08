@@ -6,10 +6,10 @@
 // biome-ignore lint: disable
 export {}
 declare global {
-  const CardStatus: typeof import("./src/utils/constant.js")["CardStatus"]
   const ERROR_MESSAGE: typeof import('./src/utils/constant.js')['ERROR_MESSAGE']
   const EffectScope: typeof import('vue')['EffectScope']
-  const UserRole: typeof import('./src/utils/constant.js')['UserRole']
+  const ROLES: typeof import('./src/utils/constant.js')['ROLES']
+  const USER_ABILITY_RULES: typeof import('./src/utils/constant.js')['USER_ABILITY_RULES']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
   const alphaDashValidator: typeof import('./src/utils/validators.js')['alphaDashValidator']
   const alphaValidator: typeof import('./src/utils/validators.js')['alphaValidator']
@@ -130,7 +130,6 @@ declare global {
   const shallowReactive: typeof import('vue')['shallowReactive']
   const shallowReadonly: typeof import('vue')['shallowReadonly']
   const shallowRef: typeof import('vue')['shallowRef']
-  const shuffleArray: typeof import('./src/utils/mixin.js')['shuffleArray']
   const storeToRefs: typeof import('pinia')['storeToRefs']
   const syncRef: typeof import('@vueuse/core')['syncRef']
   const syncRefs: typeof import('@vueuse/core')['syncRefs']
@@ -142,7 +141,6 @@ declare global {
   const toRef: typeof import('vue')['toRef']
   const toRefs: typeof import('vue')['toRefs']
   const toValue: typeof import('vue')['toValue']
-  const token: typeof import("./src/api/user.js")["token"]
   const triggerRef: typeof import('vue')['triggerRef']
   const tryOnBeforeMount: typeof import('@vueuse/core')['tryOnBeforeMount']
   const tryOnBeforeUnmount: typeof import('@vueuse/core')['tryOnBeforeUnmount']
@@ -185,7 +183,6 @@ declare global {
   const useCloned: typeof import('@vueuse/core')['useCloned']
   const useColorMode: typeof import('@vueuse/core')['useColorMode']
   const useConfirmDialog: typeof import('@vueuse/core')['useConfirmDialog']
-  const useCookie: typeof import("./src/utils/useCookie.js")["useCookie"]
   const useCounter: typeof import('@vueuse/core')['useCounter']
   const useCssModule: typeof import('vue')['useCssModule']
   const useCssVar: typeof import('@vueuse/core')['useCssVar']
@@ -242,6 +239,7 @@ declare global {
   const useMediaQuery: typeof import('@vueuse/core')['useMediaQuery']
   const useMemoize: typeof import('@vueuse/core')['useMemoize']
   const useMemory: typeof import('@vueuse/core')['useMemory']
+  const useMixinUtils: typeof import('@utils/useMixinUtils')['useMixinUtils']
   const useModel: typeof import('vue')['useModel']
   const useMounted: typeof import('@vueuse/core')['useMounted']
   const useMouse: typeof import('@vueuse/core')['useMouse']
@@ -354,7 +352,8 @@ declare module 'vue' {
   interface ComponentCustomProperties {
     readonly ERROR_MESSAGE: UnwrapRef<typeof import('./src/utils/constant.js')['ERROR_MESSAGE']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
-    readonly UserRole: UnwrapRef<typeof import('./src/utils/constant.js')['UserRole']>
+    readonly ROLES: UnwrapRef<typeof import('./src/utils/constant.js')['ROLES']>
+    readonly USER_ABILITY_RULES: UnwrapRef<typeof import('./src/utils/constant.js')['USER_ABILITY_RULES']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
     readonly alphaDashValidator: UnwrapRef<typeof import('./src/utils/validators.js')['alphaDashValidator']>
     readonly alphaValidator: UnwrapRef<typeof import('./src/utils/validators.js')['alphaValidator']>
@@ -475,7 +474,6 @@ declare module 'vue' {
     readonly shallowReactive: UnwrapRef<typeof import('vue')['shallowReactive']>
     readonly shallowReadonly: UnwrapRef<typeof import('vue')['shallowReadonly']>
     readonly shallowRef: UnwrapRef<typeof import('vue')['shallowRef']>
-    readonly shuffleArray: UnwrapRef<typeof import('./src/utils/mixin.js')['shuffleArray']>
     readonly storeToRefs: UnwrapRef<typeof import('pinia')['storeToRefs']>
     readonly syncRef: UnwrapRef<typeof import('@vueuse/core')['syncRef']>
     readonly syncRefs: UnwrapRef<typeof import('@vueuse/core')['syncRefs']>

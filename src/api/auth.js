@@ -7,9 +7,9 @@ export const refreshToken = async () => {
   try {
     authStore.token = null;
     return "";
-  } catch (e) {
+  } catch (error) {
     authStore.token = null;
-    console.log(e);
-    throw e;
+    console.log(error);
+    throw error.response.data || error;
   }
 };

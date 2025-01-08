@@ -1,4 +1,5 @@
 import { $api } from "@/plugins/axios";
+import { cookies } from "@/plugins/useCookies";
 import { store } from "@store";
 
 const authStore = useAuthStore(store);
@@ -10,12 +11,18 @@ export const getUserInfo = async () => {
 
     if (res.status === 200 && res.data) {
       userStore.userData = res.data;
+
+      // cookies.set("user_role", res.data.role, {
+      //   path: "/",
+      //   maxAge: 60 * 60 * 24, // 24 hours
+      // });
     }
 
     return res.data;
-  } catch (e) {
-    userStore.userData = null;
-    console.log(e);
-    throw e;
+  } catch (error) {
+    // userStore.userData = null;
+
+    console.log(error);
+    throw error.response?.data || error;
   }
 };

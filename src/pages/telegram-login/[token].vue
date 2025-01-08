@@ -1,4 +1,6 @@
 <script setup>
+import { cookies } from "@/plugins/useCookies";
+
 definePage({
   meta: {
     layout: "blank",
@@ -10,7 +12,8 @@ const authStore = useAuthStore();
 const userStore = useUserStore();
 
 onMounted(async () => {
-  authStore.token = route.params.token;
+  // authStore.token = route.params.token;
+  cookies.set("token", route.params.token);
 
   await fetchData();
 });

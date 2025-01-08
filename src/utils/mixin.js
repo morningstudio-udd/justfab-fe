@@ -1,5 +1,6 @@
 import { store } from "@/plugins/2.pinia";
-
+import { useAbility } from "@casl/vue";
+import { USER_ABILITY_RULES } from "./constant";
 
 export const paginationMeta = (options, total) => {
   const start = (options.page - 1) * options.itemsPerPage + 1;
@@ -10,12 +11,21 @@ export const paginationMeta = (options, total) => {
   } tới ${end} trên tổng số ${total}`;
 };
 
-export const delay = (ms) =>
-  new Promise((resolve) => setTimeout(resolve, ms));
+/**
+ * Promise based setTimeout
+ *
+ * @param {*} ms
+ * @returns
+ */
+export const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export const selectAllText = (
-  target
-) => {
+/**
+ *
+ * Select all text in a input
+ *
+ * @param {*} target
+ */
+export const selectAllText = (target) => {
   console.log(target);
   nextTick(() => {
     const textareaElement = target;
@@ -25,6 +35,3 @@ export const selectAllText = (
     }
   });
 };
-
-export const shuffleArray = (array) =>
-  array.sort(() => Math.random() - 0.5);

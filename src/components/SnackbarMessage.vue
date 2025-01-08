@@ -2,7 +2,6 @@
 const appStore = useAppStore();
 
 const onModelValueUpdate = (value) => {
-  console.log("value", value);
 
   if (value === false) {
     appStore.clearNotiSnackbar();

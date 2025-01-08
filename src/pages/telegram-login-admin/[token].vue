@@ -2,32 +2,46 @@
 definePage({
   meta: {
     layout: "blank",
+    public: true,
   },
 });
 
 const route = useRoute();
 const router = useRouter();
+const appStore = useAppStore();
 const authStore = useAuthStore();
+const userStore = useUserStore();
 
 const user = ref();
 
 onMounted(async () => {
   authStore.token = route.params.token;
-
   await fetchData();
 });
 
 const fetchData = async () => {
   try {
-    user.value = await getUserInfo();
+    await getUserInfo();
 
-    if (typeof user.value === "object" && user.value.role === UserRole.ADMIN) {
+    if (
+      typeof userStore.userData === "object" &&
+      userStore.userData.role === ROLES.ADMIN
+    ) {
+      await delay(3000);
+
       router.push("/admin");
     }
   } catch (error) {
     console.error(error);
 
-    user.value = null;
+    appStore.showNotiSnackbar({
+      color: "error",
+      message:
+        error.message || t("Error occurred. Please contact the administrator."),
+    });
+
+    userStore.userData = null;
+    router.push("/");
   }
 };
 

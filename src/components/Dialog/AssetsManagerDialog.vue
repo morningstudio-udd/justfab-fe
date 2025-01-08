@@ -124,8 +124,6 @@ const onConfirmSelected = () => {
 };
 
 const onConfirmDelete = async () => {
-  confirmDeleteDialog.value.closeDialog();
-
   await delAsset();
 };
 </script>
@@ -206,8 +204,8 @@ const onConfirmDelete = async () => {
           <v-btn
             color="error"
             variant="outlined"
-            :disabled="!selectedId"
-            @click="confirmDeleteDialog.openDialog"
+            :disabled="selectedId === null"
+            @click="confirmDeleteDialog?.openDialog"
           >
             {{ $t("Delete") }}
           </v-btn>
@@ -221,11 +219,10 @@ const onConfirmDelete = async () => {
 
     <ConfirmDialog
       ref="confirmDeleteDialog"
-      v-if="selectedId"
       title="Delete Asset"
       message="Are you sure you want to delete this asset?"
       @onConfirm="onConfirmDelete"
-      @onCancel="confirmDeleteDialog.closeDialog"
+      @onCancel="confirmDeleteDialog?.cancelDialog"
     />
   </v-dialog>
 </template>

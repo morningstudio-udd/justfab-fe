@@ -7,6 +7,7 @@ import {
 import { routes } from "vue-router/auto-routes";
 import { setupLayouts } from "virtual:generated-layouts";
 import { staticRoutes, redirects } from "./static";
+import { setupGuards } from "./guards";
 
 const isHash =
   import.meta.env.VITE_USE_HASH === true ||
@@ -33,17 +34,13 @@ const router = createRouter({
     }
     return { top: 0 };
   },
-  routes: [...redirects, ...[
-    ...routes,
-    ...staticRoutes,
-  ].map(route => recursiveLayouts(route)),],
+  routes: [
+    ...redirects,
+    ...[...routes, ...staticRoutes].map((route) => recursiveLayouts(route)),
+  ],
 });
 
-// Docs: https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
-router.beforeEach(async (to) => {
-  console.log("to: ", to);
-});
-
+setupGuards(router);
 export { router };
 export default function (app) {
   app.use(router);

@@ -43,25 +43,22 @@ defineExpose({ openDialog, confirmDialog, cancelDialog });
   <v-dialog
     v-model="confirmDialog"
     class="tw-rounded-2xl !tw-z-[2010]"
-    theme="dark"
     width="540"
     persistent
   >
     <v-card class="!tw-rounded-2xl tw-px-4 tw-py-2" min-height="196">
-      <v-card-title
-        class="tw-text-center tw-p-0 tw-text-base tw-text-white tw-font-bold"
-      >
+      <v-card-title class="tw-text-center tw-p-0 tw-text-base tw-font-bold">
         {{ $t(title) }}
       </v-card-title>
 
-      <v-card-text class="tw-text-center !tw-px-10 !tw-text-sm tw-text-white">
+      <v-card-text class="tw-text-center !tw-px-10 !tw-text-sm">
         {{ $t(message) }}
       </v-card-text>
       <v-card-actions class="tw-flex tw-p-0 tw-min-h-fit">
         <v-btn
           variant="outlined"
           color="primary"
-          class="[&>span]:tw-whitespace-break-spaces tw-capitalize tw-text-base [&_*]:!tw-text-white tw-flex-auto"
+          class="[&>span]:tw-whitespace-break-spaces tw-capitalize tw-text-base [&_*]:! tw-flex-auto"
           @click="cancelDialog"
           v-if="cancelText"
         >

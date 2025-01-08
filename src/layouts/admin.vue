@@ -9,7 +9,19 @@ const DefaultLayoutWithSidebar = defineAsyncComponent(() =>
   import("./components/DefaultLayoutWithSidebar.vue")
 );
 
-onMounted(async () => {});
+onMounted(async () => {
+  console.log("Admin page mounted");
+
+  await fetchData();
+});
+
+const fetchData = async () => {
+  try {
+    await getUserInfo();
+  } catch (error) {
+    console.error(error);
+  }
+};
 </script>
 
 <template>

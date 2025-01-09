@@ -10,8 +10,6 @@ const DefaultLayoutWithSidebar = defineAsyncComponent(() =>
 );
 
 onMounted(async () => {
-  console.log("Admin page mounted");
-
   await fetchData();
 });
 

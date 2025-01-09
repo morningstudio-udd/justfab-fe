@@ -8,14 +8,11 @@ const appStore = useAppStore();
 
     <LeftSidebar />
 
-    <div class="content-wrapper">
-      <v-main
-        class="page-content bg-gray-50 dark:bg-slate-800 tw-m-bloc"
-        :class="appStore.expandVerticalNav ? `ps-64` : 'ps-14'"
-      >
+    <v-main class="page-content bg-gray-50 dark:bg-slate-800">
+      <div class="content-wrapper">
         <router-view />
         <!-- <default-footer /> -->
-      </v-main>
-    </div>
+      </div>
+    </v-main>
   </div>
 </template>

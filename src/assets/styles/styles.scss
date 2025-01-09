@@ -36,13 +36,13 @@ img {
   min-block-size: 100dvh;
   transition: padding-inline-start 0.2s ease-in-out;
   will-change: padding-inline-start;
-}
-
-.page-content {
   margin-block-start: 1rem;
   inline-size: 100%;
   margin-inline: auto;
   max-inline-size: 1440px;
   padding-block: 1.5rem;
   padding-inline: 1.5rem;
+}
+
+.page-content {
 }

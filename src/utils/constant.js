@@ -26,4 +26,19 @@ export const USER_ABILITY_RULES = {
   ],
 };
 
+export const ITEM_CATEGORIES = {
+  WEAPON: "WEAPON",
+  ARMOR: "ARMOR",
+  PET: "PET",
+  ACCESSORY: "ACCESSORY",
+};
+
+export const ITEM_RARITIES = {
+  COMMON: "COMMON",
+  RARE: "RARE",
+  EPIC: "EPIC",
+  LEGENDARY: "LEGENDARY",
+  MYTHIC: "MYTHIC",
+};
+
 export const ERROR_MESSAGE = {};

@@ -15,6 +15,8 @@ declare module 'vue' {
     Footer: typeof import('./src/views/Footer.vue')['default']
     I18n: typeof import('./src/components/I18n.vue')['default']
     InputUploadFiles: typeof import('./src/components/InputUploadFiles.vue')['default']
+    ItemDialog: typeof import('./src/components/Dialog/ItemDialog.vue')['default']
+    ItemForm: typeof import('./src/components/Form/ItemForm.vue')['default']
     LeftSidebar: typeof import('./src/components/Sidebar/LeftSidebar.vue')['default']
     LoadingOverlay: typeof import('./src/components/LoadingOverlay.vue')['default']
     NewGameButton: typeof import('./src/components/NewGameButton.vue')['default']

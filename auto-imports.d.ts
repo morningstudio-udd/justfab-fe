@@ -8,6 +8,8 @@ export {}
 declare global {
   const ERROR_MESSAGE: typeof import('./src/utils/constant.js')['ERROR_MESSAGE']
   const EffectScope: typeof import('vue')['EffectScope']
+  const ITEM_CATEGORIES: typeof import('./src/utils/constant.js')['ITEM_CATEGORIES']
+  const ITEM_RARITIES: typeof import('./src/utils/constant.js')['ITEM_RARITIES']
   const ROLES: typeof import('./src/utils/constant.js')['ROLES']
   const USER_ABILITY_RULES: typeof import('./src/utils/constant.js')['USER_ABILITY_RULES']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
@@ -28,6 +30,7 @@ declare global {
   const createEventHook: typeof import('@vueuse/core')['createEventHook']
   const createGlobalState: typeof import('@vueuse/core')['createGlobalState']
   const createInjectionState: typeof import('@vueuse/core')['createInjectionState']
+  const createItem: typeof import('./src/api/admin.js')['createItem']
   const createPinia: typeof import('pinia')['createPinia']
   const createReactiveFn: typeof import('@vueuse/core')['createReactiveFn']
   const createReusableTemplate: typeof import('@vueuse/core')['createReusableTemplate']
@@ -43,14 +46,18 @@ declare global {
   const defineStore: typeof import('pinia')['defineStore']
   const delay: typeof import('./src/utils/mixin.js')['delay']
   const deleteAsset: typeof import('./src/api/admin.js')['deleteAsset']
+  const deleteItem: typeof import('./src/api/admin.js')['deleteItem']
   const eagerComputed: typeof import('@vueuse/core')['eagerComputed']
   const effectScope: typeof import('vue')['effectScope']
   const emailValidator: typeof import('./src/utils/validators.js')['emailValidator']
   const extendRef: typeof import('@vueuse/core')['extendRef']
   const getActivePinia: typeof import('pinia')['getActivePinia']
   const getAllAssets: typeof import('./src/api/admin.js')['getAllAssets']
+  const getAllItems: typeof import('./src/api/admin.js')['getAllItems']
+  const getApiPath: typeof import('./src/utils/helpers.js')['getApiPath']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
+  const getItem: typeof import('./src/api/admin.js')['getItem']
   const getUserInfo: typeof import('./src/api/user.js')['getUserInfo']
   const h: typeof import('vue')['h']
   const ignorableWatch: typeof import('@vueuse/core')['ignorableWatch']
@@ -130,6 +137,7 @@ declare global {
   const shallowReactive: typeof import('vue')['shallowReactive']
   const shallowReadonly: typeof import('vue')['shallowReadonly']
   const shallowRef: typeof import('vue')['shallowRef']
+  const srcAsset: typeof import('./src/utils/mixin.js')['srcAsset']
   const storeToRefs: typeof import('pinia')['storeToRefs']
   const syncRef: typeof import('@vueuse/core')['syncRef']
   const syncRefs: typeof import('@vueuse/core')['syncRefs']
@@ -150,9 +158,11 @@ declare global {
   const unref: typeof import('vue')['unref']
   const unrefElement: typeof import('@vueuse/core')['unrefElement']
   const until: typeof import('@vueuse/core')['until']
+  const updateItem: typeof import('./src/api/admin.js')['updateItem']
   const uploadAsset: typeof import('./src/api/admin.js')['uploadAsset']
   const urlValidator: typeof import('./src/utils/validators.js')['urlValidator']
   const useActiveElement: typeof import('@vueuse/core')['useActiveElement']
+  const useAdminStore: typeof import('./src/plugins/2.pinia/modules/admin.js')['useAdminStore']
   const useAnimate: typeof import('@vueuse/core')['useAnimate']
   const useAppStore: typeof import('./src/plugins/2.pinia/modules/app.js')['useAppStore']
   const useArrayDifference: typeof import('@vueuse/core')['useArrayDifference']
@@ -239,7 +249,6 @@ declare global {
   const useMediaQuery: typeof import('@vueuse/core')['useMediaQuery']
   const useMemoize: typeof import('@vueuse/core')['useMemoize']
   const useMemory: typeof import('@vueuse/core')['useMemory']
-  const useMixinUtils: typeof import('@utils/useMixinUtils')['useMixinUtils']
   const useModel: typeof import('vue')['useModel']
   const useMounted: typeof import('@vueuse/core')['useMounted']
   const useMouse: typeof import('@vueuse/core')['useMouse']
@@ -352,6 +361,8 @@ declare module 'vue' {
   interface ComponentCustomProperties {
     readonly ERROR_MESSAGE: UnwrapRef<typeof import('./src/utils/constant.js')['ERROR_MESSAGE']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
+    readonly ITEM_CATEGORIES: UnwrapRef<typeof import('./src/utils/constant.js')['ITEM_CATEGORIES']>
+    readonly ITEM_RARITIES: UnwrapRef<typeof import('./src/utils/constant.js')['ITEM_RARITIES']>
     readonly ROLES: UnwrapRef<typeof import('./src/utils/constant.js')['ROLES']>
     readonly USER_ABILITY_RULES: UnwrapRef<typeof import('./src/utils/constant.js')['USER_ABILITY_RULES']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
@@ -372,6 +383,7 @@ declare module 'vue' {
     readonly createEventHook: UnwrapRef<typeof import('@vueuse/core')['createEventHook']>
     readonly createGlobalState: UnwrapRef<typeof import('@vueuse/core')['createGlobalState']>
     readonly createInjectionState: UnwrapRef<typeof import('@vueuse/core')['createInjectionState']>
+    readonly createItem: UnwrapRef<typeof import('./src/api/admin.js')['createItem']>
     readonly createPinia: UnwrapRef<typeof import('pinia')['createPinia']>
     readonly createReactiveFn: UnwrapRef<typeof import('@vueuse/core')['createReactiveFn']>
     readonly createReusableTemplate: UnwrapRef<typeof import('@vueuse/core')['createReusableTemplate']>
@@ -387,14 +399,18 @@ declare module 'vue' {
     readonly defineStore: UnwrapRef<typeof import('pinia')['defineStore']>
     readonly delay: UnwrapRef<typeof import('./src/utils/mixin.js')['delay']>
     readonly deleteAsset: UnwrapRef<typeof import('./src/api/admin.js')['deleteAsset']>
+    readonly deleteItem: UnwrapRef<typeof import('./src/api/admin.js')['deleteItem']>
     readonly eagerComputed: UnwrapRef<typeof import('@vueuse/core')['eagerComputed']>
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
     readonly emailValidator: UnwrapRef<typeof import('./src/utils/validators.js')['emailValidator']>
     readonly extendRef: UnwrapRef<typeof import('@vueuse/core')['extendRef']>
     readonly getActivePinia: UnwrapRef<typeof import('pinia')['getActivePinia']>
     readonly getAllAssets: UnwrapRef<typeof import('./src/api/admin.js')['getAllAssets']>
+    readonly getAllItems: UnwrapRef<typeof import('./src/api/admin.js')['getAllItems']>
+    readonly getApiPath: UnwrapRef<typeof import('./src/utils/helpers.js')['getApiPath']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
+    readonly getItem: UnwrapRef<typeof import('./src/api/admin.js')['getItem']>
     readonly getUserInfo: UnwrapRef<typeof import('./src/api/user.js')['getUserInfo']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
     readonly ignorableWatch: UnwrapRef<typeof import('@vueuse/core')['ignorableWatch']>
@@ -474,6 +490,7 @@ declare module 'vue' {
     readonly shallowReactive: UnwrapRef<typeof import('vue')['shallowReactive']>
     readonly shallowReadonly: UnwrapRef<typeof import('vue')['shallowReadonly']>
     readonly shallowRef: UnwrapRef<typeof import('vue')['shallowRef']>
+    readonly srcAsset: UnwrapRef<typeof import('./src/utils/mixin.js')['srcAsset']>
     readonly storeToRefs: UnwrapRef<typeof import('pinia')['storeToRefs']>
     readonly syncRef: UnwrapRef<typeof import('@vueuse/core')['syncRef']>
     readonly syncRefs: UnwrapRef<typeof import('@vueuse/core')['syncRefs']>
@@ -494,9 +511,11 @@ declare module 'vue' {
     readonly unref: UnwrapRef<typeof import('vue')['unref']>
     readonly unrefElement: UnwrapRef<typeof import('@vueuse/core')['unrefElement']>
     readonly until: UnwrapRef<typeof import('@vueuse/core')['until']>
+    readonly updateItem: UnwrapRef<typeof import('./src/api/admin.js')['updateItem']>
     readonly uploadAsset: UnwrapRef<typeof import('./src/api/admin.js')['uploadAsset']>
     readonly urlValidator: UnwrapRef<typeof import('./src/utils/validators.js')['urlValidator']>
     readonly useActiveElement: UnwrapRef<typeof import('@vueuse/core')['useActiveElement']>
+    readonly useAdminStore: UnwrapRef<typeof import('./src/plugins/2.pinia/modules/admin.js')['useAdminStore']>
     readonly useAnimate: UnwrapRef<typeof import('@vueuse/core')['useAnimate']>
     readonly useAppStore: UnwrapRef<typeof import('./src/plugins/2.pinia/modules/app.js')['useAppStore']>
     readonly useArrayDifference: UnwrapRef<typeof import('@vueuse/core')['useArrayDifference']>

@@ -5,6 +5,7 @@ definePage({
     requiresAuth: true,
     subject: "Admin",
     action: "manage",
+    nav: "vertical",
   },
 });
 </script>

@@ -24,3 +24,25 @@ img {
     cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
   animation: shake-horizontal 0.8s cubic-bezier(0.455, 0.03, 0.515, 0.955) both;
 }
+
+.layout-wrapper {
+  block-size: 100%;
+}
+
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-block-size: 100dvh;
+  transition: padding-inline-start 0.2s ease-in-out;
+  will-change: padding-inline-start;
+}
+
+.page-content {
+  margin-block-start: 1rem;
+  inline-size: 100%;
+  margin-inline: auto;
+  max-inline-size: 1440px;
+  padding-block: 1.5rem;
+  padding-inline: 1.5rem;
+}

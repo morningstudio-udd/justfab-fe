@@ -2,11 +2,13 @@
 
 <template>
   <VApp>
-    <RouterView />
+    <div class="layout-wrapper">
+      <RouterView />
 
-    <AlertMessage />
-    <SnackbarMessage />
-    <LoadingOverlay />
+      <AlertMessage />
+      <SnackbarMessage />
+      <LoadingOverlay />
+    </div>
   </VApp>
 </template>
 

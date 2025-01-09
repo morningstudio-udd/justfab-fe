@@ -35,3 +35,9 @@ export const selectAllText = (target) => {
     }
   });
 };
+
+export const srcAsset = (asset) => {
+  return asset
+    ? import.meta.env.VITE_ASSET_URL + "/" + asset
+    : "https://via.placeholder.com/150";
+};

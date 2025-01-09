@@ -11,7 +11,6 @@ export const useUserStore = defineStore("user", () => {
   watch(
     () => userData.value?.role,
     (newRole) => {
-      console.log("newRole", newRole);
       if (newRole) {
         cookies.set("user_role", newRole, { path: "/", maxAge: 60 * 60 * 24 });
         userAbilityRules.value = USER_ABILITY_RULES[newRole];
@@ -21,8 +20,8 @@ export const useUserStore = defineStore("user", () => {
         userAbilityRules.value = USER_ABILITY_RULES.GUEST;
         updateAbility("GUEST");
       }
-    }
-    // { immediate: true }
+    },
+    { immediate: true }
   );
 
   return {

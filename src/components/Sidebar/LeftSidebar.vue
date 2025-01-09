@@ -5,6 +5,7 @@ import { themeConfig } from "@themeConfig";
 import { useDisplay } from "vuetify";
 
 const appStore = useAppStore();
+const userStore = useUserStore();
 const { mdAndUp } = useDisplay();
 
 const drawer = ref(true);
@@ -33,7 +34,7 @@ watch(
   >
     <v-list-item nav>
       <span v-if="appStore.expandVerticalNav">
-        {{ $t("Hello") }}, {{ userStore.profile?.username }}
+        {{ $t("Hello") }}, {{ userStore.userData?.displayName }}
       </span>
 
       <template v-slot:prepend>

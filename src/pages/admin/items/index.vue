@@ -1,0 +1,198 @@
+<script setup>
+import { getAllItems } from "@/api/admin";
+
+definePage({
+  meta: {
+    layout: "admin",
+    requiresAuth: true,
+    subject: "Admin",
+    action: "manage",
+    nav: "vertical",
+  },
+});
+
+const appStore = useAppStore();
+
+const loading = ref(false);
+const dataItems = ref(null);
+const itemDialogRef = ref(null);
+const selectedItem = ref({});
+
+const allItems = computed(() => dataItems.value?.data);
+
+onMounted(async () => {
+  await getItems();
+});
+
+const getItems = async () => {
+  try {
+    loading.value = true;
+    dataItems.value = await getAllItems();
+
+    console.log(dataItems.value);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const openItemDialog = async (item) => {
+  try {
+    itemDialogRef.value.loading = true;
+    if (item) {
+      const responseItem = await getItemById(item._id);
+
+      selectedItem.value = responseItem;
+    } else {
+      selectedItem.value = {};
+    }
+
+    itemDialogRef.value.openDialog();
+  } catch (error) {
+    console.error(error);
+  } finally {
+    itemDialogRef.value.loading = false;
+  }
+};
+
+const getItemById = async (id) => {
+  if (!id) return;
+
+  try {
+    itemDialogRef.value.loading = true;
+
+    const data = await getItem(id);
+
+    return data;
+  } catch (error) {
+    console.error(error);
+  } finally {
+    itemDialogRef.value.loading = false;
+  }
+};
+
+const saveItem = async (item) => {
+  try {
+    itemDialogRef.value.loading = true;
+
+    let response;
+
+    if (selectedItem.value && Object.keys(selectedItem.value).length) {
+      console.log("update");
+
+      response = await updateItem(item);
+    } else {
+      console.log("create");
+      response = await createItem(item);
+    }
+
+    appStore.showNotiSnackbar({
+      color: "success",
+      message: response.message || "Save successfully.",
+    });
+
+    await getItems();
+
+    itemDialogRef.value.closeDialog();
+
+    clearSelected();
+  } catch (error) {
+    console.log(error);
+
+    appStore.showNotiSnackbar({
+      color: "error",
+      message:
+        error.message || "Error occurred. Please contact the administrator.",
+    });
+  } finally {
+    itemDialogRef.value.loading = false;
+  }
+};
+
+const delItem = async (item) => {
+  if (!item) return;
+
+  try {
+    itemDialogRef.value.loading = true;
+
+    const response = await deleteItem(item._id);
+
+    appStore.showNotiSnackbar({
+      color: "success",
+      message: response.message || "Delete successfully.",
+    });
+
+    await getItems();
+
+    itemDialogRef.value.closeDialog();
+
+    clearSelected();
+  } catch (error) {
+    console.error(error);
+
+    appStore.showNotiSnackbar({
+      color: "error",
+      message:
+        error.message || "Error occurred. Please contact the administrator.",
+    });
+  } finally {
+    itemDialogRef.value.loading = false;
+  }
+};
+
+const clearSelected = () => {
+  selectedItem.value = {};
+};
+</script>
+
+<template>
+  <div class="tw-flex tw-justify-between tw-items-center tw-mb-6">
+    <h1 class="tw-text-2xl tw-font-semibold">{{ $t("Items") }}</h1>
+    <v-btn color="primary" @click="openItemDialog">
+      <v-icon icon="tabler-plus" />
+      {{ $t("Add Item") }}
+    </v-btn>
+  </div>
+  <v-card class="!tw-rounded-2xl" :loading="loading">
+    <v-list lines="two" border>
+      <template v-for="(item, index) of allItems" :key="item._id">
+        <v-list-item>
+          <template #prepend>
+            <VAvatar :image="srcAsset(item.photoUrl)" />
+          </template>
+          <VListItemTitle>
+            {{ item.name }}
+          </VListItemTitle>
+          <VListItemSubtitle class="mt-1">
+            <!-- <VBadge
+              dot
+              location="start center"
+              offset-x="2"
+              :color="resolveStatusColor[item.status]"
+              class="me-3"
+            >
+              <span class="ms-4">{{ item.status }}</span>
+            </VBadge> -->
+
+            <span class="text-xs text-disabled">{{ item.category }}</span>
+          </VListItemSubtitle>
+
+          <template #append>
+            <IconBtn class="" @click="openItemDialog(item)">
+              <v-icon icon="tabler-edit" />
+            </IconBtn>
+          </template>
+        </v-list-item>
+      </template>
+    </v-list>
+  </v-card>
+
+  <item-dialog
+    ref="itemDialogRef"
+    v-model="selectedItem"
+    @onSave="saveItem"
+    @onDelete="delItem"
+    @onCancel="clearSelected"
+  />
+</template>

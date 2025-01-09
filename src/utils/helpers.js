@@ -55,3 +55,7 @@ export const playSound = (audioUrl) => {
     console.error("Error playing sound:", error);
   });
 };
+
+export const getApiPath = (path, params) => {
+  return path.replace(/:([a-zA-Z]+)/g, (_, key) => params[key]);
+};

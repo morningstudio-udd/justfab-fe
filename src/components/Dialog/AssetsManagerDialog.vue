@@ -1,13 +1,13 @@
 <script setup>
 import uploadIcon from "@images/svg/upload.svg";
-import ConfirmDialog from "./ConfirmDialog.vue";
+import { emitter } from "@plugins/mitt";
 
 const emit = defineEmits(["onConfirmSelected", "onCancelSelected"]);
 
 const { t } = useI18n();
 const appStore = useAppStore();
+const adminStore = useAdminStore();
 
-const assetsManagerDialog = ref(true);
 const uploaderRef = ref(null);
 const uploadFiles = ref(null);
 const allAssets = ref([]);
@@ -22,7 +22,11 @@ onMounted(async () => {
 const closeDialog = () => {
   emit("onCancelSelected");
 
-  assetsManagerDialog.value = false;
+  adminStore.assetsManagerDialog = false;
+};
+
+const openDialog = () => {
+  adminStore.assetsManagerDialog = true;
 };
 
 const uploadFilesSelected = async () => {
@@ -71,12 +75,6 @@ const getAssets = async () => {
   }
 };
 
-const srcAsset = (asset) => {
-  return asset
-    ? import.meta.env.VITE_ASSET_URL + "/" + asset
-    : "https://via.placeholder.com/150";
-};
-
 const selectAsset = (id) => {
   if (selectedId.value === id) {
     selectedId.value = null;
@@ -120,7 +118,9 @@ const delAsset = async () => {
 };
 
 const onConfirmSelected = () => {
-  emit("onConfirmSelected", allAssets[selectedId.value]);
+  emitter.emit("onSelectAsset", allAssets.value[selectedId.value]);
+
+  closeDialog();
 };
 
 const onConfirmDelete = async () => {
@@ -130,7 +130,7 @@ const onConfirmDelete = async () => {
 
 <template>
   <v-dialog
-    v-model="assetsManagerDialog"
+    v-model="adminStore.assetsManagerDialog"
     class="!tw-z-[2010]"
     width="900"
     height="500"

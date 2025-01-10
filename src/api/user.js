@@ -1,6 +1,7 @@
 import { $api } from "@/plugins/axios";
 import { cookies } from "@/plugins/useCookies";
 import { store } from "@store";
+import { updateAbility } from "@plugins/casl/casl";
 
 const authStore = useAuthStore(store);
 const userStore = useUserStore(store);
@@ -11,6 +12,10 @@ export const getUserInfo = async () => {
 
     if (res.status === 200 && res.data) {
       userStore.userData = res.data;
+
+      console.log(res.data.role);
+
+      await updateAbility(res.data.role || "GUEST");
 
       // cookies.set("user_role", res.data.role, {
       //   path: "/",

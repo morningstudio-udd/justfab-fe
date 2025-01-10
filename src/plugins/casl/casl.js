@@ -6,13 +6,11 @@ import { useAbility } from "@casl/vue";
  *
  * @param {string} role - User role to update
  */
-export const updateAbility = (role) => {
+export const updateAbility = async (role) => {
   const vm = getCurrentInstance();
   if (!vm) return false;
 
-  console.log("test", vm.appContext.config.globalProperties);
-
-  const ability = vm.appContext.config.globalProperties.$ability; // Move this inside the function
+  const ability = vm.appContext.config.globalProperties.$ability;
 
   if (!ability) {
     console.error(
@@ -21,10 +19,15 @@ export const updateAbility = (role) => {
     return;
   }
 
-  const rules = USER_ABILITY_RULES[role] || [];
-
-  ability.update(rules);
-  console.log("Updated ability rules:", ability.rules);
+  try {
+    const rules = await Promise.resolve(USER_ABILITY_RULES[role] || []);
+    ability.update(rules);
+    console.log("Updated ability rules:", ability.rules);
+    return true;
+  } catch (error) {
+    console.error("Failed to update ability rules:", error);
+    return false;
+  }
 };
 
 /**

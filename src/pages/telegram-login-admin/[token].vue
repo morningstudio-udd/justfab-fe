@@ -1,4 +1,6 @@
 <script setup>
+import { nextTick } from "vue";
+
 definePage({
   meta: {
     layout: "blank",
@@ -22,6 +24,8 @@ onMounted(async () => {
 const fetchData = async () => {
   try {
     await getUserInfo();
+
+    await nextTick();
 
     if (
       typeof userStore.userData === "object" &&

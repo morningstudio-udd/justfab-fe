@@ -353,6 +353,13 @@
     "watchTriggerable": true,
     "watchWithFilter": true,
     "whenever": true,
-    "srcAsset": true
+    "srcAsset": true,
+    "getAllFusions": true,
+    "createFusion": true,
+    "getFusion": true,
+    "updateFusion": true,
+    "deleteFusion": true,
+    "getFusedInto": true,
+    "getFusedFrom": true
   }
 }

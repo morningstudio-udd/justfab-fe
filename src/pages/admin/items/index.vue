@@ -1,5 +1,5 @@
 <script setup>
-import { getAllItems } from "@/api/admin";
+import { getFusedFrom, getFusedInto } from "@/api/admin";
 
 definePage({
   meta: {
@@ -12,13 +12,15 @@ definePage({
 });
 
 const appStore = useAppStore();
+const adminStore = useAdminStore();
 
 const loading = ref(false);
 const dataItems = ref(null);
 const itemDialogRef = ref(null);
 const selectedItem = ref({});
-
-const allItems = computed(() => dataItems.value?.data);
+const itemFusedFrom = ref([]);
+const itemFusedInto = ref([]);
+const fuseDialogRef = ref(null);
 
 onMounted(async () => {
   await getItems();
@@ -30,6 +32,8 @@ const getItems = async () => {
     dataItems.value = await getAllItems();
 
     console.log(dataItems.value);
+
+    adminStore.allItems = dataItems.value.data;
   } catch (error) {
     console.error(error);
   } finally {
@@ -41,9 +45,21 @@ const openItemDialog = async (item) => {
   try {
     itemDialogRef.value.loading = true;
     if (item) {
-      const responseItem = await getItemById(item._id);
+      const p1 = getItemById(item._id).then((responseItem) => {
+        selectedItem.value = responseItem;
+      });
 
-      selectedItem.value = responseItem;
+      const p2 = getFusedInto(item._id).then((responseFusedInto) => {
+        console.log(responseFusedInto);
+        itemFusedInto.value = responseFusedInto;
+      });
+
+      const p3 = getFusedFrom(item._id).then((responseFusedFrom) => {
+        console.log(responseFusedFrom);
+        itemFusedFrom.value = responseFusedFrom;
+      });
+
+      await Promise.all([p1, p2, p3]);
     } else {
       selectedItem.value = {};
     }
@@ -143,12 +159,19 @@ const delItem = async (item) => {
 
 const clearSelected = () => {
   selectedItem.value = {};
+  itemFusedFrom.value = [];
+  itemFusedInto.value = [];
+};
+
+const openFuseDialog = () => {
+  fuseDialogRef.value.openDialog();
 };
 </script>
 
 <template>
   <div class="tw-flex tw-justify-between tw-items-center tw-mb-6">
     <h1 class="tw-text-2xl tw-font-semibold">{{ $t("Items") }}</h1>
+
     <v-btn color="primary" @click="openItemDialog">
       <v-icon icon="tabler-plus" />
       {{ $t("Add Item") }}
@@ -156,7 +179,7 @@ const clearSelected = () => {
   </div>
   <v-card class="!tw-rounded-2xl" :loading="loading">
     <v-list lines="two" border>
-      <template v-for="(item, index) of allItems" :key="item._id">
+      <template v-for="(item, index) of adminStore.allItems" :key="item._id">
         <v-list-item>
           <template #prepend>
             <VAvatar :image="srcAsset(item.photoUrl)" />
@@ -191,6 +214,8 @@ const clearSelected = () => {
   <item-dialog
     ref="itemDialogRef"
     v-model="selectedItem"
+    :itemFusedFrom="itemFusedFrom"
+    :itemFusedInto="itemFusedInto"
     @onSave="saveItem"
     @onDelete="delItem"
     @onCancel="clearSelected"

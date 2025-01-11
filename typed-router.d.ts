@@ -20,6 +20,7 @@ declare module 'vue-router/auto-routes' {
   export interface RouteNamedMap {
     '404': RouteRecordInfo<'404', '/404', Record<never, never>, Record<never, never>>,
     'admin': RouteRecordInfo<'admin', '/admin', Record<never, never>, Record<never, never>>,
+    'admin-fusion': RouteRecordInfo<'admin-fusion', '/admin/fusion', Record<never, never>, Record<never, never>>,
     'admin-items': RouteRecordInfo<'admin-items', '/admin/items', Record<never, never>, Record<never, never>>,
     'home': RouteRecordInfo<'home', '/home', Record<never, never>, Record<never, never>>,
     'telegram-login-token': RouteRecordInfo<'telegram-login-token', '/telegram-login/:token', { token: ParamValue<true> }, { token: ParamValue<false> }>,

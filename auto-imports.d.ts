@@ -28,6 +28,7 @@ declare global {
   const controlledRef: typeof import('@vueuse/core')['controlledRef']
   const createApp: typeof import('vue')['createApp']
   const createEventHook: typeof import('@vueuse/core')['createEventHook']
+  const createFusion: typeof import('./src/api/admin.js')['createFusion']
   const createGlobalState: typeof import('@vueuse/core')['createGlobalState']
   const createInjectionState: typeof import('@vueuse/core')['createInjectionState']
   const createItem: typeof import('./src/api/admin.js')['createItem']
@@ -46,6 +47,7 @@ declare global {
   const defineStore: typeof import('pinia')['defineStore']
   const delay: typeof import('./src/utils/mixin.js')['delay']
   const deleteAsset: typeof import('./src/api/admin.js')['deleteAsset']
+  const deleteFusion: typeof import('./src/api/admin.js')['deleteFusion']
   const deleteItem: typeof import('./src/api/admin.js')['deleteItem']
   const eagerComputed: typeof import('@vueuse/core')['eagerComputed']
   const effectScope: typeof import('vue')['effectScope']
@@ -53,10 +55,14 @@ declare global {
   const extendRef: typeof import('@vueuse/core')['extendRef']
   const getActivePinia: typeof import('pinia')['getActivePinia']
   const getAllAssets: typeof import('./src/api/admin.js')['getAllAssets']
+  const getAllFusions: typeof import('./src/api/admin.js')['getAllFusions']
   const getAllItems: typeof import('./src/api/admin.js')['getAllItems']
   const getApiPath: typeof import('./src/utils/helpers.js')['getApiPath']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
+  const getFusedFrom: typeof import('./src/api/admin.js')['getFusedFrom']
+  const getFusedInto: typeof import('./src/api/admin.js')['getFusedInto']
+  const getFusion: typeof import('./src/api/admin.js')['getFusion']
   const getItem: typeof import('./src/api/admin.js')['getItem']
   const getUserInfo: typeof import('./src/api/user.js')['getUserInfo']
   const h: typeof import('vue')['h']
@@ -158,6 +164,7 @@ declare global {
   const unref: typeof import('vue')['unref']
   const unrefElement: typeof import('@vueuse/core')['unrefElement']
   const until: typeof import('@vueuse/core')['until']
+  const updateFusion: typeof import('./src/api/admin.js')['updateFusion']
   const updateItem: typeof import('./src/api/admin.js')['updateItem']
   const uploadAsset: typeof import('./src/api/admin.js')['uploadAsset']
   const urlValidator: typeof import('./src/utils/validators.js')['urlValidator']
@@ -381,6 +388,7 @@ declare module 'vue' {
     readonly controlledRef: UnwrapRef<typeof import('@vueuse/core')['controlledRef']>
     readonly createApp: UnwrapRef<typeof import('vue')['createApp']>
     readonly createEventHook: UnwrapRef<typeof import('@vueuse/core')['createEventHook']>
+    readonly createFusion: UnwrapRef<typeof import('./src/api/admin.js')['createFusion']>
     readonly createGlobalState: UnwrapRef<typeof import('@vueuse/core')['createGlobalState']>
     readonly createInjectionState: UnwrapRef<typeof import('@vueuse/core')['createInjectionState']>
     readonly createItem: UnwrapRef<typeof import('./src/api/admin.js')['createItem']>
@@ -399,6 +407,7 @@ declare module 'vue' {
     readonly defineStore: UnwrapRef<typeof import('pinia')['defineStore']>
     readonly delay: UnwrapRef<typeof import('./src/utils/mixin.js')['delay']>
     readonly deleteAsset: UnwrapRef<typeof import('./src/api/admin.js')['deleteAsset']>
+    readonly deleteFusion: UnwrapRef<typeof import('./src/api/admin.js')['deleteFusion']>
     readonly deleteItem: UnwrapRef<typeof import('./src/api/admin.js')['deleteItem']>
     readonly eagerComputed: UnwrapRef<typeof import('@vueuse/core')['eagerComputed']>
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
@@ -406,10 +415,14 @@ declare module 'vue' {
     readonly extendRef: UnwrapRef<typeof import('@vueuse/core')['extendRef']>
     readonly getActivePinia: UnwrapRef<typeof import('pinia')['getActivePinia']>
     readonly getAllAssets: UnwrapRef<typeof import('./src/api/admin.js')['getAllAssets']>
+    readonly getAllFusions: UnwrapRef<typeof import('./src/api/admin.js')['getAllFusions']>
     readonly getAllItems: UnwrapRef<typeof import('./src/api/admin.js')['getAllItems']>
     readonly getApiPath: UnwrapRef<typeof import('./src/utils/helpers.js')['getApiPath']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
+    readonly getFusedFrom: UnwrapRef<typeof import('./src/api/admin.js')['getFusedFrom']>
+    readonly getFusedInto: UnwrapRef<typeof import('./src/api/admin.js')['getFusedInto']>
+    readonly getFusion: UnwrapRef<typeof import('./src/api/admin.js')['getFusion']>
     readonly getItem: UnwrapRef<typeof import('./src/api/admin.js')['getItem']>
     readonly getUserInfo: UnwrapRef<typeof import('./src/api/user.js')['getUserInfo']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
@@ -511,6 +524,7 @@ declare module 'vue' {
     readonly unref: UnwrapRef<typeof import('vue')['unref']>
     readonly unrefElement: UnwrapRef<typeof import('@vueuse/core')['unrefElement']>
     readonly until: UnwrapRef<typeof import('@vueuse/core')['until']>
+    readonly updateFusion: UnwrapRef<typeof import('./src/api/admin.js')['updateFusion']>
     readonly updateItem: UnwrapRef<typeof import('./src/api/admin.js')['updateItem']>
     readonly uploadAsset: UnwrapRef<typeof import('./src/api/admin.js')['uploadAsset']>
     readonly urlValidator: UnwrapRef<typeof import('./src/utils/validators.js')['urlValidator']>

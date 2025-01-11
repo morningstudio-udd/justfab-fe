@@ -7,6 +7,19 @@ const modelValue = defineModel({
   event: "update:modelValue",
 });
 
+const props = defineProps({
+  itemFusedFrom: {
+    type: Array,
+    default: () => [],
+    required: false,
+  },
+  itemFusedInto: {
+    type: Array,
+    default: () => [],
+    required: false,
+  },
+});
+
 const emit = defineEmits(["onSave", "onDelete"]);
 
 const { t } = useI18n();
@@ -149,6 +162,49 @@ watch(
           hide-details="auto"
           :items="Object.values(ITEM_CATEGORIES)"
         />
+
+        <div>
+          <label>{{ $t("Fused from") }}</label>
+
+          <template v-if="itemFusedFrom.length">
+            <div
+              class="tw-flex tw-flex-wrap tw-gap-4 tw-items-stretch"
+              v-for="item in itemFusedFrom"
+            >
+              <template v-if="item.requiredItems">
+                <template
+                  v-for="itemId in item.requiredItems"
+                  :key="`required-${itemId}`"
+                >
+                  <item-block
+                    :item="adminStore.getItemById(itemId)"
+                    class=""
+                    :modelValue="adminStore.getItemById(itemId)"
+                  >
+                  </item-block>
+                </template>
+              </template>
+            </div>
+          </template>
+        </div>
+
+        <div>
+          <label>{{ $t("Fused into") }}</label>
+
+          <template v-if="itemFusedInto.length">
+            <div
+              class="tw-flex tw-flex-wrap tw-gap-4 tw-items-stretch"
+              v-for="item in itemFusedInto"
+            >
+              <item-block
+                :item="adminStore.getItemById(item.resultItem)"
+                class=""
+                :modelValue="adminStore.getItemById(item.resultItem)"
+              >
+              </item-block>
+            </div>
+          </template>
+        </div>
       </div>
       <div class="tw-flex tw-flex-wrap tw-mt-4 tw-gap-4 tw-justify-end">
         <v-btn

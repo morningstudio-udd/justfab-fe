@@ -5,16 +5,15 @@ const devVerticalNav = [
     to: "/admin/items",
     icon: "material-symbols-light:home-outline",
   },
-];
-
-const prodVerticalNav = [
   {
-    title: "Items",
+    title: "Fusion",
     isLink: true,
-    to: "/admin/items",
+    to: "/admin/fusion",
     icon: "material-symbols-light:home-outline",
   },
 ];
+
+const prodVerticalNav = [...devVerticalNav];
 
 export const verticalNav =
   import.meta.env.MODE === "development" ? devVerticalNav : prodVerticalNav;

@@ -61,9 +61,8 @@ defineExpose({
   <v-dialog
     v-model="itemDialog"
     class="!tw-z-[2010]"
-    width="900"
-    height="500"
-    max-height="90vh"
+    width="90vw"
+    height="90vh"
     persistent
   >
     <DialogCloseBtn @click="closeDialog" />

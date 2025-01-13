@@ -98,9 +98,8 @@ defineExpose({
   <v-dialog
     v-model="fusionDialog"
     class="!tw-z-[2010]"
-    width="900"
-    height="500"
-    max-height="90vh"
+    width="90vw"
+    height="90vh"
     persistent
   >
     <DialogCloseBtn @click="closeDialog" />
@@ -114,13 +113,13 @@ defineExpose({
         <div>{{ $t("Items") }}</div>
         <div class="tw-overflow-y-auto tw-flex-1 tw-min-h-60">
           <div
-            class="sm:tw-col-span-2 md:tw-col-span-3 tw-grid tw-grid-cols-3 md:tw-grid-cols-6 tw-gap-4"
+            class="tw-flex tw-flex-wrap tw-gap-4"
             v-if="adminStore.allItems.length"
           >
             <div
               v-for="(item, index) in adminStore.allItems"
               :key="`item-${index}`"
-              class="tw-rounded-lg tw-overflow-hidden tw-border-transparent tw-border-2 tw-border-solid"
+              class="tw-rounded-lg tw-overflow-hidden tw-border-transparent tw-border-2 tw-border-solid tw-w-28"
               :class="{
                 '!tw-border-primary': requiredIds.includes(item._id),
               }"
@@ -133,7 +132,7 @@ defineExpose({
 
         <div>
           <div>{{ $t("Result item") }}</div>
-          <div @click="onRemoveResult">
+          <div @click="onRemoveResult" class="tw-w-32">
             <item-block :modelValue="resultItem" />
           </div>
         </div>
@@ -144,6 +143,7 @@ defineExpose({
           <div class="tw-flex tw-flex-wrap tw-gap-4 tw-items-stretch">
             <template v-if="requiredItems.length">
               <div
+                class="tw-w-28"
                 v-for="(item, index) in requiredItems"
                 :key="`selected-${item._id}`"
                 @click.stop="onRemoveSelected(index)"

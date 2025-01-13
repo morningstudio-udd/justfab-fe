@@ -164,44 +164,46 @@ watch(
         />
 
         <div>
-          <label>{{ $t("Fused from") }}</label>
-
+          <div>{{ $t("Fusion") }}</div>
           <template v-if="itemFusedFrom.length">
             <div
-              class="tw-flex tw-flex-wrap tw-gap-4 tw-items-stretch"
+              class="tw-flex tw-flex-wrap tw-gap-4 tw-items-center"
               v-for="item in itemFusedFrom"
             >
-              <template v-if="item.requiredItems">
-                <template
-                  v-for="itemId in item.requiredItems"
-                  :key="`required-${itemId}`"
-                >
-                  <item-block
-                    :item="adminStore.getItemById(itemId)"
-                    class=""
-                    :modelValue="adminStore.getItemById(itemId)"
-                  >
-                  </item-block>
-                </template>
-              </template>
+              <div class="tw-w-28">
+                <item-block class="" :modelValue="item.resultItem" />
+              </div>
+
+              =
+
+              <div
+                v-for="requiredItem in item.requiredItems"
+                :key="`required-${requiredItem._id}`"
+                class="tw-w-28"
+              >
+                <item-block class="" :modelValue="requiredItem"> </item-block>
+              </div>
             </div>
           </template>
-        </div>
-
-        <div>
-          <label>{{ $t("Fused into") }}</label>
 
           <template v-if="itemFusedInto.length">
             <div
-              class="tw-flex tw-flex-wrap tw-gap-4 tw-items-stretch"
+              class="tw-flex tw-flex-wrap tw-gap-4 tw-items-center"
               v-for="item in itemFusedInto"
             >
-              <item-block
-                :item="adminStore.getItemById(item.resultItem)"
-                class=""
-                :modelValue="adminStore.getItemById(item.resultItem)"
+              <div class="tw-w-28">
+                <item-block class="" :modelValue="item.resultItem" />
+              </div>
+
+              =
+
+              <div
+                v-for="requiredItem in item.requiredItems"
+                :key="`required-${requiredItem._id}`"
+                class="tw-w-28"
               >
-              </item-block>
+                <item-block class="" :modelValue="requiredItem"> </item-block>
+              </div>
             </div>
           </template>
         </div>

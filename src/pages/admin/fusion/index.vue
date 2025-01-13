@@ -51,7 +51,7 @@ const fetchData = async () => {
 const openItemDialog = async (item) => {
   try {
     fusionDialogRef.value.loading = true;
-    if (item) {
+    if (item && Object.keys(item).length) {
       selectedFusion.value = await getFusion(item._id);
     } else {
       selectedFusion.value = {};
@@ -178,7 +178,7 @@ const openFuseDialog = () => {
   <div class="tw-flex tw-justify-between tw-items-center tw-mb-6">
     <h1 class="tw-text-2xl tw-font-semibold">{{ $t("Fusions") }}</h1>
 
-    <v-btn color="primary" @click="openFuseDialog">
+    <v-btn color="primary" @click="openFuseDialog(null)">
       <v-icon icon="tabler-plus" />
       {{ $t("Fuse") }}
     </v-btn>

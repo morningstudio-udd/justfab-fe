@@ -44,7 +44,8 @@ const getItems = async () => {
 const openItemDialog = async (item) => {
   try {
     itemDialogRef.value.loading = true;
-    if (item) {
+
+    if (item && Object.keys(item).length) {
       const p1 = getItemById(item._id).then((responseItem) => {
         selectedItem.value = responseItem;
       });
@@ -172,7 +173,7 @@ const openFuseDialog = () => {
   <div class="tw-flex tw-justify-between tw-items-center tw-mb-6">
     <h1 class="tw-text-2xl tw-font-semibold">{{ $t("Items") }}</h1>
 
-    <v-btn color="primary" @click="openItemDialog">
+    <v-btn color="primary" @click="openItemDialog(null)">
       <v-icon icon="tabler-plus" />
       {{ $t("Add Item") }}
     </v-btn>

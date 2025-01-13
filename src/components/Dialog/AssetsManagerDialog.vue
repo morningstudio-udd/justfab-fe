@@ -132,9 +132,8 @@ const onConfirmDelete = async () => {
   <v-dialog
     v-model="adminStore.assetsManagerDialog"
     class="!tw-z-[2010]"
-    width="900"
-    height="500"
-    max-height="90vh"
+    width="90vw"
+    height="90vh"
     persistent
   >
     <DialogCloseBtn @click="closeDialog" />
@@ -177,14 +176,13 @@ const onConfirmDelete = async () => {
             <div
               v-for="(asset, index) in allAssets"
               :key="`asset-${index}`"
-              class="tw-rounded-lg tw-overflow-hidden tw-border-transparent tw-border-2 tw-border-solid"
+              class="tw-rounded-lg tw-overflow-hidden tw-border-transparent tw-border-2 tw-border-solid tw-aspect-square tw-flex tw-items-center tw-justify-center tw-cursor-pointer tw-bg-gray-100"
               :class="{
                 '!tw-border-primary': selectedId === index,
               }"
             >
               <v-img
                 :src="srcAsset(asset)"
-                width="100%"
                 class=""
                 cover
                 @click="selectAsset(index)"

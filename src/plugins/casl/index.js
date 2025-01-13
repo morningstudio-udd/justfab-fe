@@ -23,6 +23,7 @@ export default function (app) {
 
   // Create the initial ability instance
   const initialAbility = createMongoAbility(userAbilityRules ?? []);
+  $ability = initialAbility;
 
   // Register CASL ability plugin with Vue
   app.use(abilitiesPlugin, initialAbility, {

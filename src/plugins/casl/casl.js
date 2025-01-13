@@ -7,19 +7,20 @@ import { useAbility } from "@casl/vue";
  * @param {string} role - User role to update
  */
 export const updateAbility = async (role) => {
-  const vm = getCurrentInstance();
-  if (!vm) return false;
-
-  const ability = vm.appContext.config.globalProperties.$ability;
-
-  if (!ability) {
-    console.error(
-      "CASL Ability instance is missing! Make sure abilitiesPlugin is registered."
-    );
-    return;
-  }
-
   try {
+    const vm = getCurrentInstance();
+    console.log("vm", vm);
+    if (!vm) return false;
+
+    const ability = vm.appContext.config.globalProperties.$ability;
+
+    if (!ability) {
+      console.error(
+        "CASL Ability instance is missing! Make sure abilitiesPlugin is registered."
+      );
+      return;
+    }
+
     const rules = await Promise.resolve(USER_ABILITY_RULES[role] || []);
     ability.update(rules);
     console.log("Updated ability rules:", ability.rules);

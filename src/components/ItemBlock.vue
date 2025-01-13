@@ -19,7 +19,7 @@ const modelValue = defineModel({
       v-if="modelValue.photoUrl"
       :src="srcAsset(modelValue.photoUrl)"
       width="100%"
-      class="tw-aspect-square !tw-w-28 tw-rounded-lg tw-overflow-hidden"
+      class="tw-aspect-square tw-rounded-lg tw-overflow-hidden"
       cover=""
     />
     <div class="tw-text-sm tw-text-center">{{ modelValue.name }}</div>

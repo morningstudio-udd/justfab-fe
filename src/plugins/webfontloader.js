@@ -6,19 +6,21 @@
 import "@styles/fonts.css";
 
 export async function loadFonts() {
-  const webFontLoader = await import(/* webpackChunkName: "webfontloader" */ 'webfontloader')
+  const webFontLoader = await import(
+    /* webpackChunkName: "webfontloader" */ "webfontloader"
+  );
 
   webFontLoader.load({
     google: {
-      families: ['Grandstander:ital,wght@0,100..900;1,100..900'],
+      families: ["DynaPuff:wght@400..700"],
     },
     custom: {
-      families: ['Montserrat'],
+      families: ["Montserrat"],
       // urls: ['./assets/fonts.css']
-    }
-  })
+    },
+  });
 }
 
 export default function () {
-  loadFonts()
+  loadFonts();
 }

@@ -10,6 +10,7 @@ declare module 'vue' {
     AlertMessage: typeof import('./src/components/AlertMessage.vue')['default']
     AppBar: typeof import('./src/components/AppBar.vue')['default']
     AssetsManagerDialog: typeof import('./src/components/Dialog/AssetsManagerDialog.vue')['default']
+    BottomBar: typeof import('./src/components/Game/BottomBar.vue')['default']
     ConfirmDialog: typeof import('./src/components/Dialog/ConfirmDialog.vue')['default']
     DialogCloseBtn: typeof import('./src/components/DialogCloseBtn.vue')['default']
     Footer: typeof import('./src/views/Footer.vue')['default']
@@ -25,6 +26,7 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SnackbarMessage: typeof import('./src/components/SnackbarMessage.vue')['default']
+    TopBar: typeof import('./src/components/Game/TopBar.vue')['default']
     UserAvatar: typeof import('./src/components/UserAvatar.vue')['default']
   }
 }

@@ -22,6 +22,8 @@ declare module 'vue-router/auto-routes' {
     'admin': RouteRecordInfo<'admin', '/admin', Record<never, never>, Record<never, never>>,
     'admin-fusion': RouteRecordInfo<'admin-fusion', '/admin/fusion', Record<never, never>, Record<never, never>>,
     'admin-items': RouteRecordInfo<'admin-items', '/admin/items', Record<never, never>, Record<never, never>>,
+    'game-inventory': RouteRecordInfo<'game-inventory', '/game/inventory', Record<never, never>, Record<never, never>>,
+    'game-jackpot': RouteRecordInfo<'game-jackpot', '/game/jackpot', Record<never, never>, Record<never, never>>,
     'home': RouteRecordInfo<'home', '/home', Record<never, never>, Record<never, never>>,
     'telegram-login-token': RouteRecordInfo<'telegram-login-token', '/telegram-login/:token', { token: ParamValue<true> }, { token: ParamValue<false> }>,
     'telegram-login-admin-token': RouteRecordInfo<'telegram-login-admin-token', '/telegram-login-admin/:token', { token: ParamValue<true> }, { token: ParamValue<false> }>,

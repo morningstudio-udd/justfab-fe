@@ -1,8 +1,29 @@
-<script setup></script>
+<script setup>
+const preLoading = ref(true);
+
+onMounted(async () => {
+  await fetchData();
+});
+
+const fetchData = async () => {
+  try {
+    preLoading.value = true;
+
+    await getUserInfo();
+  } catch (error) {
+    console.error(error);
+  } finally {
+    preLoading.value = false;
+  }
+};
+</script>
 
 <template>
   <VApp>
-    <div class="layout-wrapper">
+    <template v-if="preLoading">
+      <v-skeleton-loader />
+    </template>
+    <div v-else class="layout-wrapper">
       <RouterView />
 
       <AlertMessage />

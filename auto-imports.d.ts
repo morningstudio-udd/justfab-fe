@@ -13,6 +13,7 @@ declare global {
   const ROLES: typeof import('./src/utils/constant.js')['ROLES']
   const USER_ABILITY_RULES: typeof import('./src/utils/constant.js')['USER_ABILITY_RULES']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
+  const addItemToInventory: typeof import('./src/api/game.js')['addItemToInventory']
   const alphaDashValidator: typeof import('./src/utils/validators.js')['alphaDashValidator']
   const alphaValidator: typeof import('./src/utils/validators.js')['alphaValidator']
   const asyncComputed: typeof import('@vueuse/core')['asyncComputed']
@@ -65,6 +66,7 @@ declare global {
   const getFusion: typeof import('./src/api/admin.js')['getFusion']
   const getItem: typeof import('./src/api/admin.js')['getItem']
   const getUserInfo: typeof import('./src/api/user.js')['getUserInfo']
+  const getUserInventory: typeof import('./src/api/game.js')['getUserInventory']
   const h: typeof import('vue')['h']
   const ignorableWatch: typeof import('@vueuse/core')['ignorableWatch']
   const inject: typeof import('vue')['inject']
@@ -133,6 +135,7 @@ declare global {
   const refreshToken: typeof import('./src/api/auth.js')['refreshToken']
   const regexValidator: typeof import('./src/utils/validators.js')['regexValidator']
   const registerPlugins: typeof import('./src/utils/plugins.js')['registerPlugins']
+  const removeItemFromInventory: typeof import('./src/api/game.js')['removeItemFromInventory']
   const requiredValidator: typeof import('./src/utils/validators.js')['requiredValidator']
   const resolveComponent: typeof import('vue')['resolveComponent']
   const resolveRef: typeof import('@vueuse/core')['resolveRef']
@@ -373,6 +376,7 @@ declare module 'vue' {
     readonly ROLES: UnwrapRef<typeof import('./src/utils/constant.js')['ROLES']>
     readonly USER_ABILITY_RULES: UnwrapRef<typeof import('./src/utils/constant.js')['USER_ABILITY_RULES']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
+    readonly addItemToInventory: UnwrapRef<typeof import('./src/api/game.js')['addItemToInventory']>
     readonly alphaDashValidator: UnwrapRef<typeof import('./src/utils/validators.js')['alphaDashValidator']>
     readonly alphaValidator: UnwrapRef<typeof import('./src/utils/validators.js')['alphaValidator']>
     readonly asyncComputed: UnwrapRef<typeof import('@vueuse/core')['asyncComputed']>
@@ -425,6 +429,7 @@ declare module 'vue' {
     readonly getFusion: UnwrapRef<typeof import('./src/api/admin.js')['getFusion']>
     readonly getItem: UnwrapRef<typeof import('./src/api/admin.js')['getItem']>
     readonly getUserInfo: UnwrapRef<typeof import('./src/api/user.js')['getUserInfo']>
+    readonly getUserInventory: UnwrapRef<typeof import('./src/api/game.js')['getUserInventory']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
     readonly ignorableWatch: UnwrapRef<typeof import('@vueuse/core')['ignorableWatch']>
     readonly inject: UnwrapRef<typeof import('vue')['inject']>
@@ -493,6 +498,7 @@ declare module 'vue' {
     readonly refreshToken: UnwrapRef<typeof import('./src/api/auth.js')['refreshToken']>
     readonly regexValidator: UnwrapRef<typeof import('./src/utils/validators.js')['regexValidator']>
     readonly registerPlugins: UnwrapRef<typeof import('./src/utils/plugins.js')['registerPlugins']>
+    readonly removeItemFromInventory: UnwrapRef<typeof import('./src/api/game.js')['removeItemFromInventory']>
     readonly requiredValidator: UnwrapRef<typeof import('./src/utils/validators.js')['requiredValidator']>
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
     readonly resolveRef: UnwrapRef<typeof import('@vueuse/core')['resolveRef']>

@@ -28,13 +28,16 @@ definePage({
 
 const userStore = useUserStore();
 const adminStore = useAdminStore();
+const authStore = useAuthStore();
 
 const inventoryData = ref();
 
-const userInventory = computed(() => inventoryData.value.items);
+const userInventory = computed(() => inventoryData.value?.items);
 
 onMounted(async () => {
-  await getInventory();
+  if (authStore.isLoggedIn) {
+    await getInventory();
+  }
 });
 
 const getInventory = async () => {
@@ -178,7 +181,8 @@ const getInventory = async () => {
             class="tw-w-full tw-aspect-[1080/485] tw-grid tw-grid-cols-4 tw-gap-[10%] tw-px-[8%] tw-py-[5%] tw-overflow-y-scroll"
           >
             <div
-              v-for="item in adminStore.allItems"
+              v-if="userInventory && userInventory.length"
+              v-for="item in userInventory"
               :key="item._id"
               class="tw-aspect-[177/178] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
               :style="{ backgroundImage: `url(${bgSlot})` }"

@@ -1,54 +1,69 @@
 <script setup>
+import gameBg from "@images/game/bg-game.png";
 import { cookies } from "@/plugins/useCookies";
 
 definePage({
   meta: {
     layout: "blank",
+    public: true,
+    unauthenticated: true,
   },
 });
 
 const route = useRoute();
+const router = useRouter();
 const authStore = useAuthStore();
 const userStore = useUserStore();
 
 onMounted(async () => {
-  // authStore.token = route.params.token;
-  cookies.set("token", route.params.token);
-
-  await fetchData();
+  if (route.params.token) {
+    authStore.token = route.params.token;
+    await fetchData();
+  } else {
+    router.push("/");
+  }
 });
 
 const fetchData = async () => {
   try {
     await getUserInfo();
+
+    if (userStore.userData && Object.keys(userStore.userData).length) {
+      router.push("/game/jackpot");
+    }
   } catch (error) {
     console.error(error);
+
+    userStore.userData = null;
+    userStore.token = null;
+
+    router.push("/");
   }
 };
 
-watch(
-  () => [route.params.token, authStore.token],
-  async (token) => {
-    if (token) {
-      await fetchData();
-    }
-  }
-);
+// watch(
+//   () => [route.params.token, authStore.token],
+//   async (token) => {
+//     if (token) {
+//       await fetchData();
+//     }
+//   }
+// );
 </script>
 
 <template>
-  <div v-if="userStore.userData && Object.keys(userStore.userData).length">
-    Welcome {{ userStore.userData.displayName }} ({{
-      userStore.userData.username
-    }}) <br />
-    Your balance:<br />
-    <ul>
-      <li>- {{ userStore.userData.points }} points</li>
-      <li>
-        - {{ userStore.userData.energy }} /
-        {{ userStore.userData.maxEnergy }} energy
-      </li>
-    </ul>
+  <div
+    class="tw-bg-[#86C7E5] tw-w-screen tw-h-screen tw-flex tw-items-center tw-justify-center"
+  >
+    <div
+      class="game-container tw-w-auto tw-h-[1920px] tw-aspect-[1080/1920] tw-max-w-full tw-max-h-full tw-bg-[#D9D9D9] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-flex tw-flex-col tw-relative"
+      :style="{ backgroundImage: `url(${gameBg})` }"
+    >
+      <div
+        class="game-content tw-flex-grow tw-flex tw-justify-center tw-items-center"
+      >
+        Loading Dev...
+      </div>
+    </div>
   </div>
-  <div v-else>loging in...</div>
 </template>

@@ -20,7 +20,7 @@ import {
 // https://vitejs.dev/config/
 const config = defineConfig({
   // base: process.env.NODE_ENV === "production" ? "/smk/" : "/",
-  base: "/smk/",
+  base: "./",
   plugins: [
     // basicSsl(),
 

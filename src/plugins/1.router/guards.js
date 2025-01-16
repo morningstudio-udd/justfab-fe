@@ -20,7 +20,6 @@ export const setupGuards = (router) => {
      * Feel free to update this logic to suit your needs
      */
     const isLoggedIn = !!(cookies.get("user_role") && cookies.get("token"));
-    console.log("isLoggedIn", isLoggedIn);
 
     /*
           If user is logged in and is trying to access login like page, redirect to home

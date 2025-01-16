@@ -31,8 +31,6 @@ const getItems = async () => {
     loading.value = true;
     dataItems.value = await getAllItems();
 
-    console.log(dataItems.value);
-
     adminStore.allItems = dataItems.value.data;
   } catch (error) {
     console.error(error);

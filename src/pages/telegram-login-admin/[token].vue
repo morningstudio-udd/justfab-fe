@@ -1,10 +1,9 @@
 <script setup>
-import { nextTick } from "vue";
-
 definePage({
   meta: {
     layout: "blank",
     public: true,
+    unauthenticated: true,
   },
 });
 
@@ -14,11 +13,13 @@ const appStore = useAppStore();
 const authStore = useAuthStore();
 const userStore = useUserStore();
 
-const user = ref();
-
 onMounted(async () => {
-  authStore.token = route.params.token;
-  await fetchData();
+  if (route.params.token) {
+    authStore.token = route.params.token;
+    await fetchData();
+  } else {
+    router.push("/");
+  }
 });
 
 const fetchData = async () => {
@@ -27,10 +28,7 @@ const fetchData = async () => {
 
     await nextTick();
 
-    if (
-      typeof userStore.userData === "object" &&
-      userStore.userData.role === ROLES.ADMIN
-    ) {
+    if (userStore.userData && userStore.userData.role === ROLES.ADMIN) {
       await delay(3000);
 
       router.push("/admin");
@@ -38,35 +36,38 @@ const fetchData = async () => {
   } catch (error) {
     console.error(error);
 
-    appStore.showNotiSnackbar({
-      color: "error",
-      message:
-        error.message || t("Error occurred. Please contact the administrator."),
-    });
+    // appStore.showNotiSnackbar({
+    //   color: "error",
+    //   message:
+    //     error.message || t("Error occurred. Please contact the administrator."),
+    // });
 
     userStore.userData = null;
+    userStore.token = null;
+
     router.push("/");
   }
 };
 
-watch(
-  () => [route.params.token, authStore.token],
-  async (token) => {
-    if (token) {
-      await fetchData();
-    }
-  }
-);
+// watch(
+//   () => [route.params.token, authStore.token],
+//   async (token) => {
+//     if (token) {
+//       await fetchData();
+//     }
+//   }
+// );
 </script>
 
 <template>
-  <div v-if="user && Object.keys(user).length">
-    Welcome {{ user.displayName }} ({{ user.username }}) <br />
-    Your balance:<br />
-    <ul>
-      <li>- {{ user.points }} points</li>
-      <li>- {{ user.energy }} / {{ user.maxEnergy }} energy</li>
-    </ul>
+  <div
+    class="tw-bg-[#86C7E5] tw-w-screen tw-h-screen tw-flex tw-items-center tw-justify-center"
+  >
+    <div
+      class="game-container tw-w-auto tw-h-[1920px] tw-aspect-[1080/1920] tw-max-w-full tw-max-h-full tw-bg-[#D9D9D9] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-flex tw-flex-col tw-relative"
+      :style="{ backgroundImage: `url(${gameBg})` }"
+    >
+      <div class="game-content tw-flex-grow">Loading Admin...</div>
+    </div>
   </div>
-  <div v-else>loging in...</div>
 </template>

@@ -66,6 +66,7 @@ declare global {
   const getFusedInto: typeof import('./src/api/admin.js')['getFusedInto']
   const getFusion: typeof import('./src/api/admin.js')['getFusion']
   const getItem: typeof import('./src/api/admin.js')['getItem']
+  const getSlotMachineConfig: typeof import('./src/api/game.js')['getSlotMachineConfig']
   const getUserInfo: typeof import('./src/api/user.js')['getUserInfo']
   const getUserInventory: typeof import('./src/api/game.js')['getUserInventory']
   const h: typeof import('vue')['h']
@@ -116,6 +117,7 @@ declare global {
   const paginationMeta: typeof import('./src/utils/mixin.js')['paginationMeta']
   const passwordValidator: typeof import('./src/utils/validators.js')['passwordValidator']
   const pausableWatch: typeof import('@vueuse/core')['pausableWatch']
+  const playSlotMachine: typeof import('./src/api/game.js')['playSlotMachine']
   const playSound: typeof import('./src/utils/helpers.js')['playSound']
   const provide: typeof import('vue')['provide']
   const provideLocal: typeof import('@vueuse/core')['provideLocal']
@@ -144,6 +146,7 @@ declare global {
   const selectAllText: typeof import('./src/utils/mixin.js')['selectAllText']
   const setActivePinia: typeof import('pinia')['setActivePinia']
   const setMapStoreSuffix: typeof import('pinia')['setMapStoreSuffix']
+  const setSlotMachineConfig: typeof import('./src/api/game.js')['setSlotMachineConfig']
   const shallowReactive: typeof import('vue')['shallowReactive']
   const shallowReadonly: typeof import('vue')['shallowReadonly']
   const shallowRef: typeof import('vue')['shallowRef']
@@ -430,6 +433,7 @@ declare module 'vue' {
     readonly getFusedInto: UnwrapRef<typeof import('./src/api/admin.js')['getFusedInto']>
     readonly getFusion: UnwrapRef<typeof import('./src/api/admin.js')['getFusion']>
     readonly getItem: UnwrapRef<typeof import('./src/api/admin.js')['getItem']>
+    readonly getSlotMachineConfig: UnwrapRef<typeof import('./src/api/game.js')['getSlotMachineConfig']>
     readonly getUserInfo: UnwrapRef<typeof import('./src/api/user.js')['getUserInfo']>
     readonly getUserInventory: UnwrapRef<typeof import('./src/api/game.js')['getUserInventory']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
@@ -480,6 +484,7 @@ declare module 'vue' {
     readonly paginationMeta: UnwrapRef<typeof import('./src/utils/mixin.js')['paginationMeta']>
     readonly passwordValidator: UnwrapRef<typeof import('./src/utils/validators.js')['passwordValidator']>
     readonly pausableWatch: UnwrapRef<typeof import('@vueuse/core')['pausableWatch']>
+    readonly playSlotMachine: UnwrapRef<typeof import('./src/api/game.js')['playSlotMachine']>
     readonly playSound: UnwrapRef<typeof import('./src/utils/helpers.js')['playSound']>
     readonly provide: UnwrapRef<typeof import('vue')['provide']>
     readonly provideLocal: UnwrapRef<typeof import('@vueuse/core')['provideLocal']>
@@ -508,6 +513,7 @@ declare module 'vue' {
     readonly selectAllText: UnwrapRef<typeof import('./src/utils/mixin.js')['selectAllText']>
     readonly setActivePinia: UnwrapRef<typeof import('pinia')['setActivePinia']>
     readonly setMapStoreSuffix: UnwrapRef<typeof import('pinia')['setMapStoreSuffix']>
+    readonly setSlotMachineConfig: UnwrapRef<typeof import('./src/api/game.js')['setSlotMachineConfig']>
     readonly shallowReactive: UnwrapRef<typeof import('vue')['shallowReactive']>
     readonly shallowReadonly: UnwrapRef<typeof import('vue')['shallowReadonly']>
     readonly shallowRef: UnwrapRef<typeof import('vue')['shallowRef']>

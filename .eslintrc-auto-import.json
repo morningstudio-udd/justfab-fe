@@ -364,6 +364,9 @@
     "getUserInventory": true,
     "addItemToInventory": true,
     "removeItemFromInventory": true,
-    "authClient": true
+    "authClient": true,
+    "getSlotMachineConfig": true,
+    "playSlotMachine": true,
+    "setSlotMachineConfig": true
   }
 }

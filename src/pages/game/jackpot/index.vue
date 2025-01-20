@@ -1,11 +1,11 @@
 <script setup>
-import ResultDialog from "@/components/Dialog/ResultDialog.vue";
 import gameBg from "@images/game/bg-game-1.png";
 
 definePage({
   meta: {
     layout: "game",
     public: true,
+    requiresAuth: true,
   },
 });
 
@@ -13,11 +13,15 @@ const refSlotMachine = ref();
 const energy = ref("50/50");
 const jackpot = ref("1.000.000 vnđ");
 const enable = ref(true);
+const resultData = ref(null);
 const gameContentRef = ref(null);
 const parentDivWidth = ref(0);
+
 let resizeObserver;
 
-onMounted(() => {
+const rewardResult = computed(() => resultData.value?.rewards);
+
+onMounted(async () => {
   if (gameContentRef.value) {
     resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
@@ -34,18 +38,35 @@ onMounted(() => {
   }, 2000);
 });
 
-const onRollClick = () => {
-  refSlotMachine.value.roll(["J", "J", "J", "O"]);
-  enable.value = false;
-  setTimeout(() => {
+const onRollClick = async () => {
+  // refSlotMachine.value.roll(["J", "J", "J", "O"]);
+  // enable.value = false;
+  // setTimeout(() => {
+  //   enable.value = true;
+  // }, 4000);
+  try {
+    enable.value = false;
+
+    const playResponse = await playSlotMachine();
+    resultData.value = { ...playResponse };
+    refSlotMachine.value.roll(resultData.value.reelSymbols);
+  } catch (error) {
+    console.log("error", error);
+  } finally {
     enable.value = true;
-  }, 4000);
+  }
 };
 
 onBeforeUnmount(() => {
   if (resizeObserver && gameContentRef.value) {
     resizeObserver.unobserve(gameContentRef.value);
     resizeObserver.disconnect();
+  }
+});
+
+watch(rewardResult, (newVal) => {
+  if (newVal) {
+    console.log("newVal", newVal);
   }
 });
 </script>

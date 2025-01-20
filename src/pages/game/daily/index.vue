@@ -181,7 +181,7 @@ const submitFriend = () => {
             <div
               class="tw-h-auto tw-max-h-full tw-overflow-y-scroll tw-px-[7%] tw-py-[5%] tw-flex tw-flex-col tw-gap-[1vh]"
             >
-              <template v-for="number in 1">
+              <!-- <template v-for="number in 1">
                 <v-select
                   variant="solo-filled"
                   height="auto"
@@ -198,25 +198,33 @@ const submitFriend = () => {
                   density="compact"
                 >
                 </v-select>
-              </template>
+              </template> -->
 
-              <v-expansion-panels flat>
-                <v-expansion-panel class="daily-task !tw-bg-transparent">
-                  <v-expansion-panel-title
-                    static
-                    collapse-icon="material-symbols-arrow-drop-down"
-                    expand-icon="material-symbols-arrow-right"
-                    class="task-title tw-bg-transparent tw-bg-cover tw-bg-center tw-bg-no-repeat tw-aspect-[946/114] tw-w-full tw-h-auto !tw-min-h-0 !tw-py-0 !tw-px-[2%]"
-                    :style="{ backgroundImage: `url(${inputDailyTask})` }"
-                    >ABC</v-expansion-panel-title
-                  >
+              <v-expansion-panels
+                flat
+                hide-actions
+                multiple
+                bg-color="transparent"
+              >
+                <template v-for="number in 12">
+                  <v-expansion-panel class="daily-task">
+                    <v-expansion-panel-title
+                      static
+                      collapse-icon="material-symbols-arrow-drop-down"
+                      expand-icon="material-symbols-arrow-right"
+                      class="task-title"
+                      :style="{ backgroundImage: `url(${inputDailyTask})` }"
+                    >
+                      <div class="child-element">Abv</div>
+                    </v-expansion-panel-title>
 
-                  <v-expansion-panel-text
-                    class="task-content tw-mx-[2%] tw-bg-[#FFF0C3]/60 tw-border-[.5vw] tw-border-t-0 tw-border-solid tw-border-[#8D2E02] tw-rounded-b-[1em]"
-                  >
-                    Some content
-                  </v-expansion-panel-text>
-                </v-expansion-panel>
+                    <v-expansion-panel-text
+                      class="task-content tw-mx-[2%] tw-bg-[#FFF0C3]/60 tw-border-[.5vw] tw-border-t-0 tw-border-solid tw-border-[#8D2E02] tw-rounded-b-[1em]"
+                    >
+                      Some content
+                    </v-expansion-panel-text>
+                  </v-expansion-panel>
+                </template>
               </v-expansion-panels>
             </div>
           </div>
@@ -260,15 +268,27 @@ const submitFriend = () => {
     }
   }
 }
-
-.daily-task {
-  .task-content {
-    border-width: 2%;
-  }
-}
 </style>
 
 <style lang="postcss">
+.daily-task {
+  @apply !tw-mt-0 tw-mb-[2%];
+  .task-title {
+    @apply tw-bg-transparent tw-bg-cover tw-bg-center tw-bg-no-repeat tw-aspect-[946/114] tw-w-full tw-h-auto !tw-min-h-0 !tw-py-0 !tw-pl-[2%] !tw-pr-0;
+    font-size: clamp(0.625rem, 2vh, 2.125rem);
+  }
+  .v-expansion-panel-title__icon {
+    @apply tw-h-full tw-w-auto tw-aspect-square tw-justify-center tw-items-center;
+    i {
+      @apply tw-aspect-square tw-h-[85%] tw-w-auto tw-text-[#8d2e02];
+    }
+  }
+  .task-content {
+    border-width: 2%;
+    font-size: clamp(0.625rem, 1.5vh, 2.125rem);
+  }
+}
+
 .task-select {
   @apply tw-bg-contain tw-bg-center tw-bg-no-repeat tw-aspect-[946/114] [&_input]:!tw-border-0 focus:tw-outline-none [&_input]:tw-min-h-0 tw-rounded-md;
   .v-field {

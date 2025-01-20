@@ -158,7 +158,8 @@ const navItems = ref([
 <style lang="postcss">
 .bottom-nav {
   .nav-item {
-    @apply tw-border-0 tw-border-r-[3px] tw-border-solid tw-border-[#BB6024];
+    @apply tw-border-0  tw-border-solid tw-border-[#BB6024];
+    border-right-width: 0.4vh;
   }
   &:last-child {
     .nav-item {
@@ -173,7 +174,8 @@ const navItems = ref([
     }
     &.bottom-nav-active {
       .nav-item {
-        @apply tw-border-l-[3px] tw-scale-110 tw-z-[1];
+        @apply tw-scale-110 tw-z-[1];
+        border-left-width: 0.4vh;
         &::after {
           content: "";
           @apply tw-absolute tw-w-full tw-h-full tw-bg-[#FF6208]/50;

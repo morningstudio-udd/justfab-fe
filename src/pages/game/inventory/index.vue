@@ -134,16 +134,18 @@ const submitMerge = () => {
                 ></div>
               </div>
 
-              <div class="tw-w-1/3">
-                <div
-                  class="tw-aspect-[179/100] tw-w-[54%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md tw-ml-auto"
+              <div class="tw-w-1/3 tw-text-right">
+                <v-btn
+                  flat
+                  color="transparent"
+                  class="tw-aspect-[179/100] tw-w-[54%] !tw-h-auto tw-bg-transparent tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%]"
                   :style="{ backgroundImage: `url(${btnFeed})` }"
-                ></div>
+                ></v-btn>
               </div>
             </div>
 
             <div
-              class="tw-w-full tw-aspect-[1080/100] tw-flex tw-justify-center tw-items-center -tw-mb-[1%]"
+              class="tw-w-full tw-aspect-[1080/100] tw-flex tw-justify-center tw-items-center"
             >
               <div
                 class="tw-aspect-[282/116] tw-w-[26%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md"
@@ -160,18 +162,20 @@ const submitMerge = () => {
             </div>
 
             <div
-              class="tw-w-full tw-aspect-[1080/100] tw-flex tw-justify-between tw-items-center tw-px-[4%]"
+              class="tw-w-full tw-aspect-[1080/100] tw-flex tw-justify-between tw-items-center tw-px-[4%] -tw-mb-[0.5%]"
             >
               <v-btn
+                flat
                 color="transparent"
-                class="tw-aspect-[213/76] !tw-h-[70%] tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative tw-rounded-md"
+                class="tw-aspect-[213/76] tw-w-[21.4%] !tw-h-auto tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative tw-rounded-md"
                 :style="{ backgroundImage: `url(${btnByQuality})` }"
                 @click.stop="submitByQuality"
               ></v-btn>
 
               <v-btn
+                flat
                 color="transparent"
-                class="tw-aspect-[214/76] !tw-h-[70%] tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative tw-rounded-md"
+                class="tw-aspect-[214/76] tw-w-[21.5%] !tw-h-auto tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative tw-rounded-md"
                 :style="{ backgroundImage: `url(${btnMerge})` }"
                 @click.stop="submitMerge"
               ></v-btn>

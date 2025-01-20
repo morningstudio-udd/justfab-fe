@@ -1,0 +1,96 @@
+<script setup>
+import gameBg from "@images/game/blank_background.png";
+import bgConnectWallet from "@images/game/bg-connect-wallet.png";
+import inputConnectWallet from "@images/game/input-connect-wallet.png";
+import btnConnectWallet from "@images/game/btn-connect-wallet.png";
+
+definePage({
+  meta: {
+    layout: "blank",
+    public: true,
+  },
+});
+</script>
+
+<template>
+  <div
+    class="tw-bg-[#86C7E5] tw-w-screen tw-h-screen tw-flex tw-items-center tw-justify-center"
+  >
+    <div
+      class="game-container tw-w-auto tw-h-[1920px] tw-aspect-[1080/1920] tw-max-w-full tw-max-h-full tw-bg-[#D9D9D9] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-flex tw-flex-col tw-relative"
+      :style="{ backgroundImage: `url(${gameBg})` }"
+    >
+      <!-- Top Icons -->
+      <top-bar />
+
+      <div
+        class="game-content tw-flex-grow tw-flex tw-items-center tw-justify-center"
+      >
+        <v-card
+          class="!tw-bg-cover tw-bg-center tw-bg-no-repeat tw-aspect-[892/829]"
+          width="82%"
+          max-width="90%"
+          flat
+          color="transparent"
+          :style="{ backgroundImage: `url(${bgConnectWallet})` }"
+        >
+          <v-card-text class="!tw-p-[5%] tw-h-full">
+            <div class="tw-grid tw-h-full tw-pt-[13%] tw-py-[5%] tw-px-[7%]">
+              <v-text-field
+                v-model="walletAddress"
+                class="input-connect-wallet"
+                variant="solo-filled"
+                readonly
+                bg-color="transparent"
+                flat
+                hide-details
+                :style="{ backgroundImage: `url(${inputConnectWallet})` }"
+              />
+
+              <v-text-field
+                v-model="walletAddress"
+                class="input-connect-wallet"
+                variant="solo-filled"
+                readonly
+                bg-color="transparent"
+                flat
+                hide-details
+                :style="{ backgroundImage: `url(${inputConnectWallet})` }"
+              />
+
+              <v-text-field
+                v-model="walletAddress"
+                class="input-connect-wallet"
+                variant="solo-filled"
+                readonly
+                bg-color="transparent"
+                flat
+                hide-details
+                :style="{ backgroundImage: `url(${inputConnectWallet})` }"
+              />
+
+              <connect-wallet-btn />
+            </div>
+          </v-card-text>
+        </v-card>
+      </div>
+
+      <!-- Bottom Icons -->
+      <bottom-bar />
+    </div>
+  </div>
+</template>
+
+<style lang="postcss">
+.input-connect-wallet {
+  @apply tw-aspect-[688/140]
+    tw-bg-cover
+    tw-bg-center
+    tw-bg-no-repeat
+    !tw-rounded-[8%]
+    tw-overflow-hidden;
+  input {
+    @apply tw-aspect-[688/130];
+  }
+}
+</style>

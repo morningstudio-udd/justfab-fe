@@ -1,4 +1,5 @@
 <script setup>
+import gbGame from "@images/game/bg-game-2.png";
 import gameBgInventory from "@images/game/bg-game-inventory.png";
 import bgBar1 from "@images/game/bar-1.png";
 import btnAddInventory from "@images/game/btn-add-inventory.png";
@@ -42,20 +43,21 @@ onMounted(async () => {
 
 const getInventory = async () => {
   try {
-    const p1 = getUserInventory(userStore.userData?._id).then(
-      (response) => (inventoryData.value = response)
-    );
-
-    const p2 = getAllItems().then((response) => {
-      adminStore.allItems = response.data;
-    });
-
-    await Promise.all([p1, p2]);
+    const response = await getUserInventory(userStore.userData?._id);
+    inventoryData.value = response;
   } catch (error) {
     console.error(error);
   } finally {
     loading.value = false;
   }
+};
+
+const submitByQuality = () => {
+  console.log("submitByQuality");
+};
+
+const submitMerge = () => {
+  console.log("submitMerge");
 };
 </script>
 
@@ -65,120 +67,119 @@ const getInventory = async () => {
   >
     <div
       class="game-container tw-w-auto tw-h-[1920px] tw-aspect-[1080/1920] tw-max-w-[100vw] tw-max-h-[100vh] tw-bg-[#D9D9D9] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-flex tw-flex-col tw-relative"
-      :style="{ backgroundImage: `url(${gameBgInventory})` }"
+      :style="{ backgroundImage: `url(${gbGame})` }"
     >
-      <v-img
-        :src="kapybara"
-        class="!tw-absolute tw-top-0 tw-left-0 tw-w-full tw-h-full"
-      />
-
       <!-- Top Icons -->
       <top-bar />
 
       <div class="tw-flex-grow">
         <div class="tw-flex tw-flex-col tw-h-full">
-          <div class="tw-flex-grow">
+          <div
+            class="tw-aspect-[1080/932] tw-w-ful tw-flex tw-flex-col tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative"
+            :style="{ backgroundImage: `url(${gameBgInventory})` }"
+          >
             <div
-              class="tw-w-full tw-flex tw-justify-between tw-items-start tw-px-[14%]"
+              class="tw-w-full tw-flex-grow tw-items-start tw-px-[12%] tw-pt-[1%]"
             >
-              <div class="tw-w-1/3 tw-grid tw-grid-rows-3 tw-gap-[20%]">
+              <div
+                class="tw-h-full tw-grid tw-grid-cols-4 tw-grid-rows-3 tw-gap-x-[4%] tw-gap-y-[6%]"
+              >
                 <div
-                  class="tw-aspect-[177/178] tw-w-[68%] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
+                  class="tw-aspect-square tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
                   :style="{ backgroundImage: `url(${slot1})` }"
                 ></div>
+                <div class="tw-col-span-2 tw-row-span-3">
+                  <div
+                    class="tw-aspect-[274/91] tw-w-3/4 tw-mx-auto tw-mt-[4%] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
+                    :style="{ backgroundImage: `url(${bgRibbon})` }"
+                  ></div>
 
+                  <div
+                    class="tw-aspect-[371/417] tw-w-full -tw-ml-[8%] tw-mt-[13%] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
+                    :style="{ backgroundImage: `url(${kapybara})` }"
+                  ></div>
+                </div>
                 <div
-                  class="tw-aspect-[177/178] tw-w-[68%] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
+                  class="tw-aspect-square tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
+                  :style="{ backgroundImage: `url(${slot2})` }"
+                ></div>
+                <div
+                  class="tw-aspect-square tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
                   :style="{ backgroundImage: `url(${slot3})` }"
                 ></div>
-
                 <div
-                  class="tw-aspect-[177/178] tw-w-[68%] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
+                  class="tw-aspect-square tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
+                  :style="{ backgroundImage: `url(${slot4})` }"
+                ></div>
+                <div
+                  class="tw-aspect-square tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
                   :style="{ backgroundImage: `url(${slot5})` }"
+                ></div>
+                <div
+                  class="tw-aspect-square tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
+                  :style="{ backgroundImage: `url(${slot6})` }"
+                ></div>
+              </div>
+            </div>
+
+            <div
+              class="tw-w-full tw-flex tw-justify-between tw-items-center tw-px-[4%] tw-aspect-[1080/100] -tw-mb-[2%]"
+            >
+              <div class="tw-w-1/3"></div>
+
+              <div class="tw-w-1/3">
+                <div
+                  class="tw-aspect-[260/64] tw-w-[78%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md tw-mx-auto"
+                  :style="{ backgroundImage: `url(${bgLayer1})` }"
                 ></div>
               </div>
 
               <div class="tw-w-1/3">
                 <div
-                  class="tw-aspect-[274/91] tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
-                  :style="{ backgroundImage: `url(${bgRibbon})` }"
-                ></div>
-              </div>
-
-              <div class="tw-w-1/3 tw-grid tw-grid-rows-3 tw-gap-[20%]">
-                <div
-                  class="tw-aspect-[177/178] tw-w-[68%] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center tw-ml-auto"
-                  :style="{ backgroundImage: `url(${slot2})` }"
-                ></div>
-
-                <div
-                  class="tw-aspect-[177/178] tw-w-[68%] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center tw-ml-auto"
-                  :style="{ backgroundImage: `url(${slot4})` }"
-                ></div>
-
-                <div
-                  class="tw-aspect-[177/178] tw-w-[68%] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center tw-ml-auto"
-                  :style="{ backgroundImage: `url(${slot6})` }"
+                  class="tw-aspect-[179/100] tw-w-[54%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md tw-ml-auto"
+                  :style="{ backgroundImage: `url(${btnFeed})` }"
                 ></div>
               </div>
             </div>
-          </div>
 
-          <div
-            class="tw-w-full tw-flex tw-justify-between tw-items-center tw-px-[4%] tw-aspect-[1080/100] -tw-mb-[2%]"
-          >
-            <div class="tw-w-1/3"></div>
-
-            <div class="tw-w-1/3">
+            <div
+              class="tw-w-full tw-aspect-[1080/100] tw-flex tw-justify-center tw-items-center -tw-mb-[1%]"
+            >
               <div
-                class="tw-aspect-[260/64] tw-w-[78%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md tw-mx-auto"
-                :style="{ backgroundImage: `url(${bgLayer1})` }"
+                class="tw-aspect-[282/116] tw-w-[26%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md"
+                :style="{ backgroundImage: `url(${hpIndex})` }"
+              ></div>
+              <div
+                class="tw-aspect-[282/116] tw-w-[26%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md"
+                :style="{ backgroundImage: `url(${defenseIndex})` }"
+              ></div>
+              <div
+                class="tw-aspect-[284/116] tw-w-[26%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md"
+                :style="{ backgroundImage: `url(${attackIndex})` }"
               ></div>
             </div>
 
-            <div class="tw-w-1/3">
-              <div
-                class="tw-aspect-[179/100] tw-w-[54%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md tw-ml-auto"
-                :style="{ backgroundImage: `url(${btnFeed})` }"
-              ></div>
+            <div
+              class="tw-w-full tw-aspect-[1080/100] tw-flex tw-justify-between tw-items-center tw-px-[4%]"
+            >
+              <v-btn
+                color="transparent"
+                class="tw-aspect-[213/76] !tw-h-[70%] tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative tw-rounded-md"
+                :style="{ backgroundImage: `url(${btnByQuality})` }"
+                @click.stop="submitByQuality"
+              ></v-btn>
+
+              <v-btn
+                color="transparent"
+                class="tw-aspect-[214/76] !tw-h-[70%] tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative tw-rounded-md"
+                :style="{ backgroundImage: `url(${btnMerge})` }"
+                @click.stop="submitMerge"
+              ></v-btn>
             </div>
           </div>
 
           <div
-            class="tw-w-full tw-aspect-[1080/100] tw-flex tw-justify-center tw-items-center -tw-mb-[1%]"
-          >
-            <div
-              class="tw-aspect-[282/116] tw-w-[26%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md"
-              :style="{ backgroundImage: `url(${hpIndex})` }"
-            ></div>
-            <div
-              class="tw-aspect-[282/116] tw-w-[26%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md"
-              :style="{ backgroundImage: `url(${defenseIndex})` }"
-            ></div>
-            <div
-              class="tw-aspect-[284/116] tw-w-[26%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md"
-              :style="{ backgroundImage: `url(${attackIndex})` }"
-            ></div>
-          </div>
-
-          <div
-            class="tw-w-full tw-aspect-[1080/100] tw-flex tw-justify-between tw-items-center tw-px-[4%]"
-          >
-            <v-btn
-              color="transparent"
-              class="tw-aspect-[213/76] !tw-h-[70%] tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative tw-rounded-md"
-              :style="{ backgroundImage: `url(${btnByQuality})` }"
-            ></v-btn>
-
-            <v-btn
-              color="transparent"
-              class="tw-aspect-[214/76] !tw-h-[70%] tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative tw-rounded-md"
-              :style="{ backgroundImage: `url(${btnMerge})` }"
-            ></v-btn>
-          </div>
-
-          <div
-            class="tw-w-full tw-aspect-[1080/485] tw-grid tw-grid-cols-4 tw-gap-[10%] tw-px-[8%] tw-py-[5%] tw-overflow-y-scroll"
+            class="tw-w-full tw-flex-grow tw-bg-[#23212e] tw-grid tw-grid-cols-4 tw-gap-[10%] tw-overflow-y-scroll"
           >
             <div
               v-if="userInventory && userInventory.length"

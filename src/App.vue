@@ -1,8 +1,15 @@
 <script setup>
-const preLoading = ref(true);
+import { cookies } from "@/plugins/useCookies";
+
+const preLoading = ref(false);
+
+const route = useRoute();
+const authStore = useAuthStore();
 
 onMounted(async () => {
-  await fetchData();
+  if (!!(cookies.get("user_role") && cookies.get("token"))) {
+    await fetchData();
+  }
 });
 
 const fetchData = async () => {

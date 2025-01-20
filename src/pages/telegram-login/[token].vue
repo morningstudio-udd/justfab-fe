@@ -1,5 +1,5 @@
 <script setup>
-import gameBg from "@images/game/bg-game.png";
+import gameBg from "@images/game/bg-game-1.png";
 import { cookies } from "@/plugins/useCookies";
 
 definePage({

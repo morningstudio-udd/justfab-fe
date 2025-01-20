@@ -12,7 +12,7 @@ export async function loadFonts() {
 
   webFontLoader.load({
     google: {
-      families: ["DynaPuff:wght@400..700"],
+      families: ["DynaPuff:700"],
     },
     custom: {
       families: ["Montserrat"],

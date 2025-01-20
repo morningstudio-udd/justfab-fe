@@ -17,6 +17,7 @@ declare global {
   const alphaDashValidator: typeof import('./src/utils/validators.js')['alphaDashValidator']
   const alphaValidator: typeof import('./src/utils/validators.js')['alphaValidator']
   const asyncComputed: typeof import('@vueuse/core')['asyncComputed']
+  const authClient: typeof import('./src/utils/authClient.js')['authClient']
   const autoResetRef: typeof import('@vueuse/core')['autoResetRef']
   const betweenValidator: typeof import('./src/utils/validators.js')['betweenValidator']
   const computed: typeof import('vue')['computed']
@@ -380,6 +381,7 @@ declare module 'vue' {
     readonly alphaDashValidator: UnwrapRef<typeof import('./src/utils/validators.js')['alphaDashValidator']>
     readonly alphaValidator: UnwrapRef<typeof import('./src/utils/validators.js')['alphaValidator']>
     readonly asyncComputed: UnwrapRef<typeof import('@vueuse/core')['asyncComputed']>
+    readonly authClient: UnwrapRef<typeof import('./src/utils/authClient.js')['authClient']>
     readonly autoResetRef: UnwrapRef<typeof import('@vueuse/core')['autoResetRef']>
     readonly betweenValidator: UnwrapRef<typeof import('./src/utils/validators.js')['betweenValidator']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>

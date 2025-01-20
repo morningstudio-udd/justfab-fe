@@ -363,6 +363,7 @@
     "getFusedFrom": true,
     "getUserInventory": true,
     "addItemToInventory": true,
-    "removeItemFromInventory": true
+    "removeItemFromInventory": true,
+    "authClient": true
   }
 }

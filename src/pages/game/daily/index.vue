@@ -18,7 +18,7 @@ import iconCheckedIn from "@images/game/icon-checked-in.png";
 
 definePage({
   meta: {
-    layout: "blank",
+    layout: "game",
     public: true,
   },
 });
@@ -39,200 +39,161 @@ const submitFriend = () => {
 </script>
 
 <template>
-  <div
-    class="tw-bg-[#86C7E5] tw-w-screen tw-h-screen tw-flex tw-items-center tw-justify-center"
-  >
-    <div
-      class="game-container tw-w-auto tw-h-[1920px] tw-aspect-[1080/1920] tw-max-w-full tw-max-h-screen tw-bg-[#D9D9D9] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-flex tw-flex-col tw-relative"
-      :style="{ backgroundImage: `url(${gameBg})` }"
-    >
-      <!-- Top Icons -->
-      <top-bar />
+  <div class="game-content tw-flex-auto tw-overflow-hidden">
+    <div class="tw-flex tw-flex-col tw-h-full">
+      <!-- <div class="-tw-mt-[2.4%]"> -->
+      <div class="tw-aspect-[687/136] tw-w-[63.6%] tw-mx-auto">
+        <v-img :src="dailyReward" />
+      </div>
+      <!-- </div> -->
 
-      <div class="game-content tw-flex-auto tw-overflow-hidden">
-        <div class="tw-flex tw-flex-col tw-h-full">
-          <!-- <div class="-tw-mt-[2.4%]"> -->
-          <div class="tw-aspect-[687/136] tw-w-[63.6%] tw-mx-auto">
-            <v-img :src="dailyReward" />
-          </div>
-          <!-- </div> -->
-
-          <div
-            class="rewards-container tw-w-full tw-aspect-[1080/580] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-grid tw-grid-cols-7 tw-grid-rows-2 tw-pl-[8.5%] tw-pr-[9.2%] tw-py-[2.5%] tw-gap-x-[4%] tw-gap-y-[8%]"
-            :style="{ backgroundImage: `url(${bgGifts})` }"
-          >
-            <div
-              class="tw-col-span-5 tw-row-span-1 tw-grid tw-grid-cols-3 tw-grid-rows-1 tw-gap-[5%]"
-            >
-              <div class="daily-gift">
-                <div class="tw-aspect-[99/102] tw-w-1/2">
-                  <v-img :src="gift1" />
-                </div>
-
-                <div class="icon-checked-in">
-                  <v-img :src="iconCheckedIn" />
-                </div>
-              </div>
-
-              <div class="daily-gift">
-                <div class="tw-aspect-[99/102] tw-w-1/2">
-                  <v-img :src="gift2" />
-                </div>
-
-                <div class="icon-checked-in">
-                  <v-img :src="iconCheckedIn" />
-                </div>
-              </div>
-
-              <div class="daily-gift">
-                <div class="tw-aspect-[99/102] tw-w-1/2">
-                  <v-img :src="gift3" />
-                </div>
-
-                <div class="icon-checked-in">
-                  <v-img :src="iconCheckedIn" />
-                </div>
-              </div>
+      <div
+        class="rewards-container tw-w-full tw-aspect-[1080/580] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-grid tw-grid-cols-7 tw-grid-rows-2 tw-pl-[8.5%] tw-pr-[9.2%] tw-py-[2.5%] tw-gap-x-[4%] tw-gap-y-[8%]"
+        :style="{ backgroundImage: `url(${bgGifts})` }"
+      >
+        <div
+          class="tw-col-span-5 tw-row-span-1 tw-grid tw-grid-cols-3 tw-grid-rows-1 tw-gap-[5%]"
+        >
+          <div class="daily-gift">
+            <div class="tw-aspect-[99/102] tw-w-1/2">
+              <v-img :src="gift1" />
             </div>
 
-            <div class="reward tw-row-span-2 tw-col-span-2">
-              <div class="special-gift checked-in">
-                <div class="tw-aspect-[169/176] tw-w-3/4">
-                  <v-img :src="gift7" />
-                </div>
-
-                <div class="icon-checked-in">
-                  <v-img :src="iconCheckedIn" />
-                </div>
-              </div>
-            </div>
-
-            <div
-              class="tw-col-span-5 tw-row-span-1 tw-grid tw-grid-cols-3 tw-grid-rows-1 tw-gap-[5%]"
-            >
-              <div class="daily-gift">
-                <div class="tw-aspect-[99/102] tw-w-1/2">
-                  <v-img :src="gift4" />
-                </div>
-
-                <div class="icon-checked-in">
-                  <v-img :src="iconCheckedIn" />
-                </div>
-              </div>
-
-              <div class="daily-gift">
-                <div class="tw-aspect-[99/102] tw-w-1/2">
-                  <v-img :src="gift5" />
-                </div>
-
-                <div class="icon-checked-in">
-                  <v-img :src="iconCheckedIn" />
-                </div>
-              </div>
-
-              <div class="daily-gift">
-                <div class="tw-aspect-[99/102] tw-w-1/2">
-                  <v-img :src="gift6" />
-                </div>
-
-                <div class="icon-checked-in">
-                  <v-img :src="iconCheckedIn" />
-                </div>
-              </div>
+            <div class="icon-checked-in">
+              <v-img :src="iconCheckedIn" />
             </div>
           </div>
 
-          <div
-            class="tw-flex-auto tw-flex tw-flex-col tw-overflow-hidden tw-bg-[#c26828] tw-bg-[100%_auto] tw-bg-top tw-bg-no-repeat"
-            :style="{ backgroundImage: `url(${bgBoxTask})` }"
-          >
-            <div class="tw-w-full tw-aspect-[1080/157]">
-              <div class="tw-px-[8%] tw-w-full tw-h-full">
-                <div
-                  class="tw-w-full tw-h-full tw-flex tw-justify-between tw-items-center"
-                >
-                  <v-btn
-                    color="transparent"
-                    flat
-                    class="tw-aspect-[220/97] tw-w-[24.2%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden"
-                    :style="{ backgroundImage: `url(${btnFab})` }"
-                    @click="submitFab"
-                  ></v-btn>
-
-                  <v-btn
-                    color="transparent"
-                    flat
-                    class="tw-aspect-[318/97] tw-w-[35.1%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden"
-                    :style="{ backgroundImage: `url(${btnNetwork})` }"
-                    @click="submitNetwork"
-                  ></v-btn>
-
-                  <v-btn
-                    color="transparent"
-                    flat
-                    class="tw-aspect-[220/97] tw-w-[24.2%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden"
-                    :style="{ backgroundImage: `url(${btnFriend})` }"
-                    @click="submitFriend"
-                  ></v-btn>
-                </div>
-              </div>
+          <div class="daily-gift">
+            <div class="tw-aspect-[99/102] tw-w-1/2">
+              <v-img :src="gift2" />
             </div>
 
-            <div
-              class="tw-h-auto tw-max-h-full tw-overflow-y-scroll tw-px-[7%] tw-py-[5%] tw-flex tw-flex-col tw-gap-[1vh]"
-            >
-              <!-- <template v-for="number in 1">
-                <v-select
-                  variant="solo-filled"
-                  height="auto"
-                  class="task-select"
-                  flat
-                  bg-color="transparent"
-                  :style="{ backgroundImage: `url(${inputDailyTask})` }"
-                  :menu-icon="
-                    isOpen
-                      ? 'material-symbols-arrow-drop-down'
-                      : 'material-symbols-arrow-right'
-                  "
-                  @update:menu="isOpen = $event"
-                  density="compact"
-                >
-                </v-select>
-              </template> -->
+            <div class="icon-checked-in">
+              <v-img :src="iconCheckedIn" />
+            </div>
+          </div>
 
-              <v-expansion-panels
-                flat
-                hide-actions
-                multiple
-                bg-color="transparent"
-              >
-                <template v-for="number in 12">
-                  <v-expansion-panel class="daily-task">
-                    <v-expansion-panel-title
-                      static
-                      collapse-icon="material-symbols-arrow-drop-down"
-                      expand-icon="material-symbols-arrow-right"
-                      class="task-title"
-                      :style="{ backgroundImage: `url(${inputDailyTask})` }"
-                    >
-                      <div class="child-element">Abv</div>
-                    </v-expansion-panel-title>
+          <div class="daily-gift">
+            <div class="tw-aspect-[99/102] tw-w-1/2">
+              <v-img :src="gift3" />
+            </div>
 
-                    <v-expansion-panel-text
-                      class="task-content tw-mx-[2%] tw-bg-[#FFF0C3]/60 tw-border-[.5vw] tw-border-t-0 tw-border-solid tw-border-[#8D2E02] tw-rounded-b-[1em]"
-                    >
-                      Some content
-                    </v-expansion-panel-text>
-                  </v-expansion-panel>
-                </template>
-              </v-expansion-panels>
+            <div class="icon-checked-in">
+              <v-img :src="iconCheckedIn" />
+            </div>
+          </div>
+        </div>
+
+        <div class="reward tw-row-span-2 tw-col-span-2">
+          <div class="special-gift checked-in">
+            <div class="tw-aspect-[169/176] tw-w-3/4">
+              <v-img :src="gift7" />
+            </div>
+
+            <div class="icon-checked-in">
+              <v-img :src="iconCheckedIn" />
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="tw-col-span-5 tw-row-span-1 tw-grid tw-grid-cols-3 tw-grid-rows-1 tw-gap-[5%]"
+        >
+          <div class="daily-gift">
+            <div class="tw-aspect-[99/102] tw-w-1/2">
+              <v-img :src="gift4" />
+            </div>
+
+            <div class="icon-checked-in">
+              <v-img :src="iconCheckedIn" />
+            </div>
+          </div>
+
+          <div class="daily-gift">
+            <div class="tw-aspect-[99/102] tw-w-1/2">
+              <v-img :src="gift5" />
+            </div>
+
+            <div class="icon-checked-in">
+              <v-img :src="iconCheckedIn" />
+            </div>
+          </div>
+
+          <div class="daily-gift">
+            <div class="tw-aspect-[99/102] tw-w-1/2">
+              <v-img :src="gift6" />
+            </div>
+
+            <div class="icon-checked-in">
+              <v-img :src="iconCheckedIn" />
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Bottom Icons -->
-      <bottom-bar />
+      <div
+        class="tw-flex-auto tw-flex tw-flex-col tw-overflow-hidden tw-bg-[#c26828] tw-bg-[100%_auto] tw-bg-top tw-bg-no-repeat"
+        :style="{ backgroundImage: `url(${bgBoxTask})` }"
+      >
+        <div class="tw-w-full tw-aspect-[1080/157]">
+          <div class="tw-px-[8%] tw-w-full tw-h-full">
+            <div
+              class="tw-w-full tw-h-full tw-flex tw-justify-between tw-items-center"
+            >
+              <v-btn
+                color="transparent"
+                flat
+                class="tw-aspect-[220/97] tw-w-[24.2%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden"
+                :style="{ backgroundImage: `url(${btnFab})` }"
+                @click="submitFab"
+              ></v-btn>
+
+              <v-btn
+                color="transparent"
+                flat
+                class="tw-aspect-[318/97] tw-w-[35.1%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden"
+                :style="{ backgroundImage: `url(${btnNetwork})` }"
+                @click="submitNetwork"
+              ></v-btn>
+
+              <v-btn
+                color="transparent"
+                flat
+                class="tw-aspect-[220/97] tw-w-[24.2%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden"
+                :style="{ backgroundImage: `url(${btnFriend})` }"
+                @click="submitFriend"
+              ></v-btn>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="tw-h-auto tw-max-h-full tw-overflow-y-scroll tw-px-[7%] tw-py-[5%] tw-flex tw-flex-col tw-gap-[1vh]"
+        >
+          <v-expansion-panels flat hide-actions multiple bg-color="transparent">
+            <template v-for="number in 12">
+              <v-expansion-panel class="daily-task">
+                <v-expansion-panel-title
+                  static
+                  collapse-icon="material-symbols-arrow-drop-down"
+                  expand-icon="material-symbols-arrow-right"
+                  class="task-title"
+                  :style="{ backgroundImage: `url(${inputDailyTask})` }"
+                >
+                  <div class="child-element">Abv</div>
+                </v-expansion-panel-title>
+
+                <v-expansion-panel-text
+                  class="task-content tw-mx-[2%] tw-bg-[#FFF0C3]/60 tw-border-[.5vw] tw-border-t-0 tw-border-solid tw-border-[#8D2E02] tw-rounded-b-[1em]"
+                >
+                  Some content
+                </v-expansion-panel-text>
+              </v-expansion-panel>
+            </template>
+          </v-expansion-panels>
+        </div>
+      </div>
     </div>
   </div>
 </template>

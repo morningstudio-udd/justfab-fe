@@ -39,7 +39,7 @@ const disconnectWallet = async () => {
     @click="connectWallet"
     color="transparent"
     flat
-    class="tw-mx-auto tw-bg-cover tw-bg-center tw-bg-no-repeat tw-aspect-[387/104] tw-w-[53%] !tw-h-auto !tw-rounded-[10%] tw-overflow-hidden"
+    class="tw-mx-auto tw-bg-cover tw-bg-center tw-bg-no-repeat tw-aspect-[387/104] tw-w-[53%] !tw-h-auto !tw-rounded-[12%] tw-overflow-hidden"
     :style="{ backgroundImage: `url(${btnConnectWallet})` }"
   >
   </v-btn>

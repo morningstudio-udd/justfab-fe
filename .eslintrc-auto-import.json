@@ -367,6 +367,7 @@
     "authClient": true,
     "getSlotMachineConfig": true,
     "playSlotMachine": true,
-    "setSlotMachineConfig": true
+    "setSlotMachineConfig": true,
+    "REWARD_TYPES": true
   }
 }

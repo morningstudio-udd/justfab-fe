@@ -41,4 +41,14 @@ export const ITEM_RARITIES = {
   MYTHIC: "MYTHIC",
 };
 
+export const REWARD_TYPES = {
+  GOLD: "GOLD",
+  TOKEN: "TOKEN",
+  FOOD: "FOOD",
+  ITEM: "ITEM",
+  JACKPOT: "JACKPOT",
+  SPIN: "SPIN",
+  POOL_PERCENTAGE: "POOL_PERCENTAGE",
+};
+
 export const ERROR_MESSAGE = {};

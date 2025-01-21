@@ -1,4 +1,5 @@
 <script setup>
+import ResultItemDialog from "@/components/Dialog/ResultItemDialog.vue";
 import gameBg from "@images/game/bg-game-1.png";
 
 definePage({
@@ -13,13 +14,12 @@ const refSlotMachine = ref();
 const energy = ref("50/50");
 const jackpot = ref("1.000.000 vnđ");
 const enable = ref(true);
-const resultData = ref(null);
 const gameContentRef = ref(null);
 const parentDivWidth = ref(0);
+const itemReward = ref(null);
+const resultItemDialogRef = ref(null);
 
 let resizeObserver;
-
-const rewardResult = computed(() => resultData.value?.rewards);
 
 onMounted(async () => {
   if (gameContentRef.value) {
@@ -39,22 +39,34 @@ onMounted(async () => {
 });
 
 const onRollClick = async () => {
-  // refSlotMachine.value.roll(["J", "J", "J", "O"]);
-  // enable.value = false;
-  // setTimeout(() => {
-  //   enable.value = true;
-  // }, 4000);
+  if (!enable.value) return;
   try {
     enable.value = false;
 
-    const playResponse = await playSlotMachine();
-    resultData.value = { ...playResponse };
-    refSlotMachine.value.roll(resultData.value.reelSymbols);
+    const { reelSymbols: symbolsReward, rewards } = await playSlotMachine();
+
+    if (rewards && rewards.length) {
+      itemReward.value = rewards.find(
+        (reward) => reward.type === REWARD_TYPES.ITEM
+      );
+
+      if (itemReward.value && Object.keys(itemReward.value).length) {
+        console.log("itemReward", itemReward.value);
+
+        resultItemDialogRef.value.openDialog();
+      }
+    }
+
+    refSlotMachine.value.roll(symbolsReward);
   } catch (error) {
     console.log("error", error);
   } finally {
     enable.value = true;
   }
+};
+
+const resetRewardsState = () => {
+  itemReward.value = null;
 };
 
 onBeforeUnmount(() => {
@@ -63,24 +75,25 @@ onBeforeUnmount(() => {
     resizeObserver.disconnect();
   }
 });
-
-watch(rewardResult, (newVal) => {
-  if (newVal) {
-    console.log("newVal", newVal);
-  }
-});
 </script>
 
 <template>
   <div ref="gameContentRef" class="game-content tw-flex-grow">
-    <slot-machine
-      ref="refSlotMachine"
-      :energy="energy"
-      :jackpot="jackpot"
-      :disabled="!enable"
-      @rollClick="onRollClick"
-    ></slot-machine>
+    <div class="tw-absolute tw-top-0 tw-left-0 tw-right-0 tw-bottom-0">
+      <slot-machine
+        ref="refSlotMachine"
+        :energy="energy"
+        :jackpot="jackpot"
+        :disabled="!enable"
+        @rollClick="onRollClick"
+      ></slot-machine>
+    </div>
 
-    <ResultDialog :width="parentDivWidth * 0.79" />
+    <result-item-dialog
+      ref="resultItemDialogRef"
+      :width="parentDivWidth * 0.79"
+      :item="itemReward"
+      @onClose="resetRewardsState"
+    />
   </div>
 </template>

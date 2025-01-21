@@ -5,7 +5,7 @@ import bgAvt from "@images/game/bg-avt.png";
 </script>
 
 <template>
-  <div class="top-bar tw-flex tw-items-start tw-px-1 tw-pt-1">
+  <div class="top-bar tw-flex tw-items-start tw-px-1 tw-pt-1 tw-z-10">
     <div
       class="top-icon tw-mr-[1%] tw-w-[41.2%] tw-aspect-[446/218] tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative"
       :style="{ backgroundImage: `url(${bgAvt})` }"

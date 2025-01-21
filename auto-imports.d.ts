@@ -10,6 +10,7 @@ declare global {
   const EffectScope: typeof import('vue')['EffectScope']
   const ITEM_CATEGORIES: typeof import('./src/utils/constant.js')['ITEM_CATEGORIES']
   const ITEM_RARITIES: typeof import('./src/utils/constant.js')['ITEM_RARITIES']
+  const REWARD_TYPES: typeof import('./src/utils/constant.js')['REWARD_TYPES']
   const ROLES: typeof import('./src/utils/constant.js')['ROLES']
   const USER_ABILITY_RULES: typeof import('./src/utils/constant.js')['USER_ABILITY_RULES']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
@@ -377,6 +378,7 @@ declare module 'vue' {
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
     readonly ITEM_CATEGORIES: UnwrapRef<typeof import('./src/utils/constant.js')['ITEM_CATEGORIES']>
     readonly ITEM_RARITIES: UnwrapRef<typeof import('./src/utils/constant.js')['ITEM_RARITIES']>
+    readonly REWARD_TYPES: UnwrapRef<typeof import('./src/utils/constant.js')['REWARD_TYPES']>
     readonly ROLES: UnwrapRef<typeof import('./src/utils/constant.js')['ROLES']>
     readonly USER_ABILITY_RULES: UnwrapRef<typeof import('./src/utils/constant.js')['USER_ABILITY_RULES']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>

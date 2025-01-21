@@ -43,7 +43,7 @@ const navItems = ref([
 
 <template>
   <div
-    class="bottom-bar tw-w-full tw-max-w-full tw-aspect-[1080/170] tw-flex"
+    class="bottom-bar tw-w-full tw-max-w-full tw-aspect-[1080/170] tw-flex tw-z-10"
     nav
   >
     <div

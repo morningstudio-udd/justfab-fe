@@ -110,11 +110,24 @@ const config = defineConfig({
     }),
   ],
 
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: "modern-compiler",
+      },
+    },
+  },
+
   build: {
     chunkSizeWarningLimit: 5000,
     // target: 'esnext',
     // minify: 'esbuild',
     rollupOptions: {
+      onwarn(warning, warn) {
+        if (warning.code === "ANNOTATION") return;
+        warn(warning);
+      },
+
       output: {
         manualChunks: {
           vuetify: ["vuetify/components", "vuetify/directives", "vuetify"],

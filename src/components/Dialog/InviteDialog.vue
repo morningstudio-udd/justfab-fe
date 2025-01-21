@@ -48,7 +48,6 @@ defineExpose({ openDialog, inviteDialog, closeDialog });
     max-width="766"
     :width="width"
     persistent
-    :activator="parent"
   >
     <IconBtn
       flat

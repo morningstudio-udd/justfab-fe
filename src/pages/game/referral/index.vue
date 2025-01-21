@@ -12,6 +12,7 @@ definePage({
 
 const gameContentRef = ref(null);
 const inviteDialogRef = ref(null);
+const claimInviteDialogRef = ref(null);
 const parentDivWidth = ref(0);
 let resizeObserver;
 
@@ -92,5 +93,9 @@ onBeforeUnmount(() => {
     </div>
 
     <invite-dialog ref="inviteDialogRef" :width="parentDivWidth * 0.79" />
+    <claim-invite-dialog
+      ref="claimInviteDialogRef"
+      :width="parentDivWidth * 0.79"
+    />
   </div>
 </template>

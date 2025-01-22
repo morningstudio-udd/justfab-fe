@@ -59,3 +59,8 @@ export const playSound = (audioUrl) => {
 export const getApiPath = (path, params) => {
   return path.replace(/:([a-zA-Z]+)/g, (_, key) => params[key]);
 };
+
+export const truncateString = (str, maxLength = 9, suffix = "...") => {
+  if (typeof str !== "string") throw new TypeError("Input must be a string");
+  return str.length > maxLength ? `${str.slice(0, maxLength)}${suffix}` : str;
+};

@@ -2,6 +2,12 @@
 import bgCoin from "@images/game/bg-coin.png";
 import bgGold from "@images/game/bg-gold.png";
 import bgAvt from "@images/game/bg-avt.png";
+
+const userStore = useUserStore();
+
+const displayName = computed(() =>
+  truncateString(userStore.userData?.displayName)
+);
 </script>
 
 <template>
@@ -36,7 +42,7 @@ import bgAvt from "@images/game/bg-avt.png";
             overflow="hidden"
             width="100%"
           >
-            Facaby King
+            {{ displayName }}
           </text>
         </svg>
       </div>
@@ -93,7 +99,7 @@ import bgAvt from "@images/game/bg-avt.png";
             stroke-width="1.8"
             paint-order="stroke fill"
           >
-            12500
+            {{ userStore.userData?.gold || 0 }}
           </text>
         </svg>
       </div>
@@ -123,7 +129,7 @@ import bgAvt from "@images/game/bg-avt.png";
             stroke-width="1.8"
             paint-order="stroke fill"
           >
-            12500
+            {{ userStore.userData?.token || 0 }}
           </text>
         </svg>
       </div>

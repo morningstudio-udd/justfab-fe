@@ -17,10 +17,15 @@ const jackpotRewards = ref([]);
 const enable = ref(true);
 const gameContentRef = ref(null);
 const parentDivWidth = ref(0);
+const currentRewards = ref(null);
 const itemReward = ref(null);
 const resultItemDialogRef = ref(null);
 
 let resizeObserver;
+
+const bottomValue = computed(() => {
+  return `${parentDivWidth.value / (1080 / 170)}px`;
+});
 
 onMounted(async () => {
   if (gameContentRef.value) {
@@ -32,7 +37,6 @@ onMounted(async () => {
 
     resizeObserver.observe(gameContentRef.value);
   }
-
 
   // should get from api jackpot/rewards
   jackpotRewards.value = [
@@ -47,15 +51,13 @@ onMounted(async () => {
     "0.05% Jackpot Pool",
     "0.1% Jackpot Pool",
     "0.5% Jackpot Pool",
-    "1% Jackpot Pool"
+    "1% Jackpot Pool",
   ];
 
   // setTimeout(() => {
   //   energy.value = "25 / 100";
   //   jackpot.value = "1.000 vnđ";
   // }, 2000);
-
-  
 });
 
 const onRollClick = async () => {
@@ -63,11 +65,11 @@ const onRollClick = async () => {
   try {
     enable.value = false;
 
-<<<<<<< HEAD
     const { reelSymbols: symbolsReward, rewards } = await playSlotMachine();
 
-    if (rewards && rewards.length) {
-      itemReward.value = rewards.find(
+    currentRewards.value = rewards;
+    if (currentRewards.value && currentRewards.value.length) {
+      itemReward.value = currentRewards.value.find(
         (reward) => reward.type === REWARD_TYPES.ITEM
       );
 
@@ -79,19 +81,9 @@ const onRollClick = async () => {
     }
 
     refSlotMachine.value.roll(symbolsReward);
-=======
-    const playResponse = await playSlotMachine();
-    resultData.value = { ...playResponse };
-    refSlotMachine.value.roll(resultData.value.reelSymbols);
-
-    enable.value = false;
 
     await waitForSeconds(4);
     await processRewards();
-
-    enable.value = true;
-
->>>>>>> a77809c705105ec079f07dacc39926e592e89ce8
   } catch (error) {
     console.log("error", error);
   } finally {
@@ -99,16 +91,13 @@ const onRollClick = async () => {
   }
 };
 
-<<<<<<< HEAD
 const resetRewardsState = () => {
   itemReward.value = null;
 };
-=======
 const processRewards = async () => {
-  const rewards = resultData.value?.rewards;
-  for(let r in rewards) {
-    const reward = rewards[r];
-    if(reward.type == "JACKPOT") {
+  for (let r in currentRewards.value) {
+    const reward = currentRewards.value[r];
+    if (reward.type == "JACKPOT") {
       refSlotMachine.value.setJackpotVisible(true);
       refSlotMachine.value.rollJackpot(reward.jackpot.reward.description);
       await waitForSeconds(4);
@@ -117,8 +106,7 @@ const processRewards = async () => {
   }
 
   return true;
-}
->>>>>>> a77809c705105ec079f07dacc39926e592e89ce8
+};
 
 onBeforeUnmount(() => {
   if (resizeObserver && gameContentRef.value) {
@@ -126,45 +114,29 @@ onBeforeUnmount(() => {
     resizeObserver.disconnect();
   }
 });
-<<<<<<< HEAD
-=======
-
-watch(rewardResult, (newVal) => {
-  if (newVal) {
-    console.log("newVal", newVal);
-  }
-});
 
 const waitForSeconds = async (s) => {
   return new Promise((res) => {
     setTimeout(res, s * 1000);
-  })
-}
->>>>>>> a77809c705105ec079f07dacc39926e592e89ce8
+  });
+};
 </script>
 
 <template>
   <div ref="gameContentRef" class="game-content tw-flex-grow">
-<<<<<<< HEAD
-    <div class="tw-absolute tw-top-0 tw-left-0 tw-right-0 tw-bottom-0">
+    <div
+      class="tw-absolute tw-top-0 tw-left-0 tw-right-0"
+      :style="{ bottom: bottomValue }"
+    >
       <slot-machine
         ref="refSlotMachine"
         :energy="energy"
         :jackpot="jackpot"
         :disabled="!enable"
+        :jackpotRewards="jackpotRewards"
         @rollClick="onRollClick"
       ></slot-machine>
     </div>
-=======
-    <slot-machine
-      ref="refSlotMachine"
-      :energy="energy"
-      :jackpot="jackpot"
-      :disabled="!enable"
-      :jackpotRewards="jackpotRewards"
-      @rollClick="onRollClick"
-    ></slot-machine>
->>>>>>> a77809c705105ec079f07dacc39926e592e89ce8
 
     <result-item-dialog
       ref="resultItemDialogRef"

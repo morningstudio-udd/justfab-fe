@@ -368,6 +368,10 @@
     "getSlotMachineConfig": true,
     "playSlotMachine": true,
     "setSlotMachineConfig": true,
-    "REWARD_TYPES": true
+    "REWARD_TYPES": true,
+    "onElementRemoval": true,
+    "usePreferredReducedTransparency": true,
+    "useSSRWidth": true,
+    "futureverseAuth": true
   }
 }

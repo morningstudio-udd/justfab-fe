@@ -56,6 +56,7 @@ declare global {
   const effectScope: typeof import('vue')['effectScope']
   const emailValidator: typeof import('./src/utils/validators.js')['emailValidator']
   const extendRef: typeof import('@vueuse/core')['extendRef']
+  const futureverseAuth: typeof import('./src/utils/futureverseAuth.js')['default']
   const getActivePinia: typeof import('pinia')['getActivePinia']
   const getAllAssets: typeof import('./src/api/admin.js')['getAllAssets']
   const getAllFusions: typeof import('./src/api/admin.js')['getAllFusions']
@@ -103,6 +104,7 @@ declare global {
   const onBeforeUpdate: typeof import('vue')['onBeforeUpdate']
   const onClickOutside: typeof import('@vueuse/core')['onClickOutside']
   const onDeactivated: typeof import('vue')['onDeactivated']
+  const onElementRemoval: typeof import('@vueuse/core')['onElementRemoval']
   const onErrorCaptured: typeof import('vue')['onErrorCaptured']
   const onKeyStroke: typeof import('@vueuse/core')['onKeyStroke']
   const onLongPress: typeof import('@vueuse/core')['onLongPress']
@@ -289,12 +291,14 @@ declare global {
   const usePreferredDark: typeof import('@vueuse/core')['usePreferredDark']
   const usePreferredLanguages: typeof import('@vueuse/core')['usePreferredLanguages']
   const usePreferredReducedMotion: typeof import('@vueuse/core')['usePreferredReducedMotion']
+  const usePreferredReducedTransparency: typeof import('@vueuse/core')['usePreferredReducedTransparency']
   const usePrevious: typeof import('@vueuse/core')['usePrevious']
   const useRafFn: typeof import('@vueuse/core')['useRafFn']
   const useRefHistory: typeof import('@vueuse/core')['useRefHistory']
   const useResizeObserver: typeof import('@vueuse/core')['useResizeObserver']
   const useRoute: typeof import('vue-router')['useRoute']
   const useRouter: typeof import('vue-router')['useRouter']
+  const useSSRWidth: typeof import('@vueuse/core')['useSSRWidth']
   const useScreenOrientation: typeof import('@vueuse/core')['useScreenOrientation']
   const useScreenSafeArea: typeof import('@vueuse/core')['useScreenSafeArea']
   const useScriptTag: typeof import('@vueuse/core')['useScriptTag']
@@ -386,7 +390,6 @@ declare module 'vue' {
     readonly alphaDashValidator: UnwrapRef<typeof import('./src/utils/validators.js')['alphaDashValidator']>
     readonly alphaValidator: UnwrapRef<typeof import('./src/utils/validators.js')['alphaValidator']>
     readonly asyncComputed: UnwrapRef<typeof import('@vueuse/core')['asyncComputed']>
-    readonly authClient: UnwrapRef<typeof import('./src/utils/authClient.js')['authClient']>
     readonly autoResetRef: UnwrapRef<typeof import('@vueuse/core')['autoResetRef']>
     readonly betweenValidator: UnwrapRef<typeof import('./src/utils/validators.js')['betweenValidator']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
@@ -471,6 +474,7 @@ declare module 'vue' {
     readonly onBeforeUpdate: UnwrapRef<typeof import('vue')['onBeforeUpdate']>
     readonly onClickOutside: UnwrapRef<typeof import('@vueuse/core')['onClickOutside']>
     readonly onDeactivated: UnwrapRef<typeof import('vue')['onDeactivated']>
+    readonly onElementRemoval: UnwrapRef<typeof import('@vueuse/core')['onElementRemoval']>
     readonly onErrorCaptured: UnwrapRef<typeof import('vue')['onErrorCaptured']>
     readonly onKeyStroke: UnwrapRef<typeof import('@vueuse/core')['onKeyStroke']>
     readonly onLongPress: UnwrapRef<typeof import('@vueuse/core')['onLongPress']>
@@ -657,12 +661,14 @@ declare module 'vue' {
     readonly usePreferredDark: UnwrapRef<typeof import('@vueuse/core')['usePreferredDark']>
     readonly usePreferredLanguages: UnwrapRef<typeof import('@vueuse/core')['usePreferredLanguages']>
     readonly usePreferredReducedMotion: UnwrapRef<typeof import('@vueuse/core')['usePreferredReducedMotion']>
+    readonly usePreferredReducedTransparency: UnwrapRef<typeof import('@vueuse/core')['usePreferredReducedTransparency']>
     readonly usePrevious: UnwrapRef<typeof import('@vueuse/core')['usePrevious']>
     readonly useRafFn: UnwrapRef<typeof import('@vueuse/core')['useRafFn']>
     readonly useRefHistory: UnwrapRef<typeof import('@vueuse/core')['useRefHistory']>
     readonly useResizeObserver: UnwrapRef<typeof import('@vueuse/core')['useResizeObserver']>
     readonly useRoute: UnwrapRef<typeof import('vue-router')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router')['useRouter']>
+    readonly useSSRWidth: UnwrapRef<typeof import('@vueuse/core')['useSSRWidth']>
     readonly useScreenOrientation: UnwrapRef<typeof import('@vueuse/core')['useScreenOrientation']>
     readonly useScreenSafeArea: UnwrapRef<typeof import('@vueuse/core')['useScreenSafeArea']>
     readonly useScriptTag: UnwrapRef<typeof import('@vueuse/core')['useScriptTag']>

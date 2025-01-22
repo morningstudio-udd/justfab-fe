@@ -10,9 +10,11 @@ definePage({
   },
 });
 
+const userStore = useUserStore();
+
 const refSlotMachine = ref();
-const energy = ref("50/50");
-const jackpot = ref("1.000.000 vnđ");
+
+const jackpot = ref();
 const jackpotRewards = ref([]);
 const enable = ref(true);
 const gameContentRef = ref(null);
@@ -23,6 +25,9 @@ const resultItemDialogRef = ref(null);
 
 let resizeObserver;
 
+const energy = computed(
+  () => `${userStore.userData?.energy} / ${userStore.userData?.maxEnergy}`
+);
 const bottomValue = computed(() => {
   return `${parentDivWidth.value / (1080 / 170)}px`;
 });
@@ -38,26 +43,9 @@ onMounted(async () => {
     resizeObserver.observe(gameContentRef.value);
   }
 
-  // should get from api jackpot/rewards
-  jackpotRewards.value = [
-    "5.000 Gold",
-    "10.000 Gold",
-    "Items (Legendary)",
-    "Items (Mythic)",
-    "0.001% Jackpot Pool",
-    "0.005% Jackpot Pool",
-    "0.01% Jackpot Pool",
-    "0.02% Jackpot Pool",
-    "0.05% Jackpot Pool",
-    "0.1% Jackpot Pool",
-    "0.5% Jackpot Pool",
-    "1% Jackpot Pool",
-  ];
-
-  // setTimeout(() => {
-  //   energy.value = "25 / 100";
-  //   jackpot.value = "1.000 vnđ";
-  // }, 2000);
+  const { rewards, pool } = await getJackpotRewards();
+  jackpotRewards.value = rewards;
+  jackpot.value = pool.toString();
 });
 
 const onRollClick = async () => {
@@ -65,24 +53,19 @@ const onRollClick = async () => {
   try {
     enable.value = false;
 
-    const { reelSymbols: symbolsReward, rewards } = await playSlotMachine();
+    const {
+      reelSymbols: symbolsReward,
+      rewards,
+      user,
+    } = await playSlotMachine();
 
     currentRewards.value = rewards;
-    if (currentRewards.value && currentRewards.value.length) {
-      itemReward.value = currentRewards.value.find(
-        (reward) => reward.type === REWARD_TYPES.ITEM
-      );
-
-      if (itemReward.value && Object.keys(itemReward.value).length) {
-        console.log("itemReward", itemReward.value);
-
-        resultItemDialogRef.value.openDialog();
-      }
-    }
 
     refSlotMachine.value.roll(symbolsReward);
 
     await waitForSeconds(4);
+
+    userStore.userData = { ...userStore.userData, ...user };
     await processRewards();
   } catch (error) {
     console.log("error", error);
@@ -93,15 +76,32 @@ const onRollClick = async () => {
 
 const resetRewardsState = () => {
   itemReward.value = null;
+  currentRewards.value = null;
 };
+
 const processRewards = async () => {
-  for (let r in currentRewards.value) {
-    const reward = currentRewards.value[r];
-    if (reward.type == "JACKPOT") {
-      refSlotMachine.value.setJackpotVisible(true);
-      refSlotMachine.value.rollJackpot(reward.jackpot.reward.description);
-      await waitForSeconds(4);
-      refSlotMachine.value.setButtonCloseVisible(true);
+  for (const reward of currentRewards.value) {
+    switch (reward.type) {
+      case REWARD_TYPES.JACKPOT: {
+        jackpot.value = reward.jackpot.updatedPool.toString();
+
+        const description = reward.jackpot.reward.description;
+
+        refSlotMachine.value.setJackpotVisible(true);
+        refSlotMachine.value.rollJackpot(description);
+        await waitForSeconds(4);
+        refSlotMachine.value.setButtonCloseVisible(true);
+        break;
+      }
+
+      case REWARD_TYPES.ITEM:
+        itemReward.value = reward;
+        resultItemDialogRef.value.openDialog();
+        break;
+
+      default:
+        console.warn(`Unknown reward type: ${reward.type}`);
+        break;
     }
   }
 

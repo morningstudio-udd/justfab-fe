@@ -1,5 +1,4 @@
 import { $api } from "@/plugins/axios";
-import { set } from "vue-demi";
 
 const API = {
   inventory: {
@@ -11,6 +10,10 @@ const API = {
     get: "/slotMachine",
     set: "/slotMachine",
     play: "/slotMachine/play",
+  },
+  jackpot: {
+    get: "/jackpot",
+    getRewards: "/jackpot/rewards",
   },
 };
 
@@ -78,6 +81,30 @@ export const playSlotMachine = async () => {
   try {
     const url = getApiPath(API.slotMachine.play);
     const res = await $api.post(url);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
+  }
+};
+
+export const getJackpot = async () => {
+  try {
+    const url = getApiPath(API.jackpot.get);
+    const res = await $api.get(url);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
+  }
+};
+
+export const getJackpotRewards = async () => {
+  try {
+    const url = getApiPath(API.jackpot.getRewards);
+    const res = await $api.get(url);
 
     return res.data;
   } catch (error) {

@@ -372,6 +372,9 @@
     "onElementRemoval": true,
     "usePreferredReducedTransparency": true,
     "useSSRWidth": true,
-    "futureverseAuth": true
+    "futureverseAuth": true,
+    "getJackpot": true,
+    "getJackpotRewards": true,
+    "truncateString": true
   }
 }

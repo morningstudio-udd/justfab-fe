@@ -68,6 +68,8 @@ declare global {
   const getFusedInto: typeof import('./src/api/admin.js')['getFusedInto']
   const getFusion: typeof import('./src/api/admin.js')['getFusion']
   const getItem: typeof import('./src/api/admin.js')['getItem']
+  const getJackpot: typeof import('./src/api/game.js')['getJackpot']
+  const getJackpotRewards: typeof import('./src/api/game.js')['getJackpotRewards']
   const getSlotMachineConfig: typeof import('./src/api/game.js')['getSlotMachineConfig']
   const getUserInfo: typeof import('./src/api/user.js')['getUserInfo']
   const getUserInventory: typeof import('./src/api/game.js')['getUserInventory']
@@ -166,6 +168,7 @@ declare global {
   const toRefs: typeof import('vue')['toRefs']
   const toValue: typeof import('vue')['toValue']
   const triggerRef: typeof import('vue')['triggerRef']
+  const truncateString: typeof import('./src/utils/helpers.js')['truncateString']
   const tryOnBeforeMount: typeof import('@vueuse/core')['tryOnBeforeMount']
   const tryOnBeforeUnmount: typeof import('@vueuse/core')['tryOnBeforeUnmount']
   const tryOnMounted: typeof import('@vueuse/core')['tryOnMounted']
@@ -438,6 +441,8 @@ declare module 'vue' {
     readonly getFusedInto: UnwrapRef<typeof import('./src/api/admin.js')['getFusedInto']>
     readonly getFusion: UnwrapRef<typeof import('./src/api/admin.js')['getFusion']>
     readonly getItem: UnwrapRef<typeof import('./src/api/admin.js')['getItem']>
+    readonly getJackpot: UnwrapRef<typeof import('./src/api/game.js')['getJackpot']>
+    readonly getJackpotRewards: UnwrapRef<typeof import('./src/api/game.js')['getJackpotRewards']>
     readonly getSlotMachineConfig: UnwrapRef<typeof import('./src/api/game.js')['getSlotMachineConfig']>
     readonly getUserInfo: UnwrapRef<typeof import('./src/api/user.js')['getUserInfo']>
     readonly getUserInventory: UnwrapRef<typeof import('./src/api/game.js')['getUserInventory']>
@@ -536,6 +541,7 @@ declare module 'vue' {
     readonly toRefs: UnwrapRef<typeof import('vue')['toRefs']>
     readonly toValue: UnwrapRef<typeof import('vue')['toValue']>
     readonly triggerRef: UnwrapRef<typeof import('vue')['triggerRef']>
+    readonly truncateString: UnwrapRef<typeof import('./src/utils/helpers.js')['truncateString']>
     readonly tryOnBeforeMount: UnwrapRef<typeof import('@vueuse/core')['tryOnBeforeMount']>
     readonly tryOnBeforeUnmount: UnwrapRef<typeof import('@vueuse/core')['tryOnBeforeUnmount']>
     readonly tryOnMounted: UnwrapRef<typeof import('@vueuse/core')['tryOnMounted']>

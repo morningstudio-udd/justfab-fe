@@ -61,6 +61,6 @@ export const getApiPath = (path, params) => {
 };
 
 export const truncateString = (str, maxLength = 9, suffix = "...") => {
-  if (typeof str !== "string") throw new TypeError("Input must be a string");
+  if (typeof str !== "string") return "";
   return str.length > maxLength ? `${str.slice(0, maxLength)}${suffix}` : str;
 };

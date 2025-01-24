@@ -131,6 +131,7 @@ onBeforeUnmount(() => {
         class="tw-mb-[3%] tw-w-full tw-flex tw-justify-center tw-items-center"
       >
         <v-btn
+          flat
           color="transparent"
           class="tw-aspect-[380/96] tw-w-[35.2%] !tw-h-auto tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden"
           :style="{ backgroundImage: `url(${btnInvite})` }"

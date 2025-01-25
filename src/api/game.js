@@ -1,4 +1,5 @@
 import { $api } from "@/plugins/axios";
+import { set } from "@vueuse/core";
 
 const API = {
   inventory: {
@@ -13,6 +14,7 @@ const API = {
   },
   jackpot: {
     get: "/jackpot",
+    set: "/jackpot",
     getRewards: "/jackpot/rewards",
   },
 };
@@ -93,6 +95,18 @@ export const getJackpot = async () => {
   try {
     const url = getApiPath(API.jackpot.get);
     const res = await $api.get(url);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
+  }
+};
+
+export const setJackpot = async (payload) => {
+  try {
+    const url = getApiPath(API.jackpot.set);
+    const res = await $api.post(url, payload);
 
     return res.data;
   } catch (error) {

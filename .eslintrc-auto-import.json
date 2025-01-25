@@ -384,6 +384,7 @@
     "generatePKCE": true,
     "getLoginURL": true,
     "parseJwt": true,
-    "refreshFBToken": true
+    "refreshFBToken": true,
+    "setJackpot": true
   }
 }

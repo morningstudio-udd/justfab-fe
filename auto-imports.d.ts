@@ -159,6 +159,7 @@ declare global {
   const resolveUnref: typeof import('@vueuse/core')['resolveUnref']
   const selectAllText: typeof import('./src/utils/mixin.js')['selectAllText']
   const setActivePinia: typeof import('pinia')['setActivePinia']
+  const setJackpot: typeof import('./src/api/game.js')['setJackpot']
   const setMapStoreSuffix: typeof import('pinia')['setMapStoreSuffix']
   const setSlotMachineConfig: typeof import('./src/api/game.js')['setSlotMachineConfig']
   const shallowReactive: typeof import('vue')['shallowReactive']
@@ -541,6 +542,7 @@ declare module 'vue' {
     readonly resolveUnref: UnwrapRef<typeof import('@vueuse/core')['resolveUnref']>
     readonly selectAllText: UnwrapRef<typeof import('./src/utils/mixin.js')['selectAllText']>
     readonly setActivePinia: UnwrapRef<typeof import('pinia')['setActivePinia']>
+    readonly setJackpot: UnwrapRef<typeof import('./src/api/game.js')['setJackpot']>
     readonly setMapStoreSuffix: UnwrapRef<typeof import('pinia')['setMapStoreSuffix']>
     readonly setSlotMachineConfig: UnwrapRef<typeof import('./src/api/game.js')['setSlotMachineConfig']>
     readonly shallowReactive: UnwrapRef<typeof import('vue')['shallowReactive']>

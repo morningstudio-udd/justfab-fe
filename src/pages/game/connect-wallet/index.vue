@@ -3,6 +3,7 @@ import gameBg from "@images/game/blank_background.png";
 import bgConnectWallet from "@images/game/bg-connect-wallet.png";
 import inputConnectWallet from "@images/game/input-connect-wallet.png";
 import btnConnectWallet from "@images/game/btn-connect-wallet.png";
+import { onMounted } from "vue";
 
 definePage({
   meta: {
@@ -10,6 +11,18 @@ definePage({
     public: true,
   },
 });
+
+const walletAddress = ref("");
+const email = ref("");
+const chainId = ref("");
+
+
+onMounted(() => {
+  walletAddress.value = localStorage.getItem("fp_futurepass");
+  email.value = localStorage.getItem("fb_email")?localStorage.getItem("fb_email"):"none";
+  chainId.value = localStorage.getItem("fp_chainId");
+})
+
 </script>
 
 <template>
@@ -38,7 +51,7 @@ definePage({
           />
 
           <v-text-field
-            v-model="walletAddress"
+            v-model="chainId"
             class="input-connect-wallet"
             variant="solo-filled"
             readonly
@@ -49,7 +62,7 @@ definePage({
           />
 
           <v-text-field
-            v-model="walletAddress"
+            v-model="email"
             class="input-connect-wallet"
             variant="solo-filled"
             readonly
@@ -59,7 +72,7 @@ definePage({
             :style="{ backgroundImage: `url(${inputConnectWallet})` }"
           />
 
-          <connect-wallet-btn />
+          <connect-wallet-btn/>
         </div>
       </v-card-text>
     </v-card>

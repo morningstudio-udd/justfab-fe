@@ -376,6 +376,14 @@
     "getJackpot": true,
     "getJackpotRewards": true,
     "truncateString": true,
-    "animateCounter": true
+    "animateCounter": true,
+    "base64UrlDecode": true,
+    "fetchFPToken": true,
+    "generateCodeChallenge": true,
+    "generateCodeVerifier": true,
+    "generatePKCE": true,
+    "getLoginURL": true,
+    "parseJwt": true,
+    "refreshFBToken": true
   }
 }

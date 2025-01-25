@@ -22,6 +22,7 @@ declare module 'vue-router/auto-routes' {
     'admin': RouteRecordInfo<'admin', '/admin', Record<never, never>, Record<never, never>>,
     'admin-fusion': RouteRecordInfo<'admin-fusion', '/admin/fusion', Record<never, never>, Record<never, never>>,
     'admin-items': RouteRecordInfo<'admin-items', '/admin/items', Record<never, never>, Record<never, never>>,
+    'fplogin': RouteRecordInfo<'fplogin', '/FP-login', Record<never, never>, Record<never, never>>,
     'game-connect-wallet': RouteRecordInfo<'game-connect-wallet', '/game/connect-wallet', Record<never, never>, Record<never, never>>,
     'game-daily': RouteRecordInfo<'game-daily', '/game/daily', Record<never, never>, Record<never, never>>,
     'game-inventory': RouteRecordInfo<'game-inventory', '/game/inventory', Record<never, never>, Record<never, never>>,

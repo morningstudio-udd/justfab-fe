@@ -21,6 +21,7 @@ declare global {
   const asyncComputed: typeof import('@vueuse/core')['asyncComputed']
   const authClient: typeof import('./src/utils/authClient.js')['authClient']
   const autoResetRef: typeof import('@vueuse/core')['autoResetRef']
+  const base64UrlDecode: typeof import('./src/utils/helpers.js')['base64UrlDecode']
   const betweenValidator: typeof import('./src/utils/validators.js')['betweenValidator']
   const computed: typeof import('vue')['computed']
   const computedAsync: typeof import('@vueuse/core')['computedAsync']
@@ -57,7 +58,11 @@ declare global {
   const effectScope: typeof import('vue')['effectScope']
   const emailValidator: typeof import('./src/utils/validators.js')['emailValidator']
   const extendRef: typeof import('@vueuse/core')['extendRef']
+  const fetchFPToken: typeof import('./src/api/fp.js')['fetchFPToken']
   const futureverseAuth: typeof import('./src/utils/futureverseAuth.js')['default']
+  const generateCodeChallenge: typeof import('./src/utils/FPClient.js')['generateCodeChallenge']
+  const generateCodeVerifier: typeof import('./src/utils/FPClient.js')['generateCodeVerifier']
+  const generatePKCE: typeof import('./src/utils/FPClient.js')['generatePKCE']
   const getActivePinia: typeof import('pinia')['getActivePinia']
   const getAllAssets: typeof import('./src/api/admin.js')['getAllAssets']
   const getAllFusions: typeof import('./src/api/admin.js')['getAllFusions']
@@ -71,6 +76,7 @@ declare global {
   const getItem: typeof import('./src/api/admin.js')['getItem']
   const getJackpot: typeof import('./src/api/game.js')['getJackpot']
   const getJackpotRewards: typeof import('./src/api/game.js')['getJackpotRewards']
+  const getLoginURL: typeof import('./src/utils/FPClient.js')['getLoginURL']
   const getSlotMachineConfig: typeof import('./src/api/game.js')['getSlotMachineConfig']
   const getUserInfo: typeof import('./src/api/user.js')['getUserInfo']
   const getUserInventory: typeof import('./src/api/game.js')['getUserInventory']
@@ -121,6 +127,7 @@ declare global {
   const onUpdated: typeof import('vue')['onUpdated']
   const onWatcherCleanup: typeof import('vue')['onWatcherCleanup']
   const paginationMeta: typeof import('./src/utils/mixin.js')['paginationMeta']
+  const parseJwt: typeof import('./src/utils/helpers.js')['parseJwt']
   const passwordValidator: typeof import('./src/utils/validators.js')['passwordValidator']
   const pausableWatch: typeof import('@vueuse/core')['pausableWatch']
   const playSlotMachine: typeof import('./src/api/game.js')['playSlotMachine']
@@ -141,6 +148,7 @@ declare global {
   const refDefault: typeof import('@vueuse/core')['refDefault']
   const refThrottled: typeof import('@vueuse/core')['refThrottled']
   const refWithControl: typeof import('@vueuse/core')['refWithControl']
+  const refreshFBToken: typeof import('./src/api/fp.js')['refreshFBToken']
   const refreshToken: typeof import('./src/api/auth.js')['refreshToken']
   const regexValidator: typeof import('./src/utils/validators.js')['regexValidator']
   const registerPlugins: typeof import('./src/utils/plugins.js')['registerPlugins']
@@ -396,6 +404,7 @@ declare module 'vue' {
     readonly animateCounter: UnwrapRef<typeof import('./src/utils/helpers.js')['animateCounter']>
     readonly asyncComputed: UnwrapRef<typeof import('@vueuse/core')['asyncComputed']>
     readonly autoResetRef: UnwrapRef<typeof import('@vueuse/core')['autoResetRef']>
+    readonly base64UrlDecode: UnwrapRef<typeof import('./src/utils/helpers.js')['base64UrlDecode']>
     readonly betweenValidator: UnwrapRef<typeof import('./src/utils/validators.js')['betweenValidator']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly computedAsync: UnwrapRef<typeof import('@vueuse/core')['computedAsync']>
@@ -432,6 +441,10 @@ declare module 'vue' {
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
     readonly emailValidator: UnwrapRef<typeof import('./src/utils/validators.js')['emailValidator']>
     readonly extendRef: UnwrapRef<typeof import('@vueuse/core')['extendRef']>
+    readonly fetchFPToken: UnwrapRef<typeof import('./src/api/fp.js')['fetchFPToken']>
+    readonly generateCodeChallenge: UnwrapRef<typeof import('./src/utils/FPClient.js')['generateCodeChallenge']>
+    readonly generateCodeVerifier: UnwrapRef<typeof import('./src/utils/FPClient.js')['generateCodeVerifier']>
+    readonly generatePKCE: UnwrapRef<typeof import('./src/utils/FPClient.js')['generatePKCE']>
     readonly getActivePinia: UnwrapRef<typeof import('pinia')['getActivePinia']>
     readonly getAllAssets: UnwrapRef<typeof import('./src/api/admin.js')['getAllAssets']>
     readonly getAllFusions: UnwrapRef<typeof import('./src/api/admin.js')['getAllFusions']>
@@ -445,6 +458,7 @@ declare module 'vue' {
     readonly getItem: UnwrapRef<typeof import('./src/api/admin.js')['getItem']>
     readonly getJackpot: UnwrapRef<typeof import('./src/api/game.js')['getJackpot']>
     readonly getJackpotRewards: UnwrapRef<typeof import('./src/api/game.js')['getJackpotRewards']>
+    readonly getLoginURL: UnwrapRef<typeof import('./src/utils/FPClient.js')['getLoginURL']>
     readonly getSlotMachineConfig: UnwrapRef<typeof import('./src/api/game.js')['getSlotMachineConfig']>
     readonly getUserInfo: UnwrapRef<typeof import('./src/api/user.js')['getUserInfo']>
     readonly getUserInventory: UnwrapRef<typeof import('./src/api/game.js')['getUserInventory']>
@@ -495,6 +509,7 @@ declare module 'vue' {
     readonly onUpdated: UnwrapRef<typeof import('vue')['onUpdated']>
     readonly onWatcherCleanup: UnwrapRef<typeof import('vue')['onWatcherCleanup']>
     readonly paginationMeta: UnwrapRef<typeof import('./src/utils/mixin.js')['paginationMeta']>
+    readonly parseJwt: UnwrapRef<typeof import('./src/utils/helpers.js')['parseJwt']>
     readonly passwordValidator: UnwrapRef<typeof import('./src/utils/validators.js')['passwordValidator']>
     readonly pausableWatch: UnwrapRef<typeof import('@vueuse/core')['pausableWatch']>
     readonly playSlotMachine: UnwrapRef<typeof import('./src/api/game.js')['playSlotMachine']>
@@ -515,6 +530,7 @@ declare module 'vue' {
     readonly refDefault: UnwrapRef<typeof import('@vueuse/core')['refDefault']>
     readonly refThrottled: UnwrapRef<typeof import('@vueuse/core')['refThrottled']>
     readonly refWithControl: UnwrapRef<typeof import('@vueuse/core')['refWithControl']>
+    readonly refreshFBToken: UnwrapRef<typeof import('./src/api/fp.js')['refreshFBToken']>
     readonly refreshToken: UnwrapRef<typeof import('./src/api/auth.js')['refreshToken']>
     readonly regexValidator: UnwrapRef<typeof import('./src/utils/validators.js')['regexValidator']>
     readonly registerPlugins: UnwrapRef<typeof import('./src/utils/plugins.js')['registerPlugins']>

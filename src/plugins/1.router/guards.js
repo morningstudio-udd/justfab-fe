@@ -20,6 +20,7 @@ export const setupGuards = (router) => {
      * Feel free to update this logic to suit your needs
      */
     const isLoggedIn = !!(cookies.get("user_role") && cookies.get("token"));
+    console.log("isLoggedIn", isLoggedIn);
 
     /*
           If user is logged in and is trying to access login like page, redirect to home
@@ -31,9 +32,9 @@ export const setupGuards = (router) => {
       else return undefined;
     }
 
-    // if (to.meta.requiresAuth && !isLoggedIn) {
-    //   return { name: "404", query: { redirect: to.fullPath } };
-    // }
+    if (to.meta.requiresAuth && !isLoggedIn) {
+      return { name: "404", query: { redirect: to.fullPath } };
+    }
 
     if (!canNavigate(to) && to.matched.length) {
       /* eslint-disable indent */

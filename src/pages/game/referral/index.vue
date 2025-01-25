@@ -18,7 +18,7 @@ import invitedReward12 from "@images/game/invited-reward-12.png";
 definePage({
   meta: {
     layout: "game",
-    public: true,
+    requiresAuth: true,
   },
 });
 

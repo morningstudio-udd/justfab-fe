@@ -23,7 +23,7 @@ import slot6 from "@images/game/slot-6.png";
 definePage({
   meta: {
     layout: "game",
-    public: true,
+    requiresAuth: true,
   },
 });
 

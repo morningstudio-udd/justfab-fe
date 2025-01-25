@@ -19,9 +19,9 @@ declare module 'vue-router/auto-routes' {
    */
   export interface RouteNamedMap {
     '404': RouteRecordInfo<'404', '/404', Record<never, never>, Record<never, never>>,
-    'admin': RouteRecordInfo<'admin', '/admin', Record<never, never>, Record<never, never>>,
-    'admin-fusion': RouteRecordInfo<'admin-fusion', '/admin/fusion', Record<never, never>, Record<never, never>>,
-    'admin-items': RouteRecordInfo<'admin-items', '/admin/items', Record<never, never>, Record<never, never>>,
+    'dashboard': RouteRecordInfo<'dashboard', '/dashboard', Record<never, never>, Record<never, never>>,
+    'dashboard-fusion': RouteRecordInfo<'dashboard-fusion', '/dashboard/fusion', Record<never, never>, Record<never, never>>,
+    'dashboard-items': RouteRecordInfo<'dashboard-items', '/dashboard/items', Record<never, never>, Record<never, never>>,
     'fplogin': RouteRecordInfo<'fplogin', '/FP-login', Record<never, never>, Record<never, never>>,
     'game-connect-wallet': RouteRecordInfo<'game-connect-wallet', '/game/connect-wallet', Record<never, never>, Record<never, never>>,
     'game-daily': RouteRecordInfo<'game-daily', '/game/daily', Record<never, never>, Record<never, never>>,

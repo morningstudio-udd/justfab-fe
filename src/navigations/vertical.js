@@ -2,13 +2,13 @@ const devVerticalNav = [
   {
     title: "Items",
     isLink: true,
-    to: "/admin/items",
+    to: "/dashboard/items",
     icon: "material-symbols-light:home-outline",
   },
   {
     title: "Fusion",
     isLink: true,
-    to: "/admin/fusion",
+    to: "/dashboard/fusion",
     icon: "material-symbols-light:home-outline",
   },
 ];

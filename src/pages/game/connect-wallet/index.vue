@@ -1,5 +1,4 @@
 <script setup>
-import gameBg from "@images/game/blank_background.png";
 import bgConnectWallet from "@images/game/bg-connect-wallet.png";
 import inputConnectWallet from "@images/game/input-connect-wallet.png";
 import btnConnectWallet from "@images/game/btn-connect-wallet.png";

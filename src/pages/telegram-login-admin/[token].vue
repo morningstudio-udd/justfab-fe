@@ -31,9 +31,7 @@ const fetchData = async () => {
     await nextTick();
 
     if (userStore.userData && userStore.userData.role === ROLES.ADMIN) {
-      await delay(3000);
-
-      router.push("/admin");
+      router.push("/dashboard");
     }
   } catch (error) {
     console.error(error);

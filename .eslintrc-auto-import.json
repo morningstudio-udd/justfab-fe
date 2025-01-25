@@ -375,6 +375,7 @@
     "futureverseAuth": true,
     "getJackpot": true,
     "getJackpotRewards": true,
-    "truncateString": true
+    "truncateString": true,
+    "animateCounter": true
   }
 }

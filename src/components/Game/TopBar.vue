@@ -5,8 +5,37 @@ import bgAvt from "@images/game/bg-avt.png";
 
 const userStore = useUserStore();
 
+const currentGold = ref(userStore.userData?.gold || 0);
+const currentCoin = ref(userStore.userData?.token || 0);
+
 const displayName = computed(() =>
   truncateString(userStore.userData?.displayName)
+);
+
+watch(
+  () => userStore.userData?.gold,
+  (newGold, oldGold) => {
+    console.log("newGold, oldGold", newGold, oldGold);
+    if (newGold !== oldGold) {
+      console.log("newGold !== oldGold");
+      animateCounter(oldGold, newGold, 1000, (currentValue) => {
+        currentGold.value = currentValue;
+      });
+    }
+  }
+);
+
+watch(
+  () => userStore.userData?.token,
+  (newCoin, oldCoin) => {
+    console.log("newCoin, oldCoin", newCoin, oldCoin);
+    if (newCoin !== oldCoin) {
+      console.log("newCoin !== oldCoin");
+      animateCounter(oldCoin, newCoin, 1000, (currentValue) => {
+        currentCoin.value = currentValue;
+      });
+    }
+  }
 );
 </script>
 
@@ -68,7 +97,7 @@ const displayName = computed(() =>
             stroke-width="1.8"
             paint-order="stroke fill"
           >
-            12500
+            ???
           </text>
         </svg>
       </div>
@@ -99,7 +128,7 @@ const displayName = computed(() =>
             stroke-width="1.8"
             paint-order="stroke fill"
           >
-            {{ userStore.userData?.gold || 0 }}
+            {{ currentGold }}
           </text>
         </svg>
       </div>
@@ -129,7 +158,7 @@ const displayName = computed(() =>
             stroke-width="1.8"
             paint-order="stroke fill"
           >
-            {{ userStore.userData?.token || 0 }}
+            {{ currentCoin }}
           </text>
         </svg>
       </div>

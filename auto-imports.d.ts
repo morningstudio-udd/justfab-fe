@@ -17,6 +17,7 @@ declare global {
   const addItemToInventory: typeof import('./src/api/game.js')['addItemToInventory']
   const alphaDashValidator: typeof import('./src/utils/validators.js')['alphaDashValidator']
   const alphaValidator: typeof import('./src/utils/validators.js')['alphaValidator']
+  const animateCounter: typeof import('./src/utils/helpers.js')['animateCounter']
   const asyncComputed: typeof import('@vueuse/core')['asyncComputed']
   const authClient: typeof import('./src/utils/authClient.js')['authClient']
   const autoResetRef: typeof import('@vueuse/core')['autoResetRef']
@@ -392,6 +393,7 @@ declare module 'vue' {
     readonly addItemToInventory: UnwrapRef<typeof import('./src/api/game.js')['addItemToInventory']>
     readonly alphaDashValidator: UnwrapRef<typeof import('./src/utils/validators.js')['alphaDashValidator']>
     readonly alphaValidator: UnwrapRef<typeof import('./src/utils/validators.js')['alphaValidator']>
+    readonly animateCounter: UnwrapRef<typeof import('./src/utils/helpers.js')['animateCounter']>
     readonly asyncComputed: UnwrapRef<typeof import('@vueuse/core')['asyncComputed']>
     readonly autoResetRef: UnwrapRef<typeof import('@vueuse/core')['autoResetRef']>
     readonly betweenValidator: UnwrapRef<typeof import('./src/utils/validators.js')['betweenValidator']>

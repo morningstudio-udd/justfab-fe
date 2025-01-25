@@ -64,3 +64,27 @@ export const truncateString = (str, maxLength = 9, suffix = "...") => {
   if (typeof str !== "string") return "";
   return str.length > maxLength ? `${str.slice(0, maxLength)}${suffix}` : str;
 };
+
+export function animateCounter(start, end, duration, callback) {
+  const startTime = performance.now();
+
+  function step(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const currentValue = Math.floor(
+      start + (end - start) * easeOutCubic(progress)
+    );
+
+    callback(currentValue);
+
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    }
+  }
+
+  requestAnimationFrame(step);
+}
+
+function easeOutCubic(t) {
+  return 1 - Math.pow(1 - t, 3);
+}

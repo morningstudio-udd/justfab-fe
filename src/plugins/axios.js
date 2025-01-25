@@ -92,4 +92,30 @@ $api.interceptors.response.use(
   }
 );
 
-export { $api };
+const FPapi = axios.create({
+  baseURL: import.meta.env.VITE_FP_IDENTITY_PROVIDER_URL,
+  headers: {
+    'content-type': 'application/x-www-form-urlencoded'
+  },
+});
+
+FPapi.interceptors.request.use(
+  function (config) {
+    if (config.useAuthToken === false) {
+      delete config.headers.Authorization;
+    } else {
+      if (authStore.token) {
+        config.headers["Authorization"] = "Bearer " + authStore.token;
+      }
+    }
+
+    delete config.useAuthToken;
+
+    return config;
+  },
+  function (error) {
+    return Promise.reject(error);
+  }
+);
+
+export { $api, FPapi };

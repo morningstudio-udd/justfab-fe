@@ -64,3 +64,27 @@ export const truncateString = (str, maxLength = 9, suffix = "...") => {
   if (typeof str !== "string") return "";
   return str.length > maxLength ? `${str.slice(0, maxLength)}${suffix}` : str;
 };
+
+export const base64UrlDecode = (str) => {
+  str = str.replace(/-/g, '+').replace(/_/g, '/')
+  const padding = '='.repeat((4 - (str.length % 4)) % 4)
+  const base64 = str + padding
+  return atob(base64)
+}
+
+export const parseJwt = (token) => {
+  const [header, payload, signature] = token.split('.')
+
+  if (!header || !payload) {
+    throw new Error('Invalid JWT token')
+  }
+
+  const decodedHeader = JSON.parse(base64UrlDecode(header))
+  const decodedPayload = JSON.parse(base64UrlDecode(payload))
+
+  return {
+    header: decodedHeader,
+    payload: decodedPayload,
+    signature,
+  }
+}

@@ -1,36 +1,17 @@
 <script setup>
 import btnConnectWallet from "@images/game/btn-connect-wallet.png";
-import { authClient } from "@utils/authClient";
+import { getLoginURL } from "@/utils/FPClient";
 
 const walletAddress = ref(null);
 
 const connectWallet = async () => {
-  try {
-    const response = await authClient.signInPass({
-      type: "eoa", // 'eoa' là Ethereum Account (Web3 Wallet)
-    });
-
-    if (response?.address) {
-      walletAddress.value = response.address;
-      console.log("Connected wallet:", response.address);
-    }
-  } catch (error) {
-    console.error("Error connecting wallet:", error);
-  }
+  const url = await getLoginURL();
+  console.log(url);
+  window.location.href = url;
 };
 
 const disconnectWallet = async () => {
-  try {
-    await authClient.signOutPass({
-      flow: "redirect",
-      postRedirectUri: "http://localhost:5177",
-    });
-
-    walletAddress.value = null;
-    console.log("Disconnected wallet");
-  } catch (error) {
-    console.error("Error disconnecting wallet:", error);
-  }
+  
 };
 </script>
 

@@ -11,6 +11,18 @@ const devVerticalNav = [
     to: "/dashboard/fusion",
     icon: "material-symbols-light:home-outline",
   },
+  {
+    title: "Slot Machine",
+    isLink: true,
+    to: "/dashboard/slot-machine",
+    icon: "material-symbols-light:home-outline",
+  },
+  {
+    title: "Jackpot",
+    isLink: true,
+    to: "/dashboard/jackpot",
+    icon: "material-symbols-light:home-outline",
+  },
 ];
 
 const prodVerticalNav = [...devVerticalNav];

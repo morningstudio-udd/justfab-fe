@@ -1,6 +1,5 @@
 <script setup>
 import btnConnectWallet from "@images/game/btn-connect-wallet.png";
-import { authClient } from "@utils/authClient";
 
 const walletAddress = ref(null);
 

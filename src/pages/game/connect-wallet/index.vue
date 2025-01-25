@@ -8,7 +8,7 @@ import { onMounted } from "vue";
 definePage({
   meta: {
     layout: "game",
-    public: true,
+    requiresAuth: true,
   },
 });
 
@@ -16,13 +16,13 @@ const walletAddress = ref("");
 const email = ref("");
 const chainId = ref("");
 
-
 onMounted(() => {
   walletAddress.value = localStorage.getItem("fp_futurepass");
-  email.value = localStorage.getItem("fb_email")?localStorage.getItem("fb_email"):"none";
+  email.value = localStorage.getItem("fb_email")
+    ? localStorage.getItem("fb_email")
+    : "none";
   chainId.value = localStorage.getItem("fp_chainId");
-})
-
+});
 </script>
 
 <template>
@@ -72,7 +72,7 @@ onMounted(() => {
             :style="{ backgroundImage: `url(${inputConnectWallet})` }"
           />
 
-          <connect-wallet-btn/>
+          <connect-wallet-btn />
         </div>
       </v-card-text>
     </v-card>

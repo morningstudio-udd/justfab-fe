@@ -19,7 +19,7 @@ import iconCheckedIn from "@images/game/icon-checked-in.png";
 definePage({
   meta: {
     layout: "game",
-    public: true,
+    requiresAuth: true,
   },
 });
 

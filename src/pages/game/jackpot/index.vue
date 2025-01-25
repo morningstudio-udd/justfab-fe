@@ -5,7 +5,6 @@ import gameBg from "@images/game/bg-game-1.png";
 definePage({
   meta: {
     layout: "game",
-    public: true,
     requiresAuth: true,
   },
 });

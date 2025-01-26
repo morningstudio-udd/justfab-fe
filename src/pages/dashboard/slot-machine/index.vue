@@ -1,6 +1,4 @@
 <script setup>
-import { template } from "@antfu/utils";
-
 definePage({
   meta: {
     layout: "admin",
@@ -16,6 +14,7 @@ const adminStore = useAdminStore();
 
 const loading = ref(false);
 
+const slotMachineForm = ref(null);
 const currentReels = ref([]);
 
 onMounted(async () => {
@@ -36,64 +35,70 @@ const getCurrentSlotMachine = async () => {
 };
 
 const submitSave = async () => {
-  try {
-    loading.value = true;
-    const configData = {
-      reels: currentReels.value,
-    };
+  const { valid } = await jackpotForm.value?.validate();
 
-    const response = await setSlotMachineConfig(configData);
+  if (valid) {
+    try {
+      loading.value = true;
+      const configData = {
+        reels: currentReels.value,
+      };
 
-    appStore.showNotiSnackbar({
-      color: "success",
-      message: response.message || "Save successfully.",
-    });
+      const response = await setSlotMachineConfig(configData);
 
-    await getCurrentSlotMachine();
-  } catch (error) {
-    console.error(error);
+      appStore.showNotiSnackbar({
+        color: "success",
+        message: response.message || "Save successfully.",
+      });
 
-    appStore.showNotiSnackbar({
-      color: "error",
-      message:
-        error.message || "Error occurred. Please contact the administrator.",
-    });
-  } finally {
-    loading.value = false;
+      await getCurrentSlotMachine();
+    } catch (error) {
+      console.error(error);
+
+      appStore.showNotiSnackbar({
+        color: "error",
+        message:
+          error.message || "Error occurred. Please contact the administrator.",
+      });
+    } finally {
+      loading.value = false;
+    }
   }
 };
 </script>
 
 <template>
-  <div class="tw-flex tw-justify-between tw-items-center tw-mb-6">
-    <h1 class="tw-text-2xl tw-font-semibold">{{ $t("Slot Machine") }}</h1>
+  <v-form ref="slotMachineForm" @submit.prevent="submitSave">
+    <div class="tw-flex tw-justify-between tw-items-center tw-mb-6">
+      <h1 class="tw-text-2xl tw-font-semibold">{{ $t("Slot Machine") }}</h1>
 
-    <v-btn color="primary" @click="submitSave" :disabled="loading">
-      <v-icon icon="mdi-content-save-outline" />
-      {{ $t("Save") }}
-    </v-btn>
-  </div>
-  <v-card class="!tw-rounded-2xl" :loading="loading">
-    <v-card-text>
-      <div class="tw-grid tw-grid-cols-4 tw-gap-5">
-        <div
-          v-for="(reel, columnIndex) in currentReels"
-          :key="columnIndex"
-          class="tw-grid tw-gap-5"
-        >
-          <div v-for="(symbol, rowIndex) in reel.symbols">
-            <v-text-field
-              v-model="symbol.ratio"
-              :label="symbol.symbol"
-              outlined
-              dense
-              clearable
-              hide-details="auto"
-              :key="symbol._id"
-            />
+      <v-btn color="primary" type="submit" :disabled="loading">
+        <v-icon icon="mdi-content-save-outline" />
+        {{ $t("Save") }}
+      </v-btn>
+    </div>
+    <v-card class="!tw-rounded-2xl" :loading="loading">
+      <v-card-text>
+        <div class="tw-grid tw-grid-cols-4 tw-gap-5">
+          <div
+            v-for="(reel, columnIndex) in currentReels"
+            :key="columnIndex"
+            class="tw-grid tw-gap-5"
+          >
+            <div v-for="(symbol, rowIndex) in reel.symbols">
+              <v-text-field
+                v-model="symbol.ratio"
+                :label="symbol.symbol"
+                outlined
+                dense
+                clearable
+                hide-details="auto"
+                :key="symbol._id"
+              />
+            </div>
           </div>
         </div>
-      </div>
-    </v-card-text>
-  </v-card>
+      </v-card-text>
+    </v-card>
+  </v-form>
 </template>

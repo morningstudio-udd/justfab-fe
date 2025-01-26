@@ -1,6 +1,4 @@
 <script setup>
-import { template } from "@antfu/utils";
-
 definePage({
   meta: {
     layout: "admin",
@@ -16,6 +14,8 @@ const adminStore = useAdminStore();
 
 const loading = ref(false);
 
+const jackpotForm = ref(null);
+const currentPool = ref(0);
 const currentRewards = ref([]);
 
 onMounted(async () => {
@@ -27,6 +27,7 @@ const getCurrentJackpot = async () => {
     loading.value = true;
     const configData = await getJackpot();
 
+    currentPool.value = configData.pool;
     currentRewards.value = configData.rewards;
   } catch (error) {
     console.error(error);
@@ -36,65 +37,84 @@ const getCurrentJackpot = async () => {
 };
 
 const submitSave = async () => {
-  try {
-    loading.value = true;
-    const configData = {
-      rewards: currentRewards.value,
-    };
+  const { valid } = await jackpotForm.value?.validate();
 
-    const response = await setJackpot(configData);
+  if (valid) {
+    try {
+      loading.value = true;
 
-    appStore.showNotiSnackbar({
-      color: "success",
-      message: response.message || "Save successfully.",
-    });
+      const configData = {
+        pool: currentPool.value,
+        rewards: currentRewards.value,
+      };
 
-    await getCurrentJackpot();
-  } catch (error) {
-    console.error(error);
+      const response = await setJackpot(configData);
 
-    appStore.showNotiSnackbar({
-      color: "error",
-      message:
-        error.message || "Error occurred. Please contact the administrator.",
-    });
-  } finally {
-    loading.value = false;
+      appStore.showNotiSnackbar({
+        color: "success",
+        message: response.message || "Save successfully.",
+      });
+
+      await getCurrentJackpot();
+    } catch (error) {
+      console.error(error);
+
+      appStore.showNotiSnackbar({
+        color: "error",
+        message:
+          error.message || "Error occurred. Please contact the administrator.",
+      });
+    } finally {
+      loading.value = false;
+    }
   }
 };
 </script>
 
 <template>
-  <div class="tw-flex tw-justify-between tw-items-center tw-mb-6">
-    <h1 class="tw-text-2xl tw-font-semibold">{{ $t("Jackpot") }}</h1>
+  <v-form ref="jackpotForm" @submit.prevent="submitSave">
+    <div class="tw-flex tw-justify-between tw-items-center tw-mb-6">
+      <h1 class="tw-text-2xl tw-font-semibold">{{ $t("Jackpot") }}</h1>
 
-    <v-btn color="primary" @click="submitSave" :disabled="loading">
-      <v-icon icon="mdi-content-save-outline" />
-      {{ $t("Save") }}
-    </v-btn>
-  </div>
-  <v-card class="!tw-rounded-2xl" :loading="loading">
-    <v-card-text>
-      <div
-        class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-4 tw-gap-5"
-      >
-        <div
-          v-for="(reward, columnIndex) in currentRewards"
-          :key="columnIndex"
-          class="tw-grid tw-gap-5"
-        >
+      <v-btn color="primary" type="submit" :disabled="loading">
+        <v-icon icon="mdi-content-save-outline" />
+        {{ $t("Save") }}
+      </v-btn>
+    </div>
+    <v-card class="!tw-rounded-2xl" :loading="loading">
+      <v-card-text class="">
+        <div class="tw-mb-5">
           <v-text-field
-            v-model="reward.chance"
-            :label="reward.description"
+            v-model="currentPool"
+            label="Pool"
             outlined
             dense
             clearable
             hide-details="auto"
-            suffix="%"
-            :key="reward._id"
+            :rules="[requiredValidator]"
           />
         </div>
-      </div>
-    </v-card-text>
-  </v-card>
+        <div
+          class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-4 tw-gap-5"
+        >
+          <div
+            v-for="(reward, columnIndex) in currentRewards"
+            :key="columnIndex"
+            class="tw-grid tw-gap-5"
+          >
+            <v-text-field
+              v-model="reward.chance"
+              :label="reward.description"
+              outlined
+              dense
+              clearable
+              hide-details="auto"
+              suffix="%"
+              :key="reward._id"
+            />
+          </div>
+        </div>
+      </v-card-text>
+    </v-card>
+  </v-form>
 </template>

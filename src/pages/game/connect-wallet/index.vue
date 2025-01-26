@@ -26,7 +26,7 @@ onMounted(() => {
 
 <template>
   <div
-    class="game-content tw-flex-grow tw-flex tw-items-center tw-justify-center"
+    class="game-content tw-flex-auto tw-flex tw-items-center tw-justify-center"
   >
     <v-card
       class="!tw-bg-cover tw-bg-center tw-bg-no-repeat tw-aspect-[892/829]"

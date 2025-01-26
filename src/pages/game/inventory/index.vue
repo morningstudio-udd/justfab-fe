@@ -171,7 +171,7 @@ const submitMerge = () => {
     </div>
 
     <div
-      class="tw-bg-[#23212e] tw-aspect-[1080/450] tw-flex-auto tw-w-full tw-box-border tw-px-[5%] tw-py-[5%] tw-overflow-y-scroll"
+      class="tw-bg-[#23212e] tw-aspect-[1080/420] tw-flex-auto tw-w-full tw-box-border tw-px-[5%] tw-py-[5%] tw-overflow-y-scroll"
     >
       <div class="tw-grid tw-grid-cols-4 tw-gap-[10%]">
         <div
@@ -192,7 +192,7 @@ const submitMerge = () => {
     </div>
 
     <div
-      class="tw-w-full tw-aspect-[1080/148] tw-flex tw-justify-center tw-items-center"
+      class="tw-w-full tw-aspect-[1080/145] tw-flex tw-justify-center tw-items-center"
       :style="{ backgroundImage: `url(${bgBar1})` }"
     >
       <v-btn

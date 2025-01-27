@@ -5,12 +5,7 @@ const devVerticalNav = [
     to: "/dashboard/items",
     icon: "material-symbols-light:home-outline",
   },
-  {
-    title: "Fusion",
-    isLink: true,
-    to: "/dashboard/fusion",
-    icon: "material-symbols-light:home-outline",
-  },
+
   {
     title: "Slot Machine",
     isLink: true,
@@ -21,6 +16,12 @@ const devVerticalNav = [
     title: "Jackpot",
     isLink: true,
     to: "/dashboard/jackpot",
+    icon: "material-symbols-light:home-outline",
+  },
+  {
+    title: "Skills",
+    isLink: true,
+    to: "/dashboard/skills",
     icon: "material-symbols-light:home-outline",
   },
 ];

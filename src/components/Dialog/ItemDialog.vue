@@ -72,11 +72,9 @@ defineExpose({
         {{ $t("Item") }}
       </v-card-title>
 
-      <v-card-text class="tw-flex tw-flex-col tw-gap-4 tw-h-full">
+      <v-card-text class="tw-flex tw-flex-col tw-gap-4">
         <ItemForm
           v-model="modelValue"
-          :itemFusedFrom="itemFusedFrom"
-          :itemFusedInto="itemFusedInto"
           @update:modelValue="modelValue = $event"
           @onSave="onSave"
           @onDelete="confirmDeleteDialog?.openDialog"

@@ -385,6 +385,13 @@
     "getLoginURL": true,
     "parseJwt": true,
     "refreshFBToken": true,
-    "setJackpot": true
+    "setJackpot": true,
+    "createSkill": true,
+    "deleteSkill": true,
+    "getAllSkills": true,
+    "getSkill": true,
+    "updateSkill": true,
+    "getSkillById": true,
+    "stringToSlug": true
   }
 }

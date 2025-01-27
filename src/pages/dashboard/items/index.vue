@@ -23,7 +23,10 @@ const itemFusedInto = ref([]);
 const fuseDialogRef = ref(null);
 
 onMounted(async () => {
-  await getItems();
+  const p1 = getItems();
+  const p2 = getSkills();
+
+  await Promise.all([p1, p2]);
 });
 
 const getItems = async () => {
@@ -31,7 +34,20 @@ const getItems = async () => {
     loading.value = true;
     dataItems.value = await getAllItems();
 
-    adminStore.allItems = dataItems.value.data;
+    adminStore.allItems = dataItems.value;
+  } catch (error) {
+    console.error(error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+const getSkills = async () => {
+  try {
+    loading.value = true;
+    const skillsResponse = await getAllSkills();
+
+    adminStore.allSkills = skillsResponse;
   } catch (error) {
     console.error(error);
   } finally {
@@ -48,17 +64,17 @@ const openItemDialog = async (item) => {
         selectedItem.value = responseItem;
       });
 
-      const p2 = getFusedInto(item._id).then((responseFusedInto) => {
-        console.log(responseFusedInto);
-        itemFusedInto.value = responseFusedInto;
-      });
+      // const p2 = getFusedInto(item._id).then((responseFusedInto) => {
+      //   console.log(responseFusedInto);
+      //   itemFusedInto.value = responseFusedInto;
+      // });
 
-      const p3 = getFusedFrom(item._id).then((responseFusedFrom) => {
-        console.log(responseFusedFrom);
-        itemFusedFrom.value = responseFusedFrom;
-      });
+      // const p3 = getFusedFrom(item._id).then((responseFusedFrom) => {
+      //   console.log(responseFusedFrom);
+      //   itemFusedFrom.value = responseFusedFrom;
+      // });
 
-      await Promise.all([p1, p2, p3]);
+      await Promise.all([p1]);
     } else {
       selectedItem.value = {};
     }
@@ -96,7 +112,10 @@ const saveItem = async (item) => {
     if (selectedItem.value && Object.keys(selectedItem.value).length) {
       console.log("update");
 
-      response = await updateItem(item);
+      const itemId = item._id;
+      const { _id, ...itemPayload } = item;
+
+      response = await updateItem(itemId, itemPayload);
     } else {
       console.log("create");
       response = await createItem(item);
@@ -187,16 +206,6 @@ const openFuseDialog = () => {
             {{ item.name }}
           </VListItemTitle>
           <VListItemSubtitle class="mt-1">
-            <!-- <VBadge
-              dot
-              location="start center"
-              offset-x="2"
-              :color="resolveStatusColor[item.status]"
-              class="me-3"
-            >
-              <span class="ms-4">{{ item.status }}</span>
-            </VBadge> -->
-
             <span class="text-xs text-disabled">{{ item.category }}</span>
           </VListItemSubtitle>
 

@@ -41,6 +41,7 @@ declare global {
   const createReactiveFn: typeof import('@vueuse/core')['createReactiveFn']
   const createReusableTemplate: typeof import('@vueuse/core')['createReusableTemplate']
   const createSharedComposable: typeof import('@vueuse/core')['createSharedComposable']
+  const createSkill: typeof import('./src/api/admin.js')['createSkill']
   const createTemplatePromise: typeof import('@vueuse/core')['createTemplatePromise']
   const createUnrefFn: typeof import('@vueuse/core')['createUnrefFn']
   const customRef: typeof import('vue')['customRef']
@@ -54,6 +55,7 @@ declare global {
   const deleteAsset: typeof import('./src/api/admin.js')['deleteAsset']
   const deleteFusion: typeof import('./src/api/admin.js')['deleteFusion']
   const deleteItem: typeof import('./src/api/admin.js')['deleteItem']
+  const deleteSkill: typeof import('./src/api/admin.js')['deleteSkill']
   const eagerComputed: typeof import('@vueuse/core')['eagerComputed']
   const effectScope: typeof import('vue')['effectScope']
   const emailValidator: typeof import('./src/utils/validators.js')['emailValidator']
@@ -67,6 +69,7 @@ declare global {
   const getAllAssets: typeof import('./src/api/admin.js')['getAllAssets']
   const getAllFusions: typeof import('./src/api/admin.js')['getAllFusions']
   const getAllItems: typeof import('./src/api/admin.js')['getAllItems']
+  const getAllSkills: typeof import('./src/api/admin.js')['getAllSkills']
   const getApiPath: typeof import('./src/utils/helpers.js')['getApiPath']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
@@ -77,6 +80,8 @@ declare global {
   const getJackpot: typeof import('./src/api/game.js')['getJackpot']
   const getJackpotRewards: typeof import('./src/api/game.js')['getJackpotRewards']
   const getLoginURL: typeof import('./src/utils/FPClient.js')['getLoginURL']
+  const getSkill: typeof import('./src/api/game.js')['getSkill']
+  const getSkillById: typeof import('./src/api/admin.js')['getSkillById']
   const getSlotMachineConfig: typeof import('./src/api/game.js')['getSlotMachineConfig']
   const getUserInfo: typeof import('./src/api/user.js')['getUserInfo']
   const getUserInventory: typeof import('./src/api/game.js')['getUserInventory']
@@ -167,6 +172,7 @@ declare global {
   const shallowRef: typeof import('vue')['shallowRef']
   const srcAsset: typeof import('./src/utils/mixin.js')['srcAsset']
   const storeToRefs: typeof import('pinia')['storeToRefs']
+  const stringToSlug: typeof import('./src/utils/helpers.js')['stringToSlug']
   const syncRef: typeof import('@vueuse/core')['syncRef']
   const syncRefs: typeof import('@vueuse/core')['syncRefs']
   const templateRef: typeof import('@vueuse/core')['templateRef']
@@ -189,6 +195,7 @@ declare global {
   const until: typeof import('@vueuse/core')['until']
   const updateFusion: typeof import('./src/api/admin.js')['updateFusion']
   const updateItem: typeof import('./src/api/admin.js')['updateItem']
+  const updateSkill: typeof import('./src/api/admin.js')['updateSkill']
   const uploadAsset: typeof import('./src/api/admin.js')['uploadAsset']
   const urlValidator: typeof import('./src/utils/validators.js')['urlValidator']
   const useActiveElement: typeof import('@vueuse/core')['useActiveElement']
@@ -425,6 +432,7 @@ declare module 'vue' {
     readonly createReactiveFn: UnwrapRef<typeof import('@vueuse/core')['createReactiveFn']>
     readonly createReusableTemplate: UnwrapRef<typeof import('@vueuse/core')['createReusableTemplate']>
     readonly createSharedComposable: UnwrapRef<typeof import('@vueuse/core')['createSharedComposable']>
+    readonly createSkill: UnwrapRef<typeof import('./src/api/admin.js')['createSkill']>
     readonly createTemplatePromise: UnwrapRef<typeof import('@vueuse/core')['createTemplatePromise']>
     readonly createUnrefFn: UnwrapRef<typeof import('@vueuse/core')['createUnrefFn']>
     readonly customRef: UnwrapRef<typeof import('vue')['customRef']>
@@ -438,6 +446,7 @@ declare module 'vue' {
     readonly deleteAsset: UnwrapRef<typeof import('./src/api/admin.js')['deleteAsset']>
     readonly deleteFusion: UnwrapRef<typeof import('./src/api/admin.js')['deleteFusion']>
     readonly deleteItem: UnwrapRef<typeof import('./src/api/admin.js')['deleteItem']>
+    readonly deleteSkill: UnwrapRef<typeof import('./src/api/admin.js')['deleteSkill']>
     readonly eagerComputed: UnwrapRef<typeof import('@vueuse/core')['eagerComputed']>
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
     readonly emailValidator: UnwrapRef<typeof import('./src/utils/validators.js')['emailValidator']>
@@ -450,6 +459,7 @@ declare module 'vue' {
     readonly getAllAssets: UnwrapRef<typeof import('./src/api/admin.js')['getAllAssets']>
     readonly getAllFusions: UnwrapRef<typeof import('./src/api/admin.js')['getAllFusions']>
     readonly getAllItems: UnwrapRef<typeof import('./src/api/admin.js')['getAllItems']>
+    readonly getAllSkills: UnwrapRef<typeof import('./src/api/admin.js')['getAllSkills']>
     readonly getApiPath: UnwrapRef<typeof import('./src/utils/helpers.js')['getApiPath']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
@@ -460,6 +470,7 @@ declare module 'vue' {
     readonly getJackpot: UnwrapRef<typeof import('./src/api/game.js')['getJackpot']>
     readonly getJackpotRewards: UnwrapRef<typeof import('./src/api/game.js')['getJackpotRewards']>
     readonly getLoginURL: UnwrapRef<typeof import('./src/utils/FPClient.js')['getLoginURL']>
+    readonly getSkillById: UnwrapRef<typeof import('./src/api/admin.js')['getSkillById']>
     readonly getSlotMachineConfig: UnwrapRef<typeof import('./src/api/game.js')['getSlotMachineConfig']>
     readonly getUserInfo: UnwrapRef<typeof import('./src/api/user.js')['getUserInfo']>
     readonly getUserInventory: UnwrapRef<typeof import('./src/api/game.js')['getUserInventory']>
@@ -550,6 +561,7 @@ declare module 'vue' {
     readonly shallowRef: UnwrapRef<typeof import('vue')['shallowRef']>
     readonly srcAsset: UnwrapRef<typeof import('./src/utils/mixin.js')['srcAsset']>
     readonly storeToRefs: UnwrapRef<typeof import('pinia')['storeToRefs']>
+    readonly stringToSlug: UnwrapRef<typeof import('./src/utils/helpers.js')['stringToSlug']>
     readonly syncRef: UnwrapRef<typeof import('@vueuse/core')['syncRef']>
     readonly syncRefs: UnwrapRef<typeof import('@vueuse/core')['syncRefs']>
     readonly templateRef: UnwrapRef<typeof import('@vueuse/core')['templateRef']>
@@ -572,6 +584,7 @@ declare module 'vue' {
     readonly until: UnwrapRef<typeof import('@vueuse/core')['until']>
     readonly updateFusion: UnwrapRef<typeof import('./src/api/admin.js')['updateFusion']>
     readonly updateItem: UnwrapRef<typeof import('./src/api/admin.js')['updateItem']>
+    readonly updateSkill: UnwrapRef<typeof import('./src/api/admin.js')['updateSkill']>
     readonly uploadAsset: UnwrapRef<typeof import('./src/api/admin.js')['uploadAsset']>
     readonly urlValidator: UnwrapRef<typeof import('./src/utils/validators.js')['urlValidator']>
     readonly useActiveElement: UnwrapRef<typeof import('@vueuse/core')['useActiveElement']>

@@ -1,5 +1,7 @@
 import { $api } from "@/plugins/axios";
 import { set } from "@vueuse/core";
+import { all } from "axios";
+import { create } from "canvas-confetti";
 
 const API = {
   inventory: {

@@ -111,3 +111,13 @@ export const parseJwt = (token) => {
     signature,
   };
 };
+
+export const stringToSlug = (str) => {
+  return str
+    .normalize("NFD") // Normalize to decompose accented characters
+    .replace(/[\u0300-\u036f]/g, "") // Remove accents
+    .toLowerCase() // Convert to lowercase
+    .trim() // Trim whitespace from both sides
+    .replace(/\s+/g, "-") // Replace spaces with hyphens
+    .replace(/[^\w-]+/g, ""); // Remove all non-word chars
+};

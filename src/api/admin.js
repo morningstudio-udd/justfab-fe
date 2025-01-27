@@ -25,6 +25,13 @@ const API = {
     fusedInto: "/fusion/fused-into/:id",
     fusedFrom: "/fusion/fused-from/:id",
   },
+  skill: {
+    all: "/skill",
+    get: "/skill/:skillId",
+    create: "/skill",
+    update: "/skill/:skillId",
+    delete: "/skill/:skillId",
+  },
 };
 
 export const uploadAsset = async (file) => {
@@ -104,10 +111,10 @@ export const createItem = async (payload) => {
   }
 };
 
-export const updateItem = async (payload) => {
+export const updateItem = async (itemId, payload) => {
   try {
-    const url = getApiPath(API.item.update, { id: payload._id });
-    const res = await $api.patch(url, payload);
+    const url = getApiPath(API.item.update, { id: itemId });
+    const res = await $api.put(url, payload);
 
     return res.data;
   } catch (error) {
@@ -119,6 +126,66 @@ export const updateItem = async (payload) => {
 export const deleteItem = async (id) => {
   try {
     const url = getApiPath(API.item.delete, { id: id });
+    const res = await $api.delete(url);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
+  }
+};
+
+export const getAllSkills = async () => {
+  try {
+    const url = getApiPath(API.skill.all);
+    const res = await $api.get(url);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
+  }
+};
+
+export const getSkillById = async (skillId) => {
+  try {
+    const url = getApiPath(API.skill.get, { skillId: skillId });
+    const res = await $api.get(url);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
+  }
+};
+
+export const createSkill = async (payload) => {
+  try {
+    const url = getApiPath(API.skill.create);
+    const res = await $api.post(url, payload);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
+  }
+};
+
+export const updateSkill = async (payload) => {
+  try {
+    const url = getApiPath(API.skill.update, { skillId: payload._id });
+    const res = await $api.put(url, payload);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
+  }
+};
+
+export const deleteSkill = async (skillId) => {
+  try {
+    const url = getApiPath(API.skill.delete, { skillId: skillId });
     const res = await $api.delete(url);
 
     return res.data;

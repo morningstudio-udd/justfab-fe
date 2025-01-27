@@ -23,6 +23,7 @@ declare module 'vue-router/auto-routes' {
     'dashboard-fusion': RouteRecordInfo<'dashboard-fusion', '/dashboard/fusion', Record<never, never>, Record<never, never>>,
     'dashboard-items': RouteRecordInfo<'dashboard-items', '/dashboard/items', Record<never, never>, Record<never, never>>,
     'dashboard-jackpot': RouteRecordInfo<'dashboard-jackpot', '/dashboard/jackpot', Record<never, never>, Record<never, never>>,
+    'dashboard-skills': RouteRecordInfo<'dashboard-skills', '/dashboard/skills', Record<never, never>, Record<never, never>>,
     'dashboard-slot-machine': RouteRecordInfo<'dashboard-slot-machine', '/dashboard/slot-machine', Record<never, never>, Record<never, never>>,
     'fplogin': RouteRecordInfo<'fplogin', '/FP-login', Record<never, never>, Record<never, never>>,
     'game-connect-wallet': RouteRecordInfo<'game-connect-wallet', '/game/connect-wallet', Record<never, never>, Record<never, never>>,

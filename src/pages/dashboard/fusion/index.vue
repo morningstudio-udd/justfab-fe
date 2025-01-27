@@ -37,7 +37,7 @@ const fetchData = async () => {
     });
 
     const p2 = await getAllItems().then((response) => {
-      adminStore.allItems = response.data;
+      adminStore.allItems = response;
     });
 
     await Promise.all([p1, p2]);

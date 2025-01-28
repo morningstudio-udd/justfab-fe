@@ -3,6 +3,7 @@ import gameBg from "@images/game/bg-game-1.png";
 import { cookies } from "@/plugins/useCookies";
 import { fetchFPToken } from "@/api/fp";
 import { parseJwt } from "@/utils/helpers";
+import { nextTick } from "vue";
 
 definePage({
   meta: {
@@ -18,9 +19,14 @@ const authStore = useAuthStore();
 const userStore = useUserStore();
 
 onMounted(async () => {
+  localStorage.setItem('fp_code', route.query.code);
   if (route.query.code) {
-    localStorage.setItem('fp_code', route.query.code);
-    await fetchToken();
+    try{
+      await nextTick();
+      await fetchToken();
+    } catch(e) {
+
+    }
   } 
   router.push("/game/connect-wallet");
 });

@@ -1,6 +1,7 @@
 import { FPapi } from "@/plugins/axios";
 
 const FPClientId = import.meta.env.VITE_FP_CLIENT_ID;
+const FBRedirectURL = import.meta.env.VITE_FP_REDIRECT_URL;
 
 export const fetchFPToken = async () => {
   try {
@@ -10,7 +11,7 @@ export const fetchFPToken = async () => {
     const body = {
       grant_type: 'authorization_code',
       code: fpCode,
-      redirect_uri: "http://localhost:5177/FP-login",
+      redirect_uri: FBRedirectURL,
       client_id: FPClientId,
       code_verifier: fpVerifier,
     }

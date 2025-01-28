@@ -4,7 +4,7 @@ const FPLoginUrl = import.meta.env.VITE_FP_IDENTITY_PROVIDER_URL + '/auth';
 const FPClientId = import.meta.env.VITE_FP_CLIENT_ID;
 const FPToken = import.meta.env.VITE_FP_CLIENT_ACCESS_TOKEN;
 const FBCodeChallenge = import.meta.env.VITE_FP_CODE_CHALLENGE;
-
+const FBRedirectURL = import.meta.env.VITE_FP_REDIRECT_URL
 export const getLoginURL = async () => {
 
   const PKCE = await generatePKCE();
@@ -12,7 +12,7 @@ export const getLoginURL = async () => {
   const params = {
     response_type: 'code',
     client_id: FPClientId,
-    redirect_uri: 'http://localhost:5177/FP-login',
+    redirect_uri: FBRedirectURL,
     scope: 'openid profile email',
     code_challenge: PKCE.codeChallenge,
     code_challenge_method: 'S256',

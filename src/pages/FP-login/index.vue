@@ -21,10 +21,8 @@ onMounted(async () => {
   if (route.query.code) {
     localStorage.setItem('fp_code', route.query.code);
     await fetchToken();
-    router.push("/");
-  } else {
-    router.push("/");
-  }
+  } 
+  router.push("/game/connect-wallet");
 });
 
 const fetchToken = async () => {
@@ -41,11 +39,8 @@ const fetchToken = async () => {
     localStorage.setItem("fp_custodian", payload.custodian);
     localStorage.setItem("fp_email", payload.email);
     localStorage.setItem("fp_chainId", payload.chainId);
-    
-    router.push("/game/connect-wallet");
   } catch (error) {
     console.error(error);
-    router.push("/game/connect-wallet");
   }
 };
 

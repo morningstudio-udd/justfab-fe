@@ -36,6 +36,7 @@ const fetchData = async () => {
       <AlertMessage />
       <SnackbarMessage />
       <LoadingOverlay />
+      <AudioSource />
     </div>
   </VApp>
 </template>

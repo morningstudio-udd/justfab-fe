@@ -69,6 +69,12 @@ const submitSave = async () => {
     }
   }
 };
+
+const handleBlur = (reward) => {
+  if (reward.chance === "" || reward.chance === null) {
+    reward.chance = 0;
+  }
+};
 </script>
 
 <template>
@@ -111,6 +117,7 @@ const submitSave = async () => {
               hide-details="auto"
               suffix="%"
               :key="reward._id"
+              @blur="handleBlur(reward)"
             />
           </div>
         </div>

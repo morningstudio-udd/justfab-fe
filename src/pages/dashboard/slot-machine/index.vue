@@ -35,7 +35,7 @@ const getCurrentSlotMachine = async () => {
 };
 
 const submitSave = async () => {
-  const { valid } = await jackpotForm.value?.validate();
+  const { valid } = await slotMachineForm.value?.validate();
 
   if (valid) {
     try {
@@ -63,6 +63,12 @@ const submitSave = async () => {
     } finally {
       loading.value = false;
     }
+  }
+};
+
+const handleBlur = (symbol) => {
+  if (symbol.ratio === "" || symbol.ratio === null) {
+    symbol.ratio = 0;
   }
 };
 </script>
@@ -94,6 +100,7 @@ const submitSave = async () => {
                 clearable
                 hide-details="auto"
                 :key="symbol._id"
+                @blur="handleBlur(symbol)"
               />
             </div>
           </div>

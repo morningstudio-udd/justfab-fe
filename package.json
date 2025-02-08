@@ -14,6 +14,8 @@
   },
   "scripts": {
     "dev": "vite --port 5177 --force --mode development",
+    "build:staging": "vite build --mode staging",
+    "preview:staging": "vite preview --mode staging",
     "build": "vite build --mode production",
     "preview": "vite preview",
     "build:icons": "tsx src/plugins/iconify/build-icons.js"

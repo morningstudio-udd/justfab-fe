@@ -17,156 +17,163 @@ import {
 // import pluginRewriteAll from "vite-plugin-rewrite-all";
 // import basicSsl from "@vitejs/plugin-basic-ssl";
 
-// https://vitejs.dev/config/
-const config = defineConfig({
-  // base: process.env.NODE_ENV === "production" ? "/smk/" : "/",
-  base: "./",
-  plugins: [
-    // basicSsl(),
+export default defineConfig(({ mode }) => {
+  // Xác định base URL theo mode
+  const base = mode === "staging" ? "/smk/" : "/";
 
-    VueRouter({
-      getRouteName: (routeNode) => {
-        // Convert pascal case to kebab case
-        return getPascalCaseRouteName(routeNode)
-          .replace(/([a-z\d])([A-Z])/g, "$1-$2")
-          .toLowerCase();
-      },
-      beforeWriteFiles: (root) => {},
-      // where to generate the types
-      dts: "./typed-router.d.ts",
-    }),
-
-    vue({
-      template: {
-        // support for custom elements and remove the unknown element warnings
-        // compilerOptions,
-        // support for asset url conversion
-        // transformAssetUrls,
-      },
-    }),
-
-    // https://github.com/vuetifyjs/vuetify-loader/tree/next/packages/vite-plugin
-    vuetify({
-      styles: {
-        configFile: "src/assets/styles/variables/settings.scss",
-      },
-    }),
-
-    AutoImport({
-      /* options */
-      eslintrc: {
-        enabled: true,
-        filepath: "./.eslintrc-auto-import.json",
-      },
-      imports: [
-        "vue",
-        VueRouterAutoImports,
-        "@vueuse/core",
-        {
-          // add any other imports you were relying on
-          "vue-router/auto": ["useLink"],
+  return {
+    base,
+    plugins: [
+      // basicSsl(),
+      VueRouter({
+        getRouteName: (routeNode) => {
+          // Convert pascal case to kebab case
+          return getPascalCaseRouteName(routeNode)
+            .replace(/([a-z\d])([A-Z])/g, "$1-$2")
+            .toLowerCase();
         },
-        "pinia",
-        "vue-i18n",
-      ],
-      dirs: [
-        "./src/utils",
-        "./src/api",
-        "./src/plugins/2.pinia/modules",
-        "./src/navigations",
-      ],
-      vueTemplate: true,
-      // ℹ️ Disabled to avoid confusion & accidental usage
-      ignore: ["useCookies", "useStorage"],
-    }),
+        beforeWriteFiles: (root) => {}, // Giữ nguyên logic
+        // where to generate the types
+        dts: "./typed-router.d.ts",
+      }),
 
-    Layouts({
-      layoutsDirs: "./src/layouts",
-      defaultLayout: "default",
-      exclude: ["**/components/*.vue", "**/stores"],
-    }),
-
-    Components({
-      dirs: ["./src/views", "./src/components"],
-      dts: true,
-      // resolvers: [Vuetify3Resolver()],
-      types: [
-        {
-          from: "vue-router",
-          names: ["RouterLink", "RouterView"],
+      vue({
+        template: {
+          // support for custom elements and remove the unknown element warnings
+          // compilerOptions,
+          // support for asset url conversion
+          // transformAssetUrls,
         },
-      ],
-    }),
+      }),
 
-    // Docs: https://github.com/intlify/bundle-tools/tree/main/packages/unplugin-vue-i18n#intlifyunplugin-vue-i18n
-    VueI18nPlugin({
-      runtimeOnly: true,
-      compositionOnly: true,
-      include: [
-        fileURLToPath(
-          new URL("./src/plugins/i18n/locales/**", import.meta.url)
+      vuetify({
+        styles: {
+          configFile: "src/assets/styles/variables/settings.scss",
+        },
+      }),
+
+      AutoImport({
+        /* options */
+        eslintrc: {
+          enabled: true,
+          filepath: "./.eslintrc-auto-import.json",
+        },
+        imports: [
+          "vue",
+          VueRouterAutoImports,
+          "@vueuse/core",
+          {
+            // add any other imports you were relying on
+            "vue-router/auto": ["useLink"],
+          },
+          "pinia",
+          "vue-i18n",
+        ],
+        dirs: [
+          "./src/utils",
+          "./src/api",
+          "./src/plugins/2.pinia/modules",
+          "./src/navigations",
+        ],
+        vueTemplate: true,
+        // ℹ️ Disabled to avoid confusion & accidental usage
+        ignore: ["useCookies", "useStorage"],
+      }),
+
+      Layouts({
+        layoutsDirs: "./src/layouts",
+        defaultLayout: "default",
+        exclude: ["**/components/*.vue", "**/stores"],
+      }),
+
+      Components({
+        dirs: ["./src/views", "./src/components"],
+        dts: true,
+        // resolvers: [Vuetify3Resolver()],
+        types: [
+          {
+            from: "vue-router",
+            names: ["RouterLink", "RouterView"],
+          },
+        ],
+      }),
+
+      // Docs: https://github.com/intlify/bundle-tools/tree/main/packages/unplugin-vue-i18n#intlifyunplugin-vue-i18n
+      VueI18nPlugin({
+        runtimeOnly: true,
+        compositionOnly: true,
+        include: [
+          fileURLToPath(
+            new URL("./src/plugins/i18n/locales/**", import.meta.url)
+          ),
+        ],
+      }),
+    ],
+
+    css: {
+      preprocessorOptions: {
+        scss: {
+          api: "modern-compiler",
+        },
+      },
+    },
+
+    build: {
+      chunkSizeWarningLimit: 5000,
+      // target: 'esnext',
+      minify: mode === "staging" ? false : "esbuild",
+      sourcemap: mode === "staging",
+      rollupOptions: {
+        onwarn(warning, warn) {
+          if (warning.code === "ANNOTATION") return;
+          warn(warning);
+        },
+
+        output: {
+          manualChunks: {
+            vuetify: ["vuetify/components", "vuetify/directives", "vuetify"],
+          },
+          plugins: [],
+        },
+      },
+    },
+
+    define: {
+      __DEV__: mode === "staging" ? true : false,
+    },
+
+    resolve: {
+      alias: {
+        "@": fileURLToPath(new URL("./src", import.meta.url)),
+        "@themeConfig": fileURLToPath(
+          new URL("./themeConfig.js", import.meta.url)
         ),
-      ],
-    }),
-  ],
-
-  css: {
-    preprocessorOptions: {
-      scss: {
-        api: "modern-compiler",
+        "@layouts": fileURLToPath(new URL("./src/layouts", import.meta.url)),
+        "@images": fileURLToPath(
+          new URL("./src/assets/images/", import.meta.url)
+        ),
+        "@sounds": fileURLToPath(
+          new URL("./src/assets/sounds/", import.meta.url)
+        ),
+        "@styles": fileURLToPath(
+          new URL("./src/assets/styles/", import.meta.url)
+        ),
+        "@store": fileURLToPath(
+          new URL("./src/plugins/2.pinia/", import.meta.url)
+        ),
+        "@api": fileURLToPath(new URL("./src/api/", import.meta.url)),
+        "@plugins": fileURLToPath(new URL("./src/plugins", import.meta.url)),
+        "@utils": fileURLToPath(new URL("./src/utils", import.meta.url)),
       },
     },
-  },
 
-  build: {
-    chunkSizeWarningLimit: 5000,
-    // target: 'esnext',
-    // minify: 'esbuild',
-    rollupOptions: {
-      onwarn(warning, warn) {
-        if (warning.code === "ANNOTATION") return;
-        warn(warning);
-      },
+    optimizeDeps: {
+      exclude: ["vuetify"],
+      entries: ["./src/**/*.vue"],
+    },
 
-      output: {
-        manualChunks: {
-          vuetify: ["vuetify/components", "vuetify/directives", "vuetify"],
-        },
-        plugins: [],
-      },
+    server: {
+      host: true,
     },
-  },
-  resolve: {
-    alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url)),
-      "@themeConfig": fileURLToPath(
-        new URL("./themeConfig.js", import.meta.url)
-      ),
-      "@layouts": fileURLToPath(new URL("./src/layouts", import.meta.url)),
-      "@images": fileURLToPath(
-        new URL("./src/assets/images/", import.meta.url)
-      ),
-      "@sounds": fileURLToPath(
-        new URL("./src/assets/sounds/", import.meta.url)
-      ),
-      "@styles": fileURLToPath(
-        new URL("./src/assets/styles/", import.meta.url)
-      ),
-      "@store": fileURLToPath(
-        new URL("./src/plugins/2.pinia/", import.meta.url)
-      ),
-      "@api": fileURLToPath(new URL("./src/api/", import.meta.url)),
-      "@plugins": fileURLToPath(new URL("./src/plugins", import.meta.url)),
-      "@utils": fileURLToPath(new URL("./src/utils", import.meta.url)),
-    },
-  },
-  optimizeDeps: {
-    exclude: ["vuetify"],
-    entries: ["./src/**/*.vue"],
-  },
-  server: {
-    host: true,
-  },
+  };
 });
-
-export default config;

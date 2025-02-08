@@ -24,9 +24,7 @@ const resultItemDialogRef = ref(null);
 
 let resizeObserver;
 
-const energy = computed(
-  () => `${userStore.userData?.energy} / ${userStore.userData?.maxEnergy}`
-);
+const energy = computed(() => userStore.userData?.energy || 0);
 const bottomValue = computed(() => {
   return `${parentDivWidth.value / (1080 / 170)}px`;
 });

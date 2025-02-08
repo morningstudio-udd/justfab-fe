@@ -13,7 +13,7 @@ const userStore = useUserStore();
 
 const refSlotMachine = ref();
 
-const jackpot = ref();
+const jackpot = ref(100000);
 const jackpotRewards = ref([]);
 const enable = ref(true);
 const gameContentRef = ref(null);
@@ -42,7 +42,7 @@ onMounted(async () => {
 
   const { rewards, pool } = await getJackpotRewards();
   jackpotRewards.value = rewards;
-  jackpot.value = pool.toString();
+  jackpot.value = pool;
 });
 
 const onRollClick = async () => {
@@ -51,19 +51,19 @@ const onRollClick = async () => {
     enable.value = false;
 
     const {
-      reelSymbols: symbolsReward,
+      playScripts,
       rewards,
       user,
     } = await playSlotMachine();
 
     currentRewards.value = rewards;
 
-    refSlotMachine.value.roll(symbolsReward);
+    refSlotMachine.value.roll(playScripts);
 
-    await waitForSeconds(4);
+    // await waitForSeconds(4);
 
-    userStore.userData = { ...userStore.userData, ...user };
-    await processRewards();
+    // userStore.userData = { ...userStore.userData, ...user };
+    //
   } catch (error) {
     console.log("error", error);
   } finally {
@@ -71,26 +71,25 @@ const onRollClick = async () => {
   }
 };
 
+const onScriptCompleted = async(script) => {
+  console.log("complete", script);
+  await processRewards(script.rewards);
+}
+
 const resetRewardsState = () => {
   itemReward.value = null;
   currentRewards.value = null;
 };
 
-const processRewards = async () => {
-  for (const reward of currentRewards.value) {
+const processRewards = async (rewards) => {
+  for (const reward of rewards) {
     switch (reward.type) {
       case REWARD_TYPES.JACKPOT: {
-        jackpot.value = reward.jackpot.updatedPool.toString();
-
-        const description = reward.jackpot.reward.description;
-
-        refSlotMachine.value.setJackpotVisible(true);
-        refSlotMachine.value.rollJackpot(description);
-        await waitForSeconds(4);
-        refSlotMachine.value.setButtonCloseVisible(true);
         break;
       }
-
+      case REWARD_TYPES.GOLD:
+        console.log("Add gold to user", reward.value);
+        break;
       case REWARD_TYPES.ITEM:
         itemReward.value = reward;
         resultItemDialogRef.value.openDialog();
@@ -102,6 +101,7 @@ const processRewards = async () => {
     }
   }
 
+  await refSlotMachine.value.rollNextStep();
   return true;
 };
 
@@ -132,6 +132,7 @@ const waitForSeconds = async (s) => {
         :disabled="!enable"
         :jackpotRewards="jackpotRewards"
         @rollClick="onRollClick"
+        @scriptCompleted="onScriptCompleted"
       ></slot-machine>
     </div>
 

@@ -52,7 +52,7 @@ watch(
   () => props.jackpot,
   (v) => {
     if (slotMachine.value != null) {
-      slotMachine.value.LabelJackpot.string = v.toString();
+      slotMachine.value.LabelJackpot.string = v.toLocaleString() + "$";
     }
   }
 );
@@ -76,7 +76,7 @@ const onIframeLoaded = () => {
     slotMachine.value = sm;
     sm.ButtonRoll.node.off("click");
     sm.ButtonRoll.node.on("click", onButtonRoolClick);
-    sm.LabelJackpot.string = props.jackpot;
+    sm.LabelJackpot.string = props.jackpot.toLocaleString("en-US") + "$";
     sm.LabelEnergy.string = props.energy;
     sm.BarEnergy.progress = Math.min(1, props.energy / 100);
     sm.ButtonClose.node.active = false;
@@ -113,9 +113,43 @@ const onButtonRoolClick = () => {
   emit("rollClick");
 };
 
-const roll = (symbols) => { 
-  slotMachine.value.roll(symbols);
+let playScripts = [];
+let currentStep = 0;
+let currentScript = null;
+
+const roll = async (scripts) => { 
+  currentStep = 0;
+  playScripts = scripts;
+  await rollScriptStep(0);
 };
+
+const rollScriptStep = async (step) => {
+  currentStep = step;
+  currentScript = playScripts[currentStep];
+  if(currentScript.type == 'slotMachine') {
+    setJackpotVisible(false);
+    slotMachine.value.roll(currentScript.reelSymbols);
+    await waitForSeconds(4);
+    emit("scriptCompleted", currentScript);
+  }else{
+    setJackpotVisible(true);
+    setButtonCloseVisible(false);
+    rollJackpot(currentScript.rewards[0].description);
+    await waitForSeconds(4);
+    setButtonCloseVisible(true);
+    emit("scriptCompleted", currentScript);
+  }
+  if(currentScript >= playScripts.length - 1) 
+    emit("allScriptCompleted");
+}
+
+const rollNextStep = async () => {
+  if(currentStep >= playScripts.length - 1) {
+    // emit("allScriptCompleted");
+    return;
+  }
+  await rollScriptStep(currentStep + 1);
+}
 
 const setJackpotVisible = (v) => {
   slotMachine.value.Jackpot.node.active = v;
@@ -133,9 +167,16 @@ const rollJackpot = (prize) => {
   slotMachine.value.Jackpot.roll(prize);
 };
 
-const emit = defineEmits(["rollClick"]);
+const waitForSeconds = async (s) => {
+  return new Promise((res) => {
+    setTimeout(res, s * 1000);
+  });
+};
+
+const emit = defineEmits(["rollClick", "scriptCompleted"]);
 defineExpose({
   roll,
+  rollNextStep,
   setJackpotPrizes,
   setJackpotVisible,
   setButtonCloseVisible,

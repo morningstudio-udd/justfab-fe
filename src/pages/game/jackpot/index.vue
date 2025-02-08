@@ -24,9 +24,7 @@ const resultItemDialogRef = ref(null);
 
 let resizeObserver;
 
-const energy = computed(
-  () => `${userStore.userData?.energy} / ${userStore.userData?.maxEnergy}`
-);
+const energy = computed(() => userStore.userData?.energy || 130);
 const bottomValue = computed(() => {
   return `${parentDivWidth.value / (1080 / 170)}px`;
 });
@@ -44,7 +42,7 @@ onMounted(async () => {
 
   const { rewards, pool } = await getJackpotRewards();
   jackpotRewards.value = rewards;
-  jackpot.value = pool.toString();
+  jackpot.value = pool;
 });
 
 const onRollClick = async () => {

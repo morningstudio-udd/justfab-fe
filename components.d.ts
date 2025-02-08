@@ -10,6 +10,7 @@ declare module 'vue' {
     AlertMessage: typeof import('./src/components/AlertMessage.vue')['default']
     AppBar: typeof import('./src/components/AppBar.vue')['default']
     AssetsManagerDialog: typeof import('./src/components/Dialog/AssetsManagerDialog.vue')['default']
+    AudioSource: typeof import('./src/components/AudioSource.vue')['default']
     BottomBar: typeof import('./src/components/Game/BottomBar.vue')['default']
     ClaimInviteDialog: typeof import('./src/components/Dialog/ClaimInviteDialog.vue')['default']
     ConfirmDialog: typeof import('./src/components/Dialog/ConfirmDialog.vue')['default']

@@ -6,6 +6,7 @@ import iconTreasure from "@images/game/icon-treasure.png";
 import iconBag from "@images/game/icon-bag.png";
 import iconDaily from "@images/game/icon-daily.png";
 import iconRef from "@images/game/icon-ref.png";
+import lock from "@images/game/lock.svg";
 
 const navItems = ref([
   {
@@ -13,6 +14,7 @@ const navItems = ref([
     icon: iconTreasure,
     class: "tw-aspect-[232/170] tw-w-[19%]",
     imgClass: "!tw-max-w-[50%]",
+    isLocked: true,
   },
   {
     to: "/game/inventory",
@@ -53,10 +55,11 @@ const navItems = ref([
       :class="item.class"
       v-ripple="{ class: `text-white` }"
     >
-      <router-link :to="item.to" :exact-active-class="`bottom-nav-active`">
+      <span v-if="item.isLocked">
         <div
           class="nav-item tw-bg-left tw-bg-[auto_100%] tw-bg-repeat-x tw-w-full tw-h-full tw-relative tw-flex tw-justify-center tw-items-center"
           :style="{ backgroundImage: `url(${bgBottomBar2})` }"
+          :class="{ 'nav-locked': item.isLocked }"
         >
           <v-img
             :src="item.icon"
@@ -65,6 +68,29 @@ const navItems = ref([
             :class="item.imgClass"
           />
         </div>
+
+        <!-- <v-img :src="lock" cover class="locked-icon" v-if="item.isLocked" /> -->
+      </span>
+
+      <router-link
+        :to="item.to"
+        :exact-active-class="`bottom-nav-active`"
+        v-else
+      >
+        <div
+          class="nav-item tw-bg-left tw-bg-[auto_100%] tw-bg-repeat-x tw-w-full tw-h-full tw-relative tw-flex tw-justify-center tw-items-center"
+          :style="{ backgroundImage: `url(${bgBottomBar2})` }"
+          :class="{ 'nav-locked': item.isLocked }"
+        >
+          <v-img
+            :src="item.icon"
+            cover
+            class="tw-w-300"
+            :class="item.imgClass"
+          />
+        </div>
+
+        <!-- <v-img :src="lock" cover class="locked-icon" v-if="item.isLocked" /> -->
       </router-link>
     </div>
     <!-- <div
@@ -183,5 +209,15 @@ const navItems = ref([
       }
     }
   }
+}
+
+.nav-locked {
+  filter: grayscale(100%);
+}
+.locked-icon {
+  @apply !tw-absolute tw-right-1/2 tw-bottom-1/2  tw-w-[30%] tw-h-auto;
+  transform: translate(-50%, -50%);
+  filter: none;
+  z-index: 1;
 }
 </style>

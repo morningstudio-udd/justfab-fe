@@ -18,7 +18,6 @@ import {
 // import basicSsl from "@vitejs/plugin-basic-ssl";
 
 export default defineConfig(({ mode }) => {
-  // Xác định base URL theo mode
   const base = mode === "staging" ? "/smk/" : "/";
 
   return {

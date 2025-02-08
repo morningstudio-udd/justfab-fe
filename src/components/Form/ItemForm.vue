@@ -16,14 +16,23 @@ const adminStore = useAdminStore();
 
 const isEdit = computed(() => Boolean(modelValue.value?._id));
 
+const itemForm = ref(null);
 const currentItem = ref({});
 
 onMounted(() => {
   emitter.on("onSelectAsset", changePhotoUrl);
 });
 
-const submitSave = () => {
-  emit("onSave", currentItem.value);
+const submitSave = async () => {
+  const { valid } = await itemForm.value?.validate();
+
+  console.log(valid);
+
+  // return;
+
+  if (valid) {
+    emit("onSave", currentItem.value);
+  }
 };
 
 const submitDelete = () => {
@@ -124,7 +133,7 @@ watch(
 
 <template>
   <div>
-    <v-form>
+    <v-form ref="itemForm" @submit.prevent="submitSave">
       <div
         class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-3 md:tw-grid-cols-5 tw-gap-4 tw-mb-6"
       >
@@ -152,6 +161,7 @@ watch(
                 dense
                 clearable
                 hide-details="auto"
+                :rules="[requiredValidator]"
               />
             </div>
 
@@ -164,6 +174,7 @@ watch(
                 clearable
                 hide-details="auto"
                 class="[&_input]:tw-uppercase"
+                :rules="[requiredValidator]"
               />
             </div>
 
@@ -325,13 +336,15 @@ watch(
         <v-btn
           color="error"
           variant="outlined"
-          :disabled="!currentItem || Object.keys(currentItem).length === 0"
+          :disabled="
+            !currentItem || Object.keys(currentItem).length === 0 || loading
+          "
           @click="submitDelete"
         >
           {{ $t("Delete") }}
         </v-btn>
 
-        <v-btn color="primary" @click="submitSave">
+        <v-btn color="primary" type="submit" :disabled="loading">
           {{ $t("Save") }}
         </v-btn>
       </div>

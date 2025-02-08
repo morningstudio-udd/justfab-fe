@@ -26,10 +26,6 @@ onMounted(() => {
 const submitSave = async () => {
   const { valid } = await itemForm.value?.validate();
 
-  console.log(valid);
-
-  // return;
-
   if (valid) {
     emit("onSave", currentItem.value);
   }

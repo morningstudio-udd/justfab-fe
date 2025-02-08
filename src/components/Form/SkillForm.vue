@@ -15,13 +15,18 @@ const adminStore = useAdminStore();
 
 const isEdit = computed(() => Boolean(modelValue.value?._id));
 
+const skillForm = ref(null);
 const currentSkill = ref({});
 const statInput = ref("");
 
 onMounted(() => {});
 
-const submitSave = () => {
-  emit("onSave", currentSkill.value);
+const submitSave = async () => {
+  const { valid } = await skillForm.value?.validate();
+
+  if (valid) {
+    emit("onSave", currentSkill.value);
+  }
 };
 
 const submitDelete = () => {
@@ -54,7 +59,7 @@ watch(
 
 <template>
   <div>
-    <v-form>
+    <v-form ref="skillForm" @submit.prevent="submitSave">
       <div class="tw-grid tw-gap-4 tw-grid-cols-1">
         <v-text-field
           v-model="currentSkill.name"
@@ -63,6 +68,7 @@ watch(
           dense
           clearable
           hide-details="auto"
+          :rules="[requiredValidator]"
         />
 
         <v-textarea
@@ -93,7 +99,7 @@ watch(
           outlined
           dense
           clearable
-          @keyup.enter="addStat"
+          @keydown.enter.prevent="addStat"
           hide-details="auto"
         >
         </v-text-field>
@@ -108,7 +114,7 @@ watch(
           {{ $t("Delete") }}
         </v-btn>
 
-        <v-btn color="primary" @click="submitSave">
+        <v-btn color="primary" type="submit">
           {{ $t("Save") }}
         </v-btn>
       </div>

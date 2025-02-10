@@ -23,6 +23,7 @@ declare global {
   const autoResetRef: typeof import('@vueuse/core')['autoResetRef']
   const base64UrlDecode: typeof import('./src/utils/helpers.js')['base64UrlDecode']
   const betweenValidator: typeof import('./src/utils/validators.js')['betweenValidator']
+  const claimEnergy: typeof import('./src/api/game.js')['claimEnergy']
   const computed: typeof import('vue')['computed']
   const computedAsync: typeof import('@vueuse/core')['computedAsync']
   const computedEager: typeof import('@vueuse/core')['computedEager']
@@ -62,6 +63,7 @@ declare global {
   const extendRef: typeof import('@vueuse/core')['extendRef']
   const fetchFPToken: typeof import('./src/api/fp.js')['fetchFPToken']
   const futureverseAuth: typeof import('./src/utils/futureverseAuth.js')['default']
+  const gameNav: typeof import('./src/navigations/game.js')['gameNav']
   const generateCodeChallenge: typeof import('./src/utils/FPClient.js')['generateCodeChallenge']
   const generateCodeVerifier: typeof import('./src/utils/FPClient.js')['generateCodeVerifier']
   const generatePKCE: typeof import('./src/utils/FPClient.js')['generatePKCE']
@@ -266,6 +268,7 @@ declare global {
   const useFocusWithin: typeof import('@vueuse/core')['useFocusWithin']
   const useFps: typeof import('@vueuse/core')['useFps']
   const useFullscreen: typeof import('@vueuse/core')['useFullscreen']
+  const useGameStore: typeof import('./src/plugins/2.pinia/modules/game.js')['useGameStore']
   const useGamepad: typeof import('@vueuse/core')['useGamepad']
   const useGeolocation: typeof import('@vueuse/core')['useGeolocation']
   const useI18n: typeof import('vue-i18n')['useI18n']
@@ -414,6 +417,7 @@ declare module 'vue' {
     readonly autoResetRef: UnwrapRef<typeof import('@vueuse/core')['autoResetRef']>
     readonly base64UrlDecode: UnwrapRef<typeof import('./src/utils/helpers.js')['base64UrlDecode']>
     readonly betweenValidator: UnwrapRef<typeof import('./src/utils/validators.js')['betweenValidator']>
+    readonly claimEnergy: UnwrapRef<typeof import('./src/api/game.js')['claimEnergy']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly computedAsync: UnwrapRef<typeof import('@vueuse/core')['computedAsync']>
     readonly computedEager: UnwrapRef<typeof import('@vueuse/core')['computedEager']>
@@ -452,6 +456,7 @@ declare module 'vue' {
     readonly emailValidator: UnwrapRef<typeof import('./src/utils/validators.js')['emailValidator']>
     readonly extendRef: UnwrapRef<typeof import('@vueuse/core')['extendRef']>
     readonly fetchFPToken: UnwrapRef<typeof import('./src/api/fp.js')['fetchFPToken']>
+    readonly gameNav: UnwrapRef<typeof import('./src/navigations/game.js')['gameNav']>
     readonly generateCodeChallenge: UnwrapRef<typeof import('./src/utils/FPClient.js')['generateCodeChallenge']>
     readonly generateCodeVerifier: UnwrapRef<typeof import('./src/utils/FPClient.js')['generateCodeVerifier']>
     readonly generatePKCE: UnwrapRef<typeof import('./src/utils/FPClient.js')['generatePKCE']>
@@ -655,6 +660,7 @@ declare module 'vue' {
     readonly useFocusWithin: UnwrapRef<typeof import('@vueuse/core')['useFocusWithin']>
     readonly useFps: UnwrapRef<typeof import('@vueuse/core')['useFps']>
     readonly useFullscreen: UnwrapRef<typeof import('@vueuse/core')['useFullscreen']>
+    readonly useGameStore: UnwrapRef<typeof import('./src/plugins/2.pinia/modules/game.js')['useGameStore']>
     readonly useGamepad: UnwrapRef<typeof import('@vueuse/core')['useGamepad']>
     readonly useGeolocation: UnwrapRef<typeof import('@vueuse/core')['useGeolocation']>
     readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>

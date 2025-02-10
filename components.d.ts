@@ -25,6 +25,7 @@ declare module 'vue' {
     ItemDialog: typeof import('./src/components/Dialog/ItemDialog.vue')['default']
     ItemForm: typeof import('./src/components/Form/ItemForm.vue')['default']
     LeftSidebar: typeof import('./src/components/Sidebar/LeftSidebar.vue')['default']
+    LoadingGame: typeof import('./src/components/LoadingGame.vue')['default']
     LoadingOverlay: typeof import('./src/components/LoadingOverlay.vue')['default']
     NewGameButton: typeof import('./src/components/NewGameButton.vue')['default']
     ResultItemDialog: typeof import('./src/components/Dialog/ResultItemDialog.vue')['default']

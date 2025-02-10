@@ -392,6 +392,9 @@
     "getSkill": true,
     "updateSkill": true,
     "getSkillById": true,
-    "stringToSlug": true
+    "stringToSlug": true,
+    "gameNav": true,
+    "useGameStore": true,
+    "claimEnergy": true
   }
 }

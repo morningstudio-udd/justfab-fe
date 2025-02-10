@@ -66,7 +66,11 @@ defineExpose({ openDialog, resultDialog, closeDialog });
             class="tw-aspect-[349/194] tw-w-[50.8%] tw-mb-[10%]"
             v-if="item?.item?.photoUrl"
           >
-            <v-img :src="item?.item?.photoUrl" width="100%" class="" />
+            <v-img
+              :src="srcAsset(item?.item?.photoUrl)"
+              width="100%"
+              class=""
+            />
           </div>
 
           <v-btn

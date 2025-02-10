@@ -13,7 +13,8 @@ export const setupGuards = (router) => {
      * If it's a public route, continue navigation. This kind of pages are allowed to visited by login & non-login users. Basically, without any restrictions.
      * Examples of public routes are, 404, under maintenance, etc.
      */
-    if (to.meta.public) return;
+
+    if (to.meta.public) return true;
 
     /**
      * Check if user is logged in by checking if token & user data exists in local storage

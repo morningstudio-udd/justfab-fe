@@ -30,6 +30,7 @@ definePage({
   },
 });
 
+const route = useRoute();
 const userStore = useUserStore();
 const adminStore = useAdminStore();
 const authStore = useAuthStore();
@@ -40,7 +41,11 @@ const userInventory = computed(() => inventoryData.value?.items);
 
 onMounted(async () => {
   if (authStore.isLoggedIn) {
-    await getInventory();
+    const p1 = getInventory();
+
+    const p2 = getUserInfo();
+
+    await Promise.all([p1, p2]);
   }
 });
 
@@ -218,7 +223,7 @@ const submitMerge = () => {
           :style="{ backgroundImage: `url(${bgSlot})` }"
         >
           <v-img
-            :src="srcAsset(item.photoUrl)"
+            :src="srcAsset(item.item?.photoUrl)"
             class="!tw-max-w-[75%] tw-w-full tw-h-auto"
           />
         </div>

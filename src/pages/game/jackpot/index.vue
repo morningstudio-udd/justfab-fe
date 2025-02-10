@@ -13,6 +13,7 @@ definePage({
   },
 });
 
+const route = useRoute();
 const userStore = useUserStore();
 
 const refSlotMachine = ref();
@@ -47,9 +48,13 @@ onMounted(async () => {
     resizeObserver.observe(gameContentRef.value);
   }
 
-  const { rewards, pool } = await getJackpotRewards();
-  jackpotRewards.value = rewards;
-  jackpot.value = pool;
+  const p1 = getUserInfo();
+  const p2 = getJackpotRewards().then(({ rewards, pool }) => {
+    jackpotRewards.value = rewards;
+    jackpot.value = pool;
+  });
+
+  await Promise.all([p1, p2]);
 });
 
 const onRollClick = async (betX) => {
@@ -92,6 +97,7 @@ const processRewards = async (rewards) => {
       }
       case REWARD_TYPES.GOLD:
         console.log("Add gold to user", reward.value);
+        userStore.userData.gold += reward.value;
         break;
       case REWARD_TYPES.ITEM:
         itemReward.value = reward;

@@ -19,15 +19,13 @@ const authStore = useAuthStore();
 const userStore = useUserStore();
 
 onMounted(async () => {
-  localStorage.setItem('fp_code', route.query.code);
+  localStorage.setItem("fp_code", route.query.code);
   if (route.query.code) {
-    try{
+    try {
       await nextTick();
       await fetchToken();
-    } catch(e) {
-
-    }
-  } 
+    } catch (e) {}
+  }
   router.push("/game/connect-wallet");
 });
 
@@ -39,7 +37,7 @@ const fetchToken = async () => {
     localStorage.setItem("fp_id_token", data.id_token);
     localStorage.setItem("fp_refresh_token", data.refresh_token);
 
-    const {header, payload, signature} = parseJwt(data.id_token);
+    const { header, payload, signature } = parseJwt(data.id_token);
     console.log(payload);
     localStorage.setItem("fp_futurepass", payload.futurepass);
     localStorage.setItem("fp_custodian", payload.custodian);
@@ -65,7 +63,7 @@ const fetchToken = async () => {
     class="tw-bg-[#86C7E5] tw-w-screen tw-h-screen tw-flex tw-items-center tw-justify-center"
   >
     <div
-      class="game-container tw-w-auto tw-h-[1920px] tw-aspect-[1080/1920] tw-max-w-full tw-max-h-full tw-bg-[#D9D9D9] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-flex tw-flex-col tw-relative"
+      class="game-container tw-w-auto tw-h-[1920px] tw-aspect-[9/16] tw-max-w-full tw-max-h-full tw-bg-[#D9D9D9] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-flex tw-flex-col tw-relative"
       :style="{ backgroundImage: `url(${gameBg})` }"
     >
       <div

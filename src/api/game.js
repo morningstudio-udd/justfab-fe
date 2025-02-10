@@ -84,9 +84,21 @@ export const setSlotMachineConfig = async (payload) => {
   }
 };
 
-export const playSlotMachine = async () => {
+export const playSlotMachine = async ({ betX = 1 }) => {
   try {
     const url = getApiPath(API.slotMachine.play);
+    const res = await $api.post(url, betX);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
+  }
+};
+
+export const claimEnergy = async () => {
+  try {
+    const url = getApiPath(API.user.claimEnergy);
     const res = await $api.post(url);
 
     return res.data;

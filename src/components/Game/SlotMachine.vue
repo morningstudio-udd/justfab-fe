@@ -122,7 +122,7 @@ const onButtonCloseClick = () => {
 const onButtonRoolClick = () => {
   console.log(props.disabled);
   if (props.disabled) return;
-  emit("rollClick");
+  emit("rollClick", {betX: currentX.value});
 };
 
 let playScripts = [];

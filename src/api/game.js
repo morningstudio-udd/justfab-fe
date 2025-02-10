@@ -19,6 +19,9 @@ const API = {
     set: "/jackpot",
     getRewards: "/jackpot/rewards",
   },
+  user: {
+    claimEnergy: "/user/claimEnergy"
+  }
 };
 
 export const getUserInventory = async (userId) => {

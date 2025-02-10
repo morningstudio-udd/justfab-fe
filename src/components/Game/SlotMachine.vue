@@ -18,6 +18,10 @@ const props = defineProps({
     type: Number,
     default: 0
   },
+  claimEnergyAt: {
+    type: Date,
+    default: new Date()
+  },
   jackpotRewards: {
     type: Array,
   },
@@ -86,8 +90,16 @@ const onIframeLoaded = () => {
     sm.ButtonClaimEnergy.node.on("click", onButtonClaimEnergyClick);
     sm.Jackpot.setPrizes(props.jackpotRewards);
     sm.Jackpot.node.active = false;
+    setInterval(updateEnergyBottle, 1000);
   };
 };
+
+const updateEnergyBottle = () => {
+  let now = new Date();
+  let minutes = Math.floor((now - props.claimEnergyAt) / 60000);
+  if(minutes > 50) minutes = 50;
+  slotMachine.value.LabelClaimEnergy.string = `${minutes}/50`;
+}
 
 const XS = [1, 2, 3, 5, 10]
 const onButtonBetXClick = () => {
@@ -99,7 +111,7 @@ const onButtonBetXClick = () => {
 };
 
 const onButtonClaimEnergyClick = () => {
-  console.log("claim");
+  emit("claimEnergyClick");
 };
 
 const onButtonCloseClick = () => {
@@ -173,7 +185,7 @@ const waitForSeconds = async (s) => {
   });
 };
 
-const emit = defineEmits(["rollClick", "scriptCompleted"]);
+const emit = defineEmits(["rollClick", "scriptCompleted", "claimEnergyClick"]);
 defineExpose({
   roll,
   rollNextStep,

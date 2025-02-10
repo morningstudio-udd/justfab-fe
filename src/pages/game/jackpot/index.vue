@@ -1,6 +1,8 @@
 <script setup>
+import { claimEnergy } from "@/api/game";
 import ResultItemDialog from "@/components/Dialog/ResultItemDialog.vue";
 import gameBg from "@images/game/bg-game-1.png";
+import { computed } from "vue";
 
 definePage({
   meta: {
@@ -25,6 +27,7 @@ const resultItemDialogRef = ref(null);
 let resizeObserver;
 
 const energy = computed(() => userStore.userData?.energy || 0);
+const claimEnergyAt = computed(() => new Date(userStore.userData?.claimEnergyAt));
 const bottomValue = computed(() => {
   return `${parentDivWidth.value / (1080 / 170)}px`;
 });
@@ -45,7 +48,7 @@ onMounted(async () => {
   jackpot.value = pool;
 });
 
-const onRollClick = async () => {
+const onRollClick = async (betX) => {
   if (!enable.value) return;
   try {
     enable.value = false;
@@ -54,7 +57,7 @@ const onRollClick = async () => {
       playScripts,
       rewards,
       user,
-    } = await playSlotMachine();
+    } = await playSlotMachine({ betX });
 
     currentRewards.value = rewards;
 
@@ -117,6 +120,20 @@ const waitForSeconds = async (s) => {
     setTimeout(res, s * 1000);
   });
 };
+
+const onClaimEnergyClick = async (e) => {
+  try {
+    enable.value = false;
+
+    const {
+      newEnergy = energy,
+      newClaimEnergyAt = lastClaimed
+    } = await claimEnergy();
+
+  userStore.userData.claimEnergyAt = newClaimEnergyAt;
+  userStore.userData.energy = newEnergy;
+  } catch(e){}
+}
 </script>
 
 <template>
@@ -131,8 +148,10 @@ const waitForSeconds = async (s) => {
         :jackpot="jackpot"
         :disabled="!enable"
         :jackpotRewards="jackpotRewards"
+        :claimEnergyAt="claimEnergyAt"
         @rollClick="onRollClick"
         @scriptCompleted="onScriptCompleted"
+        @claimEnergyClick="onClaimEnergyClick"
       ></slot-machine>
     </div>
 

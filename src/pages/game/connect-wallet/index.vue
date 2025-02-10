@@ -8,6 +8,8 @@ definePage({
   meta: {
     layout: "game",
     requiresAuth: true,
+    subject: "User",
+    action: "read",
   },
 });
 

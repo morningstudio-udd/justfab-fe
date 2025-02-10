@@ -20,6 +20,8 @@ definePage({
   meta: {
     layout: "game",
     requiresAuth: true,
+    subject: "User",
+    action: "read",
   },
 });
 
@@ -184,9 +186,7 @@ const submitFriend = () => {
                   <div class="child-element">Abv</div>
                 </v-expansion-panel-title>
 
-                <v-expansion-panel-text
-                  class="task-content tw-mx-[2%] tw-bg-[#FFF0C3]/60 tw-border-[.5vw] tw-border-t-0 tw-border-solid tw-border-[#8D2E02] tw-rounded-b-[1em]"
-                >
+                <v-expansion-panel-text class="task-content">
                   Some content
                 </v-expansion-panel-text>
               </v-expansion-panel>
@@ -245,7 +245,8 @@ const submitFriend = () => {
     }
   }
   .task-content {
-    border-width: 2%;
+    @apply tw-mx-[2%] tw-bg-[#FFF0C3]/60 !tw-border-[0.3vh] !tw-border-t-0 tw-border-solid tw-border-[#8D2E02] tw-rounded-b-[1em];
+    /* border-width: 2%; */
     font-size: clamp(0.625rem, 1.5vh, 2.125rem);
   }
 }

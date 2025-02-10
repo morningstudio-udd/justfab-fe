@@ -115,22 +115,18 @@ onBeforeUnmount(() => {
   }
 });
 
-const waitForSeconds = async (s) => {
-  return new Promise((res) => {
-    setTimeout(res, s * 1000);
-  });
-};
-
 const onClaimEnergyClick = async (e) => {
   try {
     enable.value = false;
 
-    const { newEnergy = energy, newClaimEnergyAt = lastClaimed } =
+    const { energy: newEnergy, lastClaimed: newClaimEnergyAt } =
       await claimEnergy();
 
     userStore.userData.claimEnergyAt = newClaimEnergyAt;
     userStore.userData.energy = newEnergy;
-  } catch (e) {}
+  } catch (error) {
+    console.log("error", error);
+  }
 };
 </script>
 

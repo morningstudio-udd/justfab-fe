@@ -19,11 +19,14 @@ import slot3 from "@images/game/slot-3.png";
 import slot4 from "@images/game/slot-4.png";
 import slot5 from "@images/game/slot-5.png";
 import slot6 from "@images/game/slot-6.png";
+import food from "@images/game/food.svg";
 
 definePage({
   meta: {
     layout: "game",
     requiresAuth: true,
+    subject: "User",
+    action: "read",
   },
 });
 
@@ -113,7 +116,7 @@ const submitMerge = () => {
       <div
         class="tw-w-full tw-grid tw-items-center tw-grid-cols-3 tw-px-[4%] tw-aspect-[1080/100] -tw-mb-[2%]"
       >
-        <div class=""></div>
+        <!-- <div class=""></div>
 
         <div class="">
           <div
@@ -129,7 +132,7 @@ const submitMerge = () => {
             class="tw-aspect-[179/100] tw-w-[54%] !tw-h-auto tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%]"
             :style="{ backgroundImage: `url(${btnFeed})` }"
           ></v-btn>
-        </div>
+        </div> -->
       </div>
 
       <div
@@ -175,6 +178,39 @@ const submitMerge = () => {
     >
       <div class="tw-grid tw-grid-cols-4 tw-gap-[10%]">
         <div
+          class="tw-aspect-[178/178] tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
+          :style="{ backgroundImage: `url(${bgSlot})` }"
+        >
+          <v-img :src="food" class="!tw-max-w-[60%] tw-w-full tw-h-auto" />
+
+          <svg
+            viewBox="0 0 50 50"
+            xmlns="http://www.w3.org/2000/svg"
+            class="tw-w-full tw-h-full tw-absolute"
+          >
+            <text
+              x="80%"
+              y="75%"
+              dominant-baseline="middle"
+              text-anchor="end"
+              font-family="DynaPuff"
+              font-size="60%"
+              font-weight="700"
+              fill="#fff"
+              stroke="#000000"
+              stroke-width="1.5"
+              paint-order="stroke fill"
+              text-overflow="ellipsis"
+              white-space="nowrap"
+              overflow="hidden"
+              width="100%"
+            >
+              {{ userStore.userData?.food || 0 }}
+            </text>
+          </svg>
+        </div>
+
+        <div
           v-if="userInventory && userInventory.length"
           v-for="item in userInventory"
           :key="item._id"
@@ -192,15 +228,67 @@ const submitMerge = () => {
     </div>
 
     <div
-      class="tw-w-full tw-aspect-[1080/145] tw-flex tw-justify-center tw-items-center"
+      class="tw-w-full tw-aspect-[1080/145] tw-flex tw-justify-center tw-items-center tw-px-[6%] tw-gap-[4%]"
       :style="{ backgroundImage: `url(${bgBar1})` }"
     >
-      <v-btn
+      <!-- <v-btn
         color="transparent"
         class="tw-aspect-[326/113] tw-w-[30%] !tw-h-auto tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-rounded-md"
         :style="{ backgroundImage: `url(${btnAddInventory})` }"
+      ></v-btn> -->
+      <v-progress-linear
+        color="#91F8FD"
+        bg-color="#000"
+        bg-opacity="0.6"
+        model-value="50"
+        rounded="0"
+        class="foodbar !tw-h-[60%]"
+      >
+        <svg
+          viewBox="0 0 80 40"
+          xmlns="http://www.w3.org/2000/svg"
+          class="tw-h-full"
+        >
+          <text
+            x="50%"
+            y="50%"
+            dominant-baseline="middle"
+            text-anchor="middle"
+            font-family="DynaPuff"
+            font-size="140%"
+            font-weight="700"
+            fill="#fff"
+            stroke="#000000"
+            stroke-width="3"
+            paint-order="stroke fill"
+            text-overflow="ellipsis"
+            white-space="nowrap"
+            overflow="hidden"
+            width="100%"
+          >
+            5/10
+          </text>
+        </svg>
+      </v-progress-linear>
+
+      <v-btn
+        flat
+        color="transparent"
+        class="tw-aspect-[179/100] tw-w-[19%] !tw-h-auto tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%]"
+        :style="{ backgroundImage: `url(${btnFeed})` }"
       ></v-btn>
     </div>
     <!-- </div> -->
   </div>
 </template>
+
+<style lang="postcss">
+.foodbar {
+  @apply tw-border-solid tw-border-[#FFFFFF];
+  border-width: clamp(1.5px, 1.5vw, 2px);
+  .v-progress-linear\_\_determinate {
+    @apply tw-h-full;
+    box-shadow: inset 0 0 0 clamp(1.5px, 1.5vw, 2px) #12a6d4;
+  }
+}
+</style>

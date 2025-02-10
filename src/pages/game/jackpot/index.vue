@@ -8,6 +8,8 @@ definePage({
   meta: {
     layout: "game",
     requiresAuth: true,
+    subject: "User",
+    action: "read",
   },
 });
 
@@ -27,7 +29,9 @@ const resultItemDialogRef = ref(null);
 let resizeObserver;
 
 const energy = computed(() => userStore.userData?.energy || 0);
-const claimEnergyAt = computed(() => new Date(userStore.userData?.claimEnergyAt));
+const claimEnergyAt = computed(
+  () => new Date(userStore.userData?.claimEnergyAt)
+);
 const bottomValue = computed(() => {
   return `${parentDivWidth.value / (1080 / 170)}px`;
 });
@@ -53,11 +57,7 @@ const onRollClick = async (betX) => {
   try {
     enable.value = false;
 
-    const {
-      playScripts,
-      rewards,
-      user,
-    } = await playSlotMachine({ betX });
+    const { playScripts, rewards, user } = await playSlotMachine({ betX });
 
     currentRewards.value = rewards;
 
@@ -74,10 +74,10 @@ const onRollClick = async (betX) => {
   }
 };
 
-const onScriptCompleted = async(script) => {
+const onScriptCompleted = async (script) => {
   console.log("complete", script);
   await processRewards(script.rewards);
-}
+};
 
 const resetRewardsState = () => {
   itemReward.value = null;
@@ -125,15 +125,13 @@ const onClaimEnergyClick = async (e) => {
   try {
     enable.value = false;
 
-    const {
-      newEnergy = energy,
-      newClaimEnergyAt = lastClaimed
-    } = await claimEnergy();
+    const { newEnergy = energy, newClaimEnergyAt = lastClaimed } =
+      await claimEnergy();
 
-  userStore.userData.claimEnergyAt = newClaimEnergyAt;
-  userStore.userData.energy = newEnergy;
-  } catch(e){}
-}
+    userStore.userData.claimEnergyAt = newClaimEnergyAt;
+    userStore.userData.energy = newEnergy;
+  } catch (e) {}
+};
 </script>
 
 <template>

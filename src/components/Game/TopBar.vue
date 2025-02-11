@@ -4,10 +4,16 @@ import bgGold from "@images/game/bg-gold.png";
 import bgAvt from "@images/game/bg-avt.png";
 
 const userStore = useUserStore();
+const gameStore = useGameStore();
 
 const currentGold = ref(userStore.userData?.gold || 0);
 const currentCoin = ref(userStore.userData?.token || 0);
+const goldSvgRef = ref(null);
+const coinSvgRef = ref(null);
+const nameSvgRef = ref(null);
+const expSvgRef = ref(null);
 
+const fontSizeBase = computed(() => gameStore.baseFontSize);
 const displayName = computed(() =>
   truncateString(userStore.userData?.displayName)
 );
@@ -52,6 +58,7 @@ watch(
           viewBox="0 0 68 15"
           xmlns="http://www.w3.org/2000/svg"
           class="tw-w-full tw-h-full"
+          ref="nameSvgRef"
         >
           <text
             x="1%"
@@ -59,7 +66,10 @@ watch(
             dominant-baseline="middle"
             text-anchor="start"
             font-family="DynaPuff"
-            font-size="60%"
+            :font-size="`${gameStore.setFontSizeBasedOnViewBox(
+              nameSvgRef,
+              60
+            )}px`"
             font-weight="700"
             padding-left="1%"
             fill="#fff"
@@ -83,6 +93,7 @@ watch(
           viewBox="0 0 68 18"
           xmlns="http://www.w3.org/2000/svg"
           class="tw-w-full tw-h-full"
+          ref="expSvgRef"
         >
           <text
             x="50%"
@@ -90,7 +101,10 @@ watch(
             dominant-baseline="middle"
             text-anchor="middle"
             font-family="DynaPuff"
-            font-size="65%"
+            :font-size="`${gameStore.setFontSizeBasedOnViewBox(
+              expSvgRef,
+              60
+            )}px`"
             font-weight="700"
             fill="#fff"
             stroke="#000"
@@ -114,6 +128,7 @@ watch(
           viewBox="0 0 68 23"
           xmlns="http://www.w3.org/2000/svg"
           class="tw-w-full tw-h-full"
+          ref="goldSvgRef"
         >
           <text
             x="50%"
@@ -121,7 +136,10 @@ watch(
             dominant-baseline="middle"
             text-anchor="middle"
             font-family="DynaPuff"
-            font-size="80%"
+            :font-size="`${gameStore.setFontSizeBasedOnViewBox(
+              goldSvgRef,
+              60
+            )}px`"
             font-weight="700"
             fill="#fff"
             stroke="#000"
@@ -144,6 +162,7 @@ watch(
           viewBox="0 0 68 25"
           xmlns="http://www.w3.org/2000/svg"
           class="tw-w-full tw-h-full"
+          ref="coinSvgRef"
         >
           <text
             x="50%"
@@ -151,7 +170,10 @@ watch(
             dominant-baseline="middle"
             text-anchor="middle"
             font-family="DynaPuff"
-            font-size="80%"
+            :font-size="`${gameStore.setFontSizeBasedOnViewBox(
+              coinSvgRef,
+              60
+            )}px`"
             font-weight="700"
             fill="#fff"
             stroke="#000"

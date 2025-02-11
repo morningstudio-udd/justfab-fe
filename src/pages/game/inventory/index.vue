@@ -34,10 +34,14 @@ const route = useRoute();
 const userStore = useUserStore();
 const adminStore = useAdminStore();
 const authStore = useAuthStore();
+const gameStore = useGameStore();
 
 const inventoryData = ref();
+const foodSvgRef = ref();
+const foodBarSvgRef = ref();
 
 const userInventory = computed(() => inventoryData.value?.items);
+const fontSizeBase = computed(() => gameStore.baseFontSize);
 
 onMounted(async () => {
   if (authStore.isLoggedIn) {
@@ -192,6 +196,7 @@ const submitMerge = () => {
             viewBox="0 0 50 50"
             xmlns="http://www.w3.org/2000/svg"
             class="tw-w-full tw-h-full tw-absolute"
+            ref="foodSvgRef"
           >
             <text
               x="80%"
@@ -199,7 +204,10 @@ const submitMerge = () => {
               dominant-baseline="middle"
               text-anchor="end"
               font-family="DynaPuff"
-              font-size="60%"
+              :font-size="`${gameStore.setFontSizeBasedOnViewBox(
+                foodSvgRef,
+                20
+              )}px`"
               font-weight="700"
               fill="#fff"
               stroke="#000000"
@@ -253,6 +261,7 @@ const submitMerge = () => {
           viewBox="0 0 80 40"
           xmlns="http://www.w3.org/2000/svg"
           class="tw-h-full"
+          ref="foodBarSvgRef"
         >
           <text
             x="50%"
@@ -260,7 +269,10 @@ const submitMerge = () => {
             dominant-baseline="middle"
             text-anchor="middle"
             font-family="DynaPuff"
-            font-size="140%"
+            :font-size="`${gameStore.setFontSizeBasedOnViewBox(
+              foodBarSvgRef,
+              50
+            )}px`"
             font-weight="700"
             fill="#fff"
             stroke="#000000"

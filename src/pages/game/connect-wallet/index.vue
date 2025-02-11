@@ -1,8 +1,6 @@
 <script setup>
 import bgConnectWallet from "@images/game/bg-connect-wallet.png";
 import inputConnectWallet from "@images/game/input-connect-wallet.png";
-import btnConnectWallet from "@images/game/btn-connect-wallet.png";
-import { onMounted } from "vue";
 
 definePage({
   meta: {
@@ -13,9 +11,13 @@ definePage({
   },
 });
 
+const gameStore = useGameStore();
+
 const walletAddress = ref("");
 const email = ref("");
 const chainId = ref("");
+
+const fontSizeBase = computed(() => gameStore.baseFontSize);
 
 onMounted(() => {
   walletAddress.value = localStorage.getItem("fp_futurepass");
@@ -70,7 +72,10 @@ onMounted(() => {
             bg-color="transparent"
             flat
             hide-details
-            :style="{ backgroundImage: `url(${inputConnectWallet})` }"
+            :style="{
+              backgroundImage: `url(${inputConnectWallet})`,
+              fontSize: `${fontSizeBase}px`,
+            }"
           />
 
           <connect-wallet-btn />
@@ -90,6 +95,7 @@ onMounted(() => {
     tw-overflow-hidden;
   input {
     @apply tw-aspect-[688/130];
+    font-size: var(--base-font-size);
   }
 }
 </style>

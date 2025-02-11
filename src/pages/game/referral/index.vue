@@ -24,6 +24,8 @@ definePage({
   },
 });
 
+const gameStore = useGameStore();
+
 const invitedRewards = [
   invitedReward1,
   invitedReward2,
@@ -43,6 +45,7 @@ const gameContentRef = ref(null);
 const inviteDialogRef = ref(null);
 const claimInviteDialogRef = ref(null);
 const parentDivWidth = ref(0);
+const invitedSvgRef = ref(null);
 
 let resizeObserver;
 
@@ -92,6 +95,7 @@ onBeforeUnmount(() => {
             viewBox="0 0 68 15"
             xmlns="http://www.w3.org/2000/svg"
             class="tw-w-full tw-h-full"
+            ref="invitedSvgRef"
           >
             <text
               x="100%"
@@ -99,7 +103,10 @@ onBeforeUnmount(() => {
               dominant-baseline="middle"
               text-anchor="start"
               font-family="DynaPuff"
-              font-size="30%"
+              :font-size="`${gameStore.setFontSizeBasedOnViewBox(
+                invitedSvgRef,
+                60
+              )}px`"
               font-weight="700"
               fill="#fff"
               stroke="#B24400"

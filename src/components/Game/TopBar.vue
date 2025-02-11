@@ -13,7 +13,6 @@ const coinSvgRef = ref(null);
 const nameSvgRef = ref(null);
 const expSvgRef = ref(null);
 
-const fontSizeBase = computed(() => gameStore.baseFontSize);
 const displayName = computed(() =>
   truncateString(userStore.userData?.displayName)
 );

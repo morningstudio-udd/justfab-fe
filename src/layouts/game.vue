@@ -24,6 +24,7 @@ onMounted(() => {
         :style="{
           backgroundImage: `url(${gameBg})`,
           fontSize: `${fontSizeBase}px`,
+          '--base-font-size': `${fontSizeBase}px`,
         }"
         ref="gameContainerRef"
       >

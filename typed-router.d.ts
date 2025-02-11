@@ -30,6 +30,7 @@ declare module 'vue-router/auto-routes' {
     'game-daily': RouteRecordInfo<'game-daily', '/game/daily', Record<never, never>, Record<never, never>>,
     'game-inventory': RouteRecordInfo<'game-inventory', '/game/inventory', Record<never, never>, Record<never, never>>,
     'game-jackpot': RouteRecordInfo<'game-jackpot', '/game/jackpot', Record<never, never>, Record<never, never>>,
+    'game-menu': RouteRecordInfo<'game-menu', '/game/menu', Record<never, never>, Record<never, never>>,
     'game-referral': RouteRecordInfo<'game-referral', '/game/referral', Record<never, never>, Record<never, never>>,
     'home': RouteRecordInfo<'home', '/home', Record<never, never>, Record<never, never>>,
     'telegram-login-token': RouteRecordInfo<'telegram-login-token', '/telegram-login/:token', { token: ParamValue<true> }, { token: ParamValue<false> }>,

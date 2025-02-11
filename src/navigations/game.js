@@ -35,25 +35,10 @@ export const gameNav = [
     isLink: true,
   },
   {
-    to: "",
+    to: "/game/menu",
     icon: iconRef,
     class: "tw-aspect-[202/170] tw-w-[19%]",
     imgClass: "!tw-max-w-[50%]",
-    isLink: false,
-    submenu: [
-      {
-        to: "/game/referral/settings",
-        title: "Setting",
-        isLocked: true,
-      },
-      {
-        to: "/game/referral",
-        title: "Referral",
-      },
-      {
-        to: "/game/connect-wallet",
-        title: "Futurepass",
-      },
-    ],
+    isLink: true,
   },
 ];

@@ -1,63 +1,79 @@
 <script setup>
 import bgBottomBar from "@images/game/bg-bottom-bar.png";
 import bgBottomBar2 from "@images/game/bg-bottom-bar-2.png";
-import iconJackpot from "@images/game/icon-jackpot.png";
-import iconTreasure from "@images/game/icon-treasure.png";
-import iconBag from "@images/game/icon-bag.png";
-import iconDaily from "@images/game/icon-daily.png";
-import iconRef from "@images/game/icon-ref.png";
 import lock from "@images/game/lock.svg";
 
-const navItems = ref([
-  {
-    to: "/game/connect-wallet",
-    icon: iconTreasure,
-    class: "tw-aspect-[232/170] tw-w-[19%]",
-    imgClass: "!tw-max-w-[50%]",
-    isLocked: true,
-  },
-  {
-    to: "/game/inventory",
-    icon: iconBag,
-    class: "tw-aspect-[209/170] tw-w-[19%]",
-    imgClass: "!tw-max-w-[55%]",
-  },
-  {
-    to: "/game/jackpot",
-    icon: iconJackpot,
-    class: "tw-aspect-[231/170] tw-grow",
-    imgClass: "!tw-max-w-[90%]",
-  },
-  {
-    to: "/game/daily",
-    icon: iconDaily,
-    class: "tw-aspect-[207/170] tw-w-[19%]",
-    imgClass: "!tw-max-w-[40%]",
-  },
-  {
-    to: "/game/referral",
-    icon: iconRef,
-    class: "tw-aspect-[202/170] tw-w-[19%]",
-    imgClass: "!tw-max-w-[50%]",
-  },
-]);
+const route = useRoute();
+
+const bottomBarRef = ref(null);
+
+const isSubmenuActive = (submenu) => {
+  if (!submenu) return false;
+  return submenu.some((subItem) => route.path.startsWith(subItem.to));
+};
 </script>
 
 <template>
   <div
-    class="bottom-bar tw-w-full tw-max-w-full tw-aspect-[1080/170] tw-flex tw-z-10"
+    class="tw-w-full !tw-h-auto tw-max-w-full tw-aspect-[1080/170] tw-flex tw-z-10;"
     nav
+    ref="bottomBarRef"
   >
     <div
-      v-for="(item, index) in navItems"
+      v-for="(item, index) in gameNav"
       :key="index"
       class="bottom-nav"
       :class="item.class"
       v-ripple="{ class: `text-white` }"
     >
-      <span v-if="item.isLocked">
+      <span
+        v-if="item.isLocked || !item.isLink"
+        :class="{
+          'bottom-nav-active': isSubmenuActive(item.submenu),
+        }"
+      >
+        <v-menu
+          v-if="item.submenu && item.submenu.length"
+          location="top end"
+          offset="-0.2vh"
+          :attach="bottomBarRef"
+          :close-on-content-click="false"
+          transition="slide-y-reverse-transition"
+        >
+          <template #activator="{ props }">
+            <div
+              class="nav-item"
+              v-bind="props"
+              :style="{ backgroundImage: `url(${bgBottomBar2})` }"
+              :class="{
+                'nav-locked': item.isLocked,
+              }"
+            >
+              <v-img
+                :src="item.icon"
+                cover
+                class="tw-w-300"
+                :class="item.imgClass"
+              />
+            </div>
+          </template>
+
+          <v-list class="game-submenu">
+            <v-list-item
+              v-for="(subItem, index) in item.submenu"
+              :key="index"
+              :value="index"
+              :class="{ 'submenu-locked': subItem.isLocked }"
+              :to="subItem.to"
+            >
+              <v-list-item-title>{{ subItem.title }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+
         <div
-          class="nav-item tw-bg-left tw-bg-[auto_100%] tw-bg-repeat-x tw-w-full tw-h-full tw-relative tw-flex tw-justify-center tw-items-center"
+          v-else
+          class="nav-item"
           :style="{ backgroundImage: `url(${bgBottomBar2})` }"
           :class="{ 'nav-locked': item.isLocked }"
         >
@@ -78,7 +94,7 @@ const navItems = ref([
         v-else
       >
         <div
-          class="nav-item tw-bg-left tw-bg-[auto_100%] tw-bg-repeat-x tw-w-full tw-h-full tw-relative tw-flex tw-justify-center tw-items-center"
+          class="nav-item"
           :style="{ backgroundImage: `url(${bgBottomBar2})` }"
           :class="{ 'nav-locked': item.isLocked }"
         >
@@ -93,98 +109,13 @@ const navItems = ref([
         <!-- <v-img :src="lock" cover class="locked-icon" v-if="item.isLocked" /> -->
       </router-link>
     </div>
-    <!-- <div
-      class="bottom-nav tw-aspect-[232/170] tw-w-[19%]"
-      v-ripple="{ class: `text-white` }"
-    >
-      <router-link to="/game/test">
-        <div
-          class="nav-item tw-bg-left tw-bg-[auto_100%] tw-bg-repeat-x tw-w-full tw-h-full tw-relative tw-flex tw-justify-center tw-items-center"
-          :style="{ backgroundImage: `url(${bgBottomBar2})` }"
-        >
-          <v-img
-            :src="iconTreasure"
-            cover
-            class="tw-aspect-[114/102] tw-w-300 !tw-max-w-[50%]"
-          />
-        </div>
-      </router-link>
-    </div>
-    <div
-      class="bottom-nav tw-aspect-[209/170] tw-w-[19%]"
-      v-ripple="{ class: `text-white` }"
-    >
-      <router-link to="/game/inventory">
-        <div
-          class="nav-item tw-bg-left tw-bg-[auto_100%] tw-bg-repeat-x tw-w-full tw-h-full tw-relative tw-flex tw-justify-center tw-items-center"
-          :style="{ backgroundImage: `url(${bgBottomBar2})` }"
-        >
-          <v-img
-            :src="iconBag"
-            cover
-            class="tw-aspect-[111/122] tw-w-300 !tw-max-w-[55%]"
-          />
-        </div>
-      </router-link>
-    </div>
-    <div
-      class="bottom-nav tw-aspect-[231/170] tw-grow tw-relative"
-      v-ripple="{ class: `text-white` }"
-    >
-      <router-link to="/game/jackpot">
-        <div
-          class="nav-item tw-bg-left tw-bg-[auto_100%] tw-bg-repeat-x tw-w-full tw-h-full tw-relative tw-flex tw-justify-center tw-items-center"
-          :style="{ backgroundImage: `url(${bgBottomBar2})` }"
-        >
-          <v-img
-            :src="iconJackpot"
-            cover
-            class="tw-aspect-[192/95] tw-w-300 !tw-max-w-[90%]"
-          />
-        </div>
-      </router-link>
-    </div>
-    <div
-      class="bottom-nav tw-aspect-[207/170] tw-w-[19%]"
-      v-ripple="{ class: `text-white` }"
-    >
-      <router-link to="/game/daily">
-        <div
-          class="nav-item tw-bg-left tw-bg-[auto_100%] tw-bg-repeat-x tw-w-full tw-h-full tw-relative tw-flex tw-justify-center tw-items-center"
-          :style="{ backgroundImage: `url(${bgBottomBar2})` }"
-        >
-          <v-img
-            :src="iconDaily"
-            cover
-            class="tw-aspect-[77/112] tw-w-300 !tw-max-w-[40%]"
-          />
-        </div>
-      </router-link>
-    </div>
-    <div
-      class="bottom-nav tw-aspect-[202/170] tw-w-[19%]"
-      v-ripple="{ class: `text-white` }"
-    >
-      <router-link to="/game/referral">
-        <div
-          class="nav-item tw-bg-left tw-bg-[auto_100%] tw-bg-repeat-x tw-w-full tw-h-full tw-relative tw-flex tw-justify-center tw-items-center"
-          :style="{ backgroundImage: `url(${bgBottomBar2})` }"
-        >
-          <v-img
-            :src="iconRef"
-            cover
-            class="tw-aspect-[115/76] tw-w-300 !tw-max-w-[50%]"
-          />
-        </div>
-      </router-link>
-    </div> -->
   </div>
 </template>
 
 <style lang="postcss">
 .bottom-nav {
   .nav-item {
-    @apply tw-border-0  tw-border-solid tw-border-[#BB6024];
+    @apply tw-bg-left tw-bg-[auto_100%] tw-bg-repeat-x tw-w-full tw-h-full !tw-relative tw-flex tw-justify-center tw-items-center tw-border-0 tw-border-solid tw-border-[#BB6024];
     border-right-width: 0.4vh;
   }
   &:last-child {
@@ -198,14 +129,14 @@ const navItems = ref([
     .bottom-active {
       @apply tw-hidden;
     }
-    &.bottom-nav-active {
-      .nav-item {
-        @apply tw-scale-110 tw-z-[1];
-        border-left-width: 0.4vh;
-        &::after {
-          content: "";
-          @apply tw-absolute tw-w-full tw-h-full tw-bg-[#FF6208]/50;
-        }
+  }
+  .bottom-nav-active {
+    .nav-item {
+      @apply tw-scale-110 tw-z-[1];
+      border-left-width: 0.4vh;
+      &::after {
+        content: "";
+        @apply tw-absolute tw-w-full tw-h-full tw-bg-[#FF6208]/50;
       }
     }
   }
@@ -219,5 +150,17 @@ const navItems = ref([
   transform: translate(-50%, -50%);
   filter: none;
   z-index: 1;
+}
+.game-submenu {
+  @apply !tw-bg-[#E0BC8C] !tw-border-[0.3vh] !tw-border-b-0 tw-border-solid !tw-border-[#BB6024] !tw-rounded-b-none !tw-shadow-none;
+  font-size: clamp(0.625rem, 1.5vh, 2.125rem);
+  .v-list-item-title {
+    @apply tw-text-[#BB6024];
+  }
+  .submenu-locked {
+    .v-list-item-title {
+      @apply tw-text-gray-500;
+    }
+  }
 }
 </style>

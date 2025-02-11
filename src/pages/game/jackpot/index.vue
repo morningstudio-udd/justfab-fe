@@ -64,14 +64,10 @@ const onRollClick = async (betX) => {
 
     const { playScripts, rewards, user } = await playSlotMachine({ betX });
 
+    userStore.userData.energy = user.energy;
     currentRewards.value = rewards;
 
     refSlotMachine.value.roll(playScripts);
-
-    // await waitForSeconds(4);
-
-    // userStore.userData = { ...userStore.userData, ...user };
-    //
   } catch (error) {
     console.log("error", error);
   } finally {

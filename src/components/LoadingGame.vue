@@ -12,84 +12,107 @@ const props = defineProps({
 const gameStore = useGameStore();
 const isLoading = computed(() => gameStore.isLoading);
 const progressLoading = computed(() => gameStore.progressLoading);
+
+const loadingBarRef = ref(null);
+const loadingNoticeRef = ref(null);
 </script>
 
 <template>
   <section id="loading">
     <v-overlay
       v-model="isLoading"
-      class="tw-justify-center tw-items-center !tw-z-[2000]"
-      scrim="rgb(59 130 246 / 50%)"
+      class="tw-justify-center tw-items-center !tw-z-[2000] tw-bg-black"
       opacity="0"
     >
       <v-card
         flat
-        class="tw-aspect-[9/16] tw-w-auto tw-h-screen tw-max-w-full tw-max-h-[1920px] !tw-bg-cover !tw-bg-center !tw-bg-no-repeat"
+        class="tw-aspect-[9/16] tw-w-auto tw-h-screen tw-max-w-full tw-max-h-[1920px] !tw-bg-cover !tw-bg-center !tw-bg-no-repeat !tw-p-[5%]"
         :style="{ backgroundImage: `url(${bgLoadingGame})` }"
       >
-        <v-progress-linear
-          color="cyan"
-          indeterminate
-          class="tw-aspect-[907/154] tw-w-[907px] !tw-h-auto tw-max-w-[80%] tw-bg-cover tw-bg-center tw-bg-no-repeat"
-          :style="{ backgroundImage: `url(${loadingBar})` }"
-        ></v-progress-linear>
+        <div
+          class="tw-h-full tw-flex tw-flex-col tw-justify-end tw-items-center"
+        >
+          <div
+            class="tw-aspect-[764/99] tw-w-[764px] !tw-h-auto tw-max-w-[80%] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-flex tw-justify-center tw-items-center"
+            :style="{ backgroundImage: `url(${loadingBar})` }"
+          >
+            <v-progress-linear
+              color="cyan"
+              indeterminate
+              class="tw-w-[95%] !tw-h-[60%] tw-font-[DynaPuff]"
+            >
+              <svg
+                viewBox="0 0 120 40"
+                xmlns="http://www.w3.org/2000/svg"
+                class="tw-h-full"
+                ref="loadingBarRef"
+              >
+                <text
+                  x="50%"
+                  y="50%"
+                  dominant-baseline="middle"
+                  text-anchor="middle"
+                  font-family="DynaPuff"
+                  :font-size="`${gameStore.setFontSizeBasedOnViewBox(
+                    loadingBarRef,
+                    60
+                  )}px`"
+                  font-weight="700"
+                  fill="#fff"
+                  stroke="#000000"
+                  stroke-width="5"
+                  paint-order="stroke fill"
+                  text-overflow="ellipsis"
+                  white-space="nowrap"
+                  overflow="hidden"
+                  width="100%"
+                >
+                  Loading
+                </text>
+              </svg>
+            </v-progress-linear>
+          </div>
+
+          <div class="tw-font-[DynaPuff]">
+            <svg
+              viewBox="0 0 300 30"
+              xmlns="http://www.w3.org/2000/svg"
+              class="tw-w-full"
+              ref="loadingNoticeRef"
+            >
+              <text
+                x="50%"
+                y="50%"
+                dominant-baseline="middle"
+                text-anchor="middle"
+                font-family="DynaPuff"
+                :font-size="`${gameStore.setFontSizeBasedOnViewBox(
+                  loadingNoticeRef,
+                  30
+                )}px`"
+                font-weight="400"
+                fill="#fff"
+                stroke="#000000"
+                stroke-width="1"
+                paint-order="stroke fill"
+                text-overflow="ellipsis"
+                white-space="nowrap"
+                overflow="hidden"
+                width="100%"
+              >
+                <tspan x="50%" y="30%">
+                  If you see an offensive message in the chat, tap it and
+                </tspan>
+                <tspan x="50%" y="70%">
+                  choose “report” to report the player.
+                </tspan>
+              </text>
+            </svg>
+          </div>
+        </div>
       </v-card>
     </v-overlay>
   </section>
 </template>
 
-<style lang="scss" scoped>
-.loader {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  display: inline-block;
-  position: relative;
-  border: 3px solid;
-  border-color: #fff #fff transparent transparent;
-  box-sizing: border-box;
-  animation: rotation 1s linear infinite;
-}
-.loader::after,
-.loader::before {
-  content: "";
-  box-sizing: border-box;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  margin: auto;
-  border: 3px solid;
-  border-color: transparent transparent #ff3d00 #ff3d00;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  box-sizing: border-box;
-  animation: rotationBack 0.5s linear infinite;
-  transform-origin: center center;
-}
-.loader::before {
-  width: 32px;
-  height: 32px;
-  border-color: #fff #fff transparent transparent;
-  animation: rotation 1.5s linear infinite;
-}
-
-@keyframes rotation {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-@keyframes rotationBack {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(-360deg);
-  }
-}
-</style>
+<style lang="postcss" scoped></style>

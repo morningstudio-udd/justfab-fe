@@ -1,28 +1,12 @@
 import { defineStore } from "pinia";
 
 export const useGameStore = defineStore("game", () => {
-  const isLoading = ref(false);
-  const progressLoading = ref(0);
+  const isLoading = ref(true);
   const baseFontSize = ref(16);
   const gameContainer = ref(null);
 
-  // Function to simulate loading progress
-  const startLoading = () => {
-    progressLoading.value = 0;
-    isLoading.value = true;
-
-    const interval = setInterval(() => {
-      if (progressLoading.value >= 95) {
-        clearInterval(interval);
-      } else {
-        progressLoading.value += Math.floor(Math.random() * 10 + 5); // Random increment
-      }
-    }, 200);
-  };
-
-  const completeLoading = () => {
-    progressLoading.value = 100;
-    setTimeout(() => (isLoading.value = false), 500); // Delay before hiding the loading screen
+  const setLoadingProgress = (value) => {
+    isLoading.value = value;
   };
 
   const setResponsiveFont = (parent = gameContainer.value, scale = 0.03) => {
@@ -56,11 +40,9 @@ export const useGameStore = defineStore("game", () => {
 
   return {
     isLoading,
-    progressLoading,
     baseFontSize,
     gameContainer,
-    startLoading,
-    completeLoading,
+    setLoadingProgress,
     setResponsiveFont,
     setResponsiveFontPercentage,
     setFontSizeBasedOnViewBox,

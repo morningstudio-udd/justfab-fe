@@ -11,6 +11,8 @@ const fontSizeBase = computed(() => gameStore.baseFontSize);
 onMounted(() => {
   gameStore.gameContainer = gameContainerRef.value;
   gameStore.baseFontSize = gameStore.setResponsiveFont();
+
+  gameStore.setLoadingProgress(false);
 });
 </script>
 

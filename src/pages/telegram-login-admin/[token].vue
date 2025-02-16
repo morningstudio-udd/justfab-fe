@@ -14,6 +14,15 @@ const router = useRouter();
 const appStore = useAppStore();
 const authStore = useAuthStore();
 const userStore = useUserStore();
+const gameStore = useGameStore();
+
+onBeforeMount(() => {
+  gameStore.setLoading(true);
+});
+
+onUnmounted(() => {
+  gameStore.setLoading(false);
+});
 
 onMounted(async () => {
   if (route.params.token) {

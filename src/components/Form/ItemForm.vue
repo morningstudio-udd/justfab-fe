@@ -18,6 +18,7 @@ const isEdit = computed(() => Boolean(modelValue.value?._id));
 
 const itemForm = ref(null);
 const currentItem = ref({});
+const loading = ref(false);
 
 onMounted(() => {
   emitter.on("onSelectAsset", changePhotoUrl);
@@ -261,16 +262,16 @@ watch(
           <v-expansion-panels flat>
             <template
               v-for="rarity in Object.values(ITEM_RARITIES)"
-              :key="rarity"
+              :key="rarity.name"
             >
               <v-expansion-panel bg-color="#F5F5F5">
                 <v-expansion-panel-title>
                   <v-checkbox
-                    :model-value="isChecked(rarity)"
-                    @update:model-value="toggleRarity(rarity, $event)"
+                    :model-value="isChecked(rarity.name)"
+                    @update:model-value="toggleRarity(rarity.name, $event)"
                     density="compact"
                   />
-                  {{ rarity }}
+                  {{ rarity.name }}
                 </v-expansion-panel-title>
 
                 <v-expansion-panel-text>
@@ -284,20 +285,21 @@ watch(
                     clearable
                     hide-details="auto"
                     @update:model-value="
-                      (selectedSkill) => addSkillToRarity(rarity, selectedSkill)
+                      (selectedSkill) =>
+                        addSkillToRarity(rarity.name, selectedSkill)
                     "
                   ></v-autocomplete>
 
                   <v-card
                     flat
                     color="transparent"
-                    v-for="skill in currentItem.raritySkills[rarity]"
+                    v-for="skill in currentItem.raritySkills[rarity.name]"
                   >
                     <v-card-title>
                       {{ getSkillById(skill.skill).name }}
                       <v-btn
                         variant="text"
-                        @click.stop="removeSkill(rarity, skill.skill)"
+                        @click.stop="removeSkill(rarity.name, skill.skill)"
                         >Remove</v-btn
                       >
                     </v-card-title>

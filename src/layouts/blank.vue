@@ -5,5 +5,7 @@
     <RouterView #="{ Component }">
       <Component :is="Component" />
     </RouterView>
+
+    <LoadingGame />
   </div>
 </template>

@@ -12,7 +12,7 @@ onMounted(() => {
   gameStore.gameContainer = gameContainerRef.value;
   gameStore.baseFontSize = gameStore.setResponsiveFont();
 
-  gameStore.setLoadingProgress(false);
+  gameStore.setLoading(false);
 });
 </script>
 

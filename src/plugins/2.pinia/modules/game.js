@@ -1,11 +1,11 @@
 import { defineStore } from "pinia";
 
 export const useGameStore = defineStore("game", () => {
-  const isLoading = ref(true);
+  const isLoading = ref(false);
   const baseFontSize = ref(16);
   const gameContainer = ref(null);
 
-  const setLoadingProgress = (value) => {
+  const setLoading = (value) => {
     isLoading.value = value;
   };
 
@@ -42,7 +42,7 @@ export const useGameStore = defineStore("game", () => {
     isLoading,
     baseFontSize,
     gameContainer,
-    setLoadingProgress,
+    setLoading,
     setResponsiveFont,
     setResponsiveFontPercentage,
     setFontSizeBasedOnViewBox,

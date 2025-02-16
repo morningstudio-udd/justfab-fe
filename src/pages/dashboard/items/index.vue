@@ -200,7 +200,21 @@ const openFuseDialog = () => {
       <template v-for="(item, index) of adminStore.allItems" :key="item._id">
         <v-list-item>
           <template #prepend>
-            <VAvatar :image="srcAsset(item.photoUrl)" />
+            <!-- <VAvatar :image="srcAsset(item.photoUrl)" /> -->
+            <!-- {{ ITEM_RARITIES[item.rarity].background }} -->
+            <div
+              class="tw-aspect-square tw-w-14 tw-mr-3 tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
+              :style="{
+                backgroundImage: `url(${
+                  ITEM_RARITIES[item.rarity].background
+                })`,
+              }"
+            >
+              <v-img
+                :src="srcAsset(item.photoUrl)"
+                class="!tw-max-w-[75%] tw-w-full tw-h-auto"
+              />
+            </div>
           </template>
           <VListItemTitle>
             {{ item.name }}

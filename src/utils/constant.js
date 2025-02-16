@@ -1,3 +1,10 @@
+import rarityCommon from "@images/game/rarity-common.png";
+import rarityRare from "@images/game/rarity-rare.png";
+import rarityUltraRare from "@images/game/rarity-ultra-rare.png";
+import rarityEpic from "@images/game/rarity-epic.png";
+import rarityLegendary from "@images/game/rarity-legendary.png";
+import rarityMythic from "@images/game/rarity-mythic.png";
+
 export const ROLES = {
   GUEST: "GUEST",
   USER: "USER",
@@ -34,13 +41,40 @@ export const ITEM_CATEGORIES = {
 };
 
 export const ITEM_RARITIES = {
-  COMMON: "COMMON",
-  RARE: "RARE",
-  ULTRA_RARE: "ULTRA_RARE",
-  EPIC: "EPIC",
-  LEGENDARY: "LEGENDARY",
-  MYTHIC: "MYTHIC",
+  COMMON: {
+    name: "COMMON",
+    background: rarityCommon,
+  },
+  RARE: {
+    name: "RARE",
+    background: rarityRare,
+  },
+  ULTRA_RARE: {
+    name: "ULTRA_RARE",
+    background: rarityUltraRare,
+  },
+  EPIC: {
+    name: "EPIC",
+    background: rarityEpic,
+  },
+  LEGENDARY: {
+    name: "LEGENDARY",
+    background: rarityLegendary,
+  },
+  MYTHIC: {
+    name: "MYTHIC",
+    background: rarityMythic,
+  },
 };
+
+// export const ITEM_RARITIES = {
+//   COMMON: "COMMON",
+//   RARE: "RARE",
+//   ULTRA_RARE: "ULTRA_RARE",
+//   EPIC: "EPIC",
+//   LEGENDARY: "LEGENDARY",
+//   MYTHIC: "MYTHIC",
+// };
 
 export const REWARD_TYPES = {
   GOLD: "GOLD",

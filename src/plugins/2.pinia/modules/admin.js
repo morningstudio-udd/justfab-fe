@@ -1,4 +1,3 @@
-import { cookies } from "@/plugins/useCookies";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 

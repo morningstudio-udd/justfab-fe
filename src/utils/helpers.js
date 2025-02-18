@@ -121,3 +121,18 @@ export const stringToSlug = (str) => {
     .replace(/\s+/g, "-") // Replace spaces with hyphens
     .replace(/[^\w-]+/g, ""); // Remove all non-word chars
 };
+
+export const copyToClipboard = async (value) => {
+  if (!navigator.clipboard) {
+    console.error("Clipboard API not supported");
+    return Promise.reject(new Error("Clipboard API not supported"));
+  }
+
+  try {
+    await navigator.clipboard.writeText(value);
+    return Promise.resolve("Copied successfully");
+  } catch (err) {
+    console.error("Error in copying text:", err);
+    return Promise.reject(err);
+  }
+};

@@ -395,6 +395,7 @@
     "stringToSlug": true,
     "gameNav": true,
     "useGameStore": true,
-    "claimEnergy": true
+    "claimEnergy": true,
+    "copyToClipboard": true
   }
 }

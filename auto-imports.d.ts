@@ -32,6 +32,7 @@ declare global {
   const confirmedValidator: typeof import('./src/utils/validators.js')['confirmedValidator']
   const controlledComputed: typeof import('@vueuse/core')['controlledComputed']
   const controlledRef: typeof import('@vueuse/core')['controlledRef']
+  const copyToClipboard: typeof import('./src/utils/helpers.js')['copyToClipboard']
   const createApp: typeof import('vue')['createApp']
   const createEventHook: typeof import('@vueuse/core')['createEventHook']
   const createFusion: typeof import('./src/api/admin.js')['createFusion']
@@ -426,6 +427,7 @@ declare module 'vue' {
     readonly confirmedValidator: UnwrapRef<typeof import('./src/utils/validators.js')['confirmedValidator']>
     readonly controlledComputed: UnwrapRef<typeof import('@vueuse/core')['controlledComputed']>
     readonly controlledRef: UnwrapRef<typeof import('@vueuse/core')['controlledRef']>
+    readonly copyToClipboard: UnwrapRef<typeof import('./src/utils/helpers.js')['copyToClipboard']>
     readonly createApp: UnwrapRef<typeof import('vue')['createApp']>
     readonly createEventHook: UnwrapRef<typeof import('@vueuse/core')['createEventHook']>
     readonly createFusion: UnwrapRef<typeof import('./src/api/admin.js')['createFusion']>

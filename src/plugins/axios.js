@@ -2,6 +2,7 @@ import axios from "axios";
 import { refreshToken } from "@api/auth";
 import { store } from "@store";
 import { router } from "@plugins/1.router";
+import { cookies } from "@/plugins/useCookies";
 
 const authStore = useAuthStore(store);
 
@@ -70,7 +71,8 @@ $api.interceptors.response.use(
         } catch (refreshError) {
           refreshingToken = false;
           // Handle refresh token failure here (e.g., redirect to login)
-          // $cookies.remove("accessToken");
+          cookies.remove("token");
+          cookies.remove("role");
 
           // Redirect to login page
           await router.push("/");
@@ -95,7 +97,7 @@ $api.interceptors.response.use(
 const FPapi = axios.create({
   baseURL: import.meta.env.VITE_FP_IDENTITY_PROVIDER_URL,
   headers: {
-    'content-type': 'application/x-www-form-urlencoded'
+    "content-type": "application/x-www-form-urlencoded",
   },
 });
 

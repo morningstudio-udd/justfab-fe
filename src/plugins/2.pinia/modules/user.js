@@ -6,6 +6,7 @@ export const useUserStore = defineStore("user", () => {
   const userAbilityRules = ref(
     USER_ABILITY_RULES[cookies.get("user_role") || "GUEST"]
   );
+  const userRefLink = ref(null);
 
   watch(
     () => userData.value?.role,
@@ -20,8 +21,14 @@ export const useUserStore = defineStore("user", () => {
     { immediate: true }
   );
 
+  const setRefLink = (link) => {
+    userRefLink.value = link;
+  };
+
   return {
     userData,
     userAbilityRules,
+    userRefLink,
+    setRefLink,
   };
 });

@@ -7,9 +7,16 @@ import { $ability } from "@/plugins/casl";
 const authStore = useAuthStore(store);
 const userStore = useUserStore(store);
 
+const API = {
+  user: {
+    info: "/user/info",
+    refLink: "/referral/link",
+  },
+};
+
 export const getUserInfo = async () => {
   try {
-    const res = await $api.get(`/user/info`);
+    const res = await $api.get(API.user.info);
 
     if (res.status === 200 && res.data) {
       userStore.userData = res.data;
@@ -33,6 +40,21 @@ export const getUserInfo = async () => {
     // userStore.userData = null;
 
     console.log(error);
+    throw error.response?.data || error;
+  }
+};
+
+export const getReferralLink = async () => {
+  try {
+    const res = await $api.get(API.user.refLink);
+
+    if (res.status === 200 && res.data) {
+      userStore.setRefLink(res.data.referralLink);
+    }
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
     throw error.response?.data || error;
   }
 };

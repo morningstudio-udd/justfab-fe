@@ -399,6 +399,7 @@
     "copyToClipboard": true,
     "claimAllRewards": true,
     "claimReward": true,
-    "getUnclaimedRewards": true
+    "getUnclaimedRewards": true,
+    "getReferralLink": true
   }
 }

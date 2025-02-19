@@ -23,7 +23,9 @@ declare global {
   const autoResetRef: typeof import('@vueuse/core')['autoResetRef']
   const base64UrlDecode: typeof import('./src/utils/helpers.js')['base64UrlDecode']
   const betweenValidator: typeof import('./src/utils/validators.js')['betweenValidator']
+  const claimAllRewards: typeof import('./src/api/game.js')['claimAllRewards']
   const claimEnergy: typeof import('./src/api/game.js')['claimEnergy']
+  const claimReward: typeof import('./src/api/game.js')['claimReward']
   const computed: typeof import('vue')['computed']
   const computedAsync: typeof import('@vueuse/core')['computedAsync']
   const computedEager: typeof import('@vueuse/core')['computedEager']
@@ -86,6 +88,7 @@ declare global {
   const getSkill: typeof import('./src/api/game.js')['getSkill']
   const getSkillById: typeof import('./src/api/admin.js')['getSkillById']
   const getSlotMachineConfig: typeof import('./src/api/game.js')['getSlotMachineConfig']
+  const getUnclaimedRewards: typeof import('./src/api/game.js')['getUnclaimedRewards']
   const getUserInfo: typeof import('./src/api/user.js')['getUserInfo']
   const getUserInventory: typeof import('./src/api/game.js')['getUserInventory']
   const h: typeof import('vue')['h']
@@ -418,7 +421,9 @@ declare module 'vue' {
     readonly autoResetRef: UnwrapRef<typeof import('@vueuse/core')['autoResetRef']>
     readonly base64UrlDecode: UnwrapRef<typeof import('./src/utils/helpers.js')['base64UrlDecode']>
     readonly betweenValidator: UnwrapRef<typeof import('./src/utils/validators.js')['betweenValidator']>
+    readonly claimAllRewards: UnwrapRef<typeof import('./src/api/game.js')['claimAllRewards']>
     readonly claimEnergy: UnwrapRef<typeof import('./src/api/game.js')['claimEnergy']>
+    readonly claimReward: UnwrapRef<typeof import('./src/api/game.js')['claimReward']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly computedAsync: UnwrapRef<typeof import('@vueuse/core')['computedAsync']>
     readonly computedEager: UnwrapRef<typeof import('@vueuse/core')['computedEager']>
@@ -479,6 +484,7 @@ declare module 'vue' {
     readonly getLoginURL: UnwrapRef<typeof import('./src/utils/FPClient.js')['getLoginURL']>
     readonly getSkillById: UnwrapRef<typeof import('./src/api/admin.js')['getSkillById']>
     readonly getSlotMachineConfig: UnwrapRef<typeof import('./src/api/game.js')['getSlotMachineConfig']>
+    readonly getUnclaimedRewards: UnwrapRef<typeof import('./src/api/game.js')['getUnclaimedRewards']>
     readonly getUserInfo: UnwrapRef<typeof import('./src/api/user.js')['getUserInfo']>
     readonly getUserInventory: UnwrapRef<typeof import('./src/api/game.js')['getUserInventory']>
     readonly h: UnwrapRef<typeof import('vue')['h']>

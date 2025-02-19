@@ -396,6 +396,9 @@
     "gameNav": true,
     "useGameStore": true,
     "claimEnergy": true,
-    "copyToClipboard": true
+    "copyToClipboard": true,
+    "claimAllRewards": true,
+    "claimReward": true,
+    "getUnclaimedRewards": true
   }
 }

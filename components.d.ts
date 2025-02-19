@@ -31,6 +31,7 @@ declare module 'vue' {
     ResultItemDialog: typeof import('./src/components/Dialog/ResultItemDialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SettingDialog: typeof import('./src/components/Dialog/SettingDialog.vue')['default']
     SkillDialog: typeof import('./src/components/Dialog/SkillDialog.vue')['default']
     SkillForm: typeof import('./src/components/Form/SkillForm.vue')['default']
     SlotMachine: typeof import('./src/components/Game/SlotMachine.vue')['default']

@@ -2,6 +2,7 @@
 import bgConnectWallet from "@images/game/bg-connect-wallet.png";
 import inputConnectWallet from "@images/game/input-connect-wallet.png";
 import btnConnectWallet from "@images/game/btn-connect-wallet.png";
+import { onUnmounted } from "vue";
 
 definePage({
   meta: {
@@ -11,13 +12,39 @@ definePage({
     action: "read",
   },
 });
+let resizeObserver;
 
-onMounted(() => {});
+const settingDialogRef = ref(null);
+const gameContentRef = ref(null);
+const parentDivWidth = ref(0);
+
+onMounted(() => {
+  if (gameContentRef.value) {
+    resizeObserver = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        parentDivWidth.value = entry.contentRect.width;
+      }
+    });
+
+    resizeObserver.observe(gameContentRef.value);
+  }
+});
+
+onUnmounted(() => {
+  if (resizeObserver) {
+    resizeObserver.disconnect();
+  }
+});
+
+const submitOpenSettingDialog = () => {
+  settingDialogRef.value.openDialog();
+};
 </script>
 
 <template>
   <div
     class="game-content tw-flex-auto tw-flex tw-items-center tw-justify-center"
+    ref="gameContentRef"
   >
     <div
       class="tw-aspect-[936/759] tw-w-[80%] tw-grid tw-grid-cols-3 tw-grid-rows-4 tw-gap-[6%]"
@@ -62,11 +89,13 @@ onMounted(() => {});
       </div>
 
       <div class="menu tw-col-span-1 tw-row-span-1">
-        <router-link class="menu-link" :to="{ path: '/game/setting' }">
+        <div class="menu-link" @click="submitOpenSettingDialog">
           {{ $t("Setting") }}
-        </router-link>
+        </div>
       </div>
     </div>
+
+    <setting-dialog ref="settingDialogRef" :width="parentDivWidth * 0.9" />
   </div>
 </template>
 

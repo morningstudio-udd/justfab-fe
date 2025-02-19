@@ -84,6 +84,7 @@ export const REWARD_TYPES = {
   JACKPOT: "JACKPOT",
   SPIN: "SPIN",
   POOL_PERCENTAGE: "POOL_PERCENTAGE",
+  ENERGY: "ENERGY",
 };
 
 export const ERROR_MESSAGE = {};

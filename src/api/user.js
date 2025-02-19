@@ -3,6 +3,7 @@ import { cookies } from "@/plugins/useCookies";
 import { store } from "@store";
 import { updateAbility } from "@plugins/casl/casl";
 import { $ability } from "@/plugins/casl";
+import { ref } from "vue";
 
 const authStore = useAuthStore(store);
 const userStore = useUserStore(store);
@@ -10,7 +11,10 @@ const userStore = useUserStore(store);
 const API = {
   user: {
     info: "/user/info",
+  },
+  referral: {
     refLink: "/referral/link",
+    recruited: "/referral/count",
   },
 };
 
@@ -46,11 +50,22 @@ export const getUserInfo = async () => {
 
 export const getReferralLink = async () => {
   try {
-    const res = await $api.get(API.user.refLink);
+    const res = await $api.get(API.referral.refLink);
 
     if (res.status === 200 && res.data) {
       userStore.setRefLink(res.data.referralLink);
     }
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response?.data || error;
+  }
+};
+
+export const getRecruitedUsers = async () => {
+  try {
+    const res = await $api.get(API.referral.recruited);
 
     return res.data;
   } catch (error) {

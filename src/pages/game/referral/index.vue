@@ -25,6 +25,7 @@ definePage({
 });
 
 const gameStore = useGameStore();
+const userStore = useUserStore();
 
 const invitedRewards = [
   invitedReward1,
@@ -46,10 +47,11 @@ const inviteDialogRef = ref(null);
 const claimInviteDialogRef = ref(null);
 const parentDivWidth = ref(0);
 const invitedSvgRef = ref(null);
+const recruited = ref(0);
 
 let resizeObserver;
 
-onMounted(() => {
+onMounted(async () => {
   if (gameContentRef.value) {
     resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
@@ -59,6 +61,8 @@ onMounted(() => {
 
     resizeObserver.observe(gameContentRef.value);
   }
+
+  await getRecruited();
 });
 
 const submitInvite = () => {
@@ -77,6 +81,15 @@ onBeforeUnmount(() => {
     resizeObserver.disconnect();
   }
 });
+
+const getRecruited = async () => {
+  try {
+    const { onboarded } = await getRecruitedUsers();
+    recruited.value = onboarded;
+  } catch (error) {
+    console.log("error", error);
+  }
+};
 </script>
 
 <template>
@@ -117,7 +130,7 @@ onBeforeUnmount(() => {
               overflow="hidden"
               width="100%"
             >
-              1000
+              {{ recruited }}
             </text>
           </svg>
         </div>

@@ -400,6 +400,7 @@
     "claimAllRewards": true,
     "claimReward": true,
     "getUnclaimedRewards": true,
-    "getReferralLink": true
+    "getReferralLink": true,
+    "getRecruitedUsers": true
   }
 }

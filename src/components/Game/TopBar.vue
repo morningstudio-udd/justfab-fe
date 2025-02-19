@@ -20,9 +20,7 @@ const displayName = computed(() =>
 watch(
   () => userStore.userData?.gold,
   (newGold, oldGold) => {
-    console.log("newGold, oldGold", newGold, oldGold);
     if (newGold !== oldGold) {
-      console.log("newGold !== oldGold");
       animateCounter(oldGold, newGold, 1000, (currentValue) => {
         currentGold.value = currentValue;
       });

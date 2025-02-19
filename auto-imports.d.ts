@@ -85,6 +85,7 @@ declare global {
   const getJackpot: typeof import('./src/api/game.js')['getJackpot']
   const getJackpotRewards: typeof import('./src/api/game.js')['getJackpotRewards']
   const getLoginURL: typeof import('./src/utils/FPClient.js')['getLoginURL']
+  const getRecruitedUsers: typeof import('./src/api/user.js')['getRecruitedUsers']
   const getReferralLink: typeof import('./src/api/user.js')['getReferralLink']
   const getSkill: typeof import('./src/api/game.js')['getSkill']
   const getSkillById: typeof import('./src/api/admin.js')['getSkillById']
@@ -483,6 +484,7 @@ declare module 'vue' {
     readonly getJackpot: UnwrapRef<typeof import('./src/api/game.js')['getJackpot']>
     readonly getJackpotRewards: UnwrapRef<typeof import('./src/api/game.js')['getJackpotRewards']>
     readonly getLoginURL: UnwrapRef<typeof import('./src/utils/FPClient.js')['getLoginURL']>
+    readonly getRecruitedUsers: UnwrapRef<typeof import('./src/api/user.js')['getRecruitedUsers']>
     readonly getReferralLink: UnwrapRef<typeof import('./src/api/user.js')['getReferralLink']>
     readonly getSkillById: UnwrapRef<typeof import('./src/api/admin.js')['getSkillById']>
     readonly getSlotMachineConfig: UnwrapRef<typeof import('./src/api/game.js')['getSlotMachineConfig']>

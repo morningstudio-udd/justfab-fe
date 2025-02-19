@@ -11,13 +11,15 @@ let resizeObserver;
 const gameContainerRef = ref(null);
 const isClaimingRewards = ref(false);
 const containerDivWidth = ref(0);
-const resultItemDialogWidth = ref(0);
+const resultItemDialogWidth = ref();
+// const resultItemDialogWidth = computed({
+//   get: () => 0,
+//   set: (val) => console.log("temp", val),
+// });
 
 const fontSizeBase = computed(() => gameStore.baseFontSize);
 const resultItemDialogRef = computed(() => gameStore.resultItemDialogRef);
-// const resultItemDialogWidth = computed(() =>
-//   containerDivWidth.value ? containerDivWidth.value * 0.79 : 0
-// );
+// const resultItemDialogWidth = computed(() => containerDivWidth.value * 0.79);
 
 onMounted(() => {
   gameStore.setLoading(true);
@@ -33,12 +35,9 @@ onMounted(() => {
 
   gameStore.gameContainer = gameContainerRef.value;
   gameStore.baseFontSize = gameStore.setResponsiveFont();
-  console.log("containerDivWidth:", containerDivWidth.value);
   if (gameContainerRef.value) {
     resizeObserver = new ResizeObserver((entries) => {
       for (let entry of entries) {
-        console.log("containerDivWidth:", containerDivWidth.value);
-        console.log("contentRect.width:", entry.contentRect.width);
         containerDivWidth.value = entry.contentRect.width;
         resultItemDialogWidth.value = containerDivWidth.value * 0.79;
       }
@@ -127,7 +126,6 @@ const resetRewardsState = () => {
     <LoadingGame />
 
     <result-item-dialog
-      v-if="gameContainerRef"
       ref="resultItemDialogRef"
       :width="resultItemDialogWidth"
       @onClose="resetRewardsState"

@@ -1,5 +1,5 @@
 <script setup>
-import bgPopup from "@images/game/bg-popup.svg";
+import bgPopup from "@images/game/bg-popup.png";
 import energy from "@images/game/energy.svg";
 import btnClaim from "@images/game/btn-claim.svg";
 import { emitter } from "@plugins/mitt";
@@ -9,14 +9,12 @@ const props = defineProps({
     type: Number,
     default: 0,
   },
-  // item: {
-  //   type: Object,
-  //   default: () => ({}),
-  // },
 });
 
 const resultDialog = ref(false);
 const currentItem = ref(null);
+
+const widthDialog = computed(() => `${props.width}px`);
 
 const emit = defineEmits(["onConfirm", "onClose"]);
 
@@ -26,7 +24,6 @@ onMounted(() => {
 
 const openDialog = (item) => {
   currentItem.value = item;
-  console.log("item", currentItem.value);
 
   resultDialog.value = true;
 };
@@ -58,7 +55,7 @@ defineExpose({ openDialog, resultDialog, closeDialog });
     class=""
     content-class="popup-invite"
     max-width="731"
-    :width="width"
+    :width="widthDialog"
     persistent
   >
     <v-card

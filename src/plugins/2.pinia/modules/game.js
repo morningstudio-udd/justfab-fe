@@ -1,9 +1,14 @@
 import { defineStore } from "pinia";
+import { useUserStore } from "./user";
+import { emitter } from "@plugins/mitt";
 
 export const useGameStore = defineStore("game", () => {
+  const userStore = useUserStore();
+
   const isLoading = ref(false);
   const baseFontSize = ref(16);
   const gameContainer = ref(null);
+  const resultItemDialogRef = ref(null);
 
   const setLoading = (value) => {
     isLoading.value = value;
@@ -38,13 +43,35 @@ export const useGameStore = defineStore("game", () => {
     return viewBoxHeight * (percent / 100);
   };
 
+  const handleRewards = (rewards) => {
+    for (const reward of rewards) {
+      switch (reward.type) {
+        case REWARD_TYPES.JACKPOT: {
+          break;
+        }
+        case REWARD_TYPES.GOLD:
+          userStore.userData.gold += reward.value;
+          break;
+        case REWARD_TYPES.ITEM:
+          emitter.emit("show-reward", reward);
+          break;
+
+        default:
+          console.warn(`Unknown reward type: ${reward.type}`);
+          break;
+      }
+    }
+  };
+
   return {
     isLoading,
     baseFontSize,
     gameContainer,
+    resultItemDialogRef,
     setLoading,
     setResponsiveFont,
     setResponsiveFontPercentage,
     setFontSizeBasedOnViewBox,
+    handleRewards,
   };
 });

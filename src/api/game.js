@@ -20,8 +20,13 @@ const API = {
     getRewards: "/jackpot/rewards",
   },
   user: {
-    claimEnergy: "/user/claimEnergy"
-  }
+    claimEnergy: "/user/claimEnergy",
+  },
+  reward: {
+    claim: "/reward/claim",
+    claimAll: "/reward/claim/all",
+    getUnclaimed: "/reward/unclaimed",
+  },
 };
 
 export const getUserInventory = async (userId) => {
@@ -135,6 +140,41 @@ export const setJackpot = async (payload) => {
 export const getJackpotRewards = async () => {
   try {
     const url = getApiPath(API.jackpot.getRewards);
+    const res = await $api.get(url);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
+  }
+};
+
+export const claimReward = async (rewardId) => {
+  try {
+    const url = getApiPath(API.reward.claim, { rewardId: rewardId });
+    const res = await $api.post(url);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
+  }
+};
+
+export const claimAllRewards = async () => {
+  try {
+    const url = getApiPath(API.reward.claimAll);
+    const res = await $api.post(url);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const getUnclaimedRewards = async () => {
+  try {
+    const url = getApiPath(API.reward.getUnclaimed);
     const res = await $api.get(url);
 
     return res.data;

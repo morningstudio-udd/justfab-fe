@@ -2,7 +2,8 @@
 import { claimEnergy } from "@/api/game";
 import ResultItemDialog from "@/components/Dialog/ResultItemDialog.vue";
 import gameBg from "@images/game/bg-game-1.png";
-import { computed } from "vue";
+import { emitter } from "@plugins/mitt";
+import { onUnmounted } from "vue";
 
 definePage({
   meta: {
@@ -15,6 +16,7 @@ definePage({
 
 const route = useRoute();
 const userStore = useUserStore();
+const gameStore = useGameStore();
 
 const refSlotMachine = ref();
 
@@ -55,6 +57,17 @@ onMounted(async () => {
   });
 
   await Promise.all([p1, p2]);
+
+  emitter.on("reset-rewards-state", resetRewardsState);
+});
+
+onUnmounted(() => {
+  if (resizeObserver && gameContentRef.value) {
+    resizeObserver.unobserve(gameContentRef.value);
+    resizeObserver.disconnect();
+  }
+
+  emitter.off("reset-rewards-state");
 });
 
 const onRollClick = async (betX) => {
@@ -86,25 +99,27 @@ const resetRewardsState = () => {
 };
 
 const processRewards = async (rewards) => {
-  for (const reward of rewards) {
-    switch (reward.type) {
-      case REWARD_TYPES.JACKPOT: {
-        break;
-      }
-      case REWARD_TYPES.GOLD:
-        console.log("Add gold to user", reward.value);
-        userStore.userData.gold += reward.value;
-        break;
-      case REWARD_TYPES.ITEM:
-        itemReward.value = reward;
-        resultItemDialogRef.value.openDialog();
-        break;
+  // for (const reward of rewards) {
+  //   switch (reward.type) {
+  //     case REWARD_TYPES.JACKPOT: {
+  //       break;
+  //     }
+  //     case REWARD_TYPES.GOLD:
+  //       console.log("Add gold to user", reward.value);
+  //       userStore.userData.gold += reward.value;
+  //       break;
+  //     case REWARD_TYPES.ITEM:
+  //       itemReward.value = reward;
+  //       resultItemDialogRef.value.openDialog();
+  //       break;
 
-      default:
-        console.warn(`Unknown reward type: ${reward.type}`);
-        break;
-    }
-  }
+  //     default:
+  //       console.warn(`Unknown reward type: ${reward.type}`);
+  //       break;
+  //   }
+  // }
+
+  gameStore.handleRewards(rewards);
 
   await refSlotMachine.value.rollNextStep();
   return true;
@@ -150,12 +165,5 @@ const onClaimEnergyClick = async (e) => {
         @claimEnergyClick="onClaimEnergyClick"
       ></slot-machine>
     </div>
-
-    <result-item-dialog
-      ref="resultItemDialogRef"
-      :width="parentDivWidth * 0.79"
-      :item="itemReward"
-      @onClose="resetRewardsState"
-    />
   </div>
 </template>

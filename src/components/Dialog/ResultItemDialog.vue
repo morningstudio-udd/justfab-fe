@@ -2,23 +2,32 @@
 import bgPopup from "@images/game/bg-popup.svg";
 import energy from "@images/game/energy.svg";
 import btnClaim from "@images/game/btn-claim.svg";
+import { emitter } from "@plugins/mitt";
 
 const props = defineProps({
   width: {
     type: Number,
     default: 0,
   },
-  item: {
-    type: Object,
-    default: () => ({}),
-  },
+  // item: {
+  //   type: Object,
+  //   default: () => ({}),
+  // },
 });
 
 const resultDialog = ref(false);
+const currentItem = ref(null);
 
 const emit = defineEmits(["onConfirm", "onClose"]);
 
-const openDialog = () => {
+onMounted(() => {
+  emitter.on("show-reward", handleShowReward);
+});
+
+const openDialog = (item) => {
+  currentItem.value = item;
+  console.log("item", currentItem.value);
+
   resultDialog.value = true;
 };
 
@@ -32,12 +41,12 @@ const submitDialog = () => {
   resultDialog.value = false;
 };
 
-const submitCopyInvite = () => {
-  console.log("submitCopyInvite");
-};
-
-const submitShareInvite = () => {
-  console.log("submitShareInvite");
+const handleShowReward = (item) => {
+  console.log("item", item);
+  // if (resultDialog.value) {
+  //   closeDialog();
+  // }
+  openDialog(item);
 };
 
 defineExpose({ openDialog, resultDialog, closeDialog });
@@ -54,7 +63,7 @@ defineExpose({ openDialog, resultDialog, closeDialog });
   >
     <v-card
       class="!tw-rounded-2xl tw-px-4 tw-py-2 !tw-shadow-none !tw-bg-cover tw-bg-center tw-bg-no-repeat tw-aspect-[731/705]"
-      :style="{ backgroundImage: `url(&quot;${bgPopup}&quot;)` }"
+      :style="{ backgroundImage: `url(${bgPopup})` }"
       color="transparent"
       flat
     >
@@ -64,10 +73,10 @@ defineExpose({ openDialog, resultDialog, closeDialog });
         >
           <div
             class="tw-aspect-[349/194] tw-w-[50.8%] tw-mb-[10%]"
-            v-if="item?.item?.photoUrl"
+            v-if="currentItem?.item?.photoUrl"
           >
             <v-img
-              :src="srcAsset(item?.item?.photoUrl)"
+              :src="srcAsset(currentItem?.item?.photoUrl)"
               width="100%"
               class=""
             />

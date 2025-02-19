@@ -1,7 +1,6 @@
 <script setup>
 import bgBottomBar from "@images/game/bg-bottom-bar.png";
 import bgBottomBar2 from "@images/game/bg-bottom-bar-2.png";
-import lock from "@images/game/lock.svg";
 
 const route = useRoute();
 

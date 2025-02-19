@@ -30,6 +30,8 @@ definePage({
   },
 });
 
+let resizeObserver;
+
 const route = useRoute();
 const userStore = useUserStore();
 const adminStore = useAdminStore();
@@ -39,11 +41,37 @@ const gameStore = useGameStore();
 const inventoryData = ref();
 const foodSvgRef = ref();
 const foodBarSvgRef = ref();
+const itemsContainerRef = ref();
+const itemsContainerWidth = ref(0);
+const itemsContainerHeight = ref(0);
 
 const userInventory = computed(() => inventoryData.value?.items);
 const fontSizeBase = computed(() => gameStore.baseFontSize);
+const itemsContainerGapX = computed(() =>
+  Math.round(itemsContainerWidth.value * 0.05)
+);
+const itemsContainerGapY = computed(() =>
+  Math.round(itemsContainerHeight.value * 0.1)
+);
+const itemsContainerPaddingX = computed(() =>
+  Math.round(itemsContainerWidth.value * 0.05)
+);
+const itemsContainerPaddingY = computed(() =>
+  Math.round(itemsContainerHeight.value * 0.1)
+);
 
 onMounted(async () => {
+  if (itemsContainerRef.value) {
+    resizeObserver = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        itemsContainerWidth.value = entry.contentRect.width;
+        itemsContainerHeight.value = entry.contentRect.height;
+      }
+    });
+
+    resizeObserver.observe(itemsContainerRef.value);
+  }
+
   if (authStore.isLoggedIn) {
     const p1 = getInventory();
 
@@ -183,9 +211,22 @@ const submitMerge = () => {
     </div>
 
     <div
-      class="tw-bg-[#23212e] tw-aspect-[1080/420] tw-flex-auto tw-w-full tw-box-border tw-px-[5%] tw-py-[5%] tw-overflow-y-scroll"
+      ref="itemsContainerRef"
+      class="tw-bg-[#23212e] tw-aspect-[1080/420] tw-flex-auto tw-w-full tw-max-w-screen tw-box-border tw-overflow-y-scroll tw-px-[5%]"
+      :style="{
+        'padding-top': `${itemsContainerPaddingY}px`,
+        'padding-bottom': `${itemsContainerPaddingY}px`,
+        'padding-left': `${itemsContainerPaddingX}px`,
+        'padding-right': `${itemsContainerPaddingX}px`,
+      }"
     >
-      <div class="tw-grid tw-grid-cols-4 tw-gap-[10%]">
+      <div
+        class="tw-grid tw-grid-cols-4"
+        :style="{
+          'row-gap': `${itemsContainerGapX}px`,
+          'column-gap': `${itemsContainerGapY}px`,
+        }"
+      >
         <div
           class="tw-aspect-[178/178] tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
           :style="{ backgroundImage: `url(${bgSlot})` }"

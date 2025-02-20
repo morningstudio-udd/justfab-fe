@@ -143,6 +143,7 @@ const getRecruited = async () => {
               v-for="(src, index) in invitedRewards"
               :key="index"
               :src="src"
+              :class="{ received: index < recruited }"
               class="tw-w-full tw-h-full"
               @click.stop="submitClaimInvited"
             />

@@ -12,7 +12,7 @@ const { t } = useI18n();
 const appStore = useAppStore();
 const adminStore = useAdminStore();
 
-const itemDialog = ref(false);
+const skillDialog = ref(false);
 const confirmDeleteDialog = ref(null);
 const loading = ref(false);
 
@@ -21,11 +21,11 @@ onMounted(async () => {});
 const closeDialog = () => {
   emit("onCancel");
 
-  itemDialog.value = false;
+  skillDialog.value = false;
 };
 
 const openDialog = () => {
-  itemDialog.value = true;
+  skillDialog.value = true;
 };
 
 const saveSkill = async (skill) => {
@@ -105,7 +105,7 @@ defineExpose({
 </script>
 
 <template>
-  <v-dialog v-model="itemDialog" class="!tw-z-[2010]" width="90vw" persistent>
+  <v-dialog v-model="skillDialog" class="!tw-z-[2010]" width="90vw" persistent>
     <DialogCloseBtn @click="closeDialog" />
 
     <v-card class="!tw-rounded-2xl !tw-p-2 sm:!tw-p-10">

@@ -17,7 +17,7 @@ const adminStore = useAdminStore();
 
 const loading = ref(false);
 const dataItems = ref(null);
-const itemDialogRef = ref(null);
+const skillDialogRef = ref(null);
 const selectedSkill = ref({});
 const itemFusedFrom = ref([]);
 const itemFusedInto = ref([]);
@@ -40,39 +40,21 @@ const getSkills = async () => {
   }
 };
 
-const openSkillDialog = async (item) => {
+const openSkillDialog = async (skill) => {
   try {
-    itemDialogRef.value.loading = true;
+    skillDialogRef.value.loading = true;
 
-    console.log("item", item);
-
-    if (item && Object.keys(item).length) {
-      selectedSkill.value = await getSkillById(item._id);
+    if (skill && Object.keys(skill).length) {
+      selectedSkill.value = await getSkillById(skill._id);
     } else {
       selectedSkill.value = {};
     }
 
-    itemDialogRef.value.openDialog();
+    skillDialogRef.value.openDialog();
   } catch (error) {
     console.error(error);
   } finally {
-    itemDialogRef.value.loading = false;
-  }
-};
-
-const getItemById = async (id) => {
-  if (!id) return;
-
-  try {
-    itemDialogRef.value.loading = true;
-
-    const data = await getItem(id);
-
-    return data;
-  } catch (error) {
-    console.error(error);
-  } finally {
-    itemDialogRef.value.loading = false;
+    skillDialogRef.value.loading = false;
   }
 };
 
@@ -122,7 +104,7 @@ const openFuseDialog = () => {
   </v-card>
 
   <skill-dialog
-    ref="itemDialogRef"
+    ref="skillDialogRef"
     v-model="selectedSkill"
     @onSaveSuccess="onSaveSuccess"
     @onDelete=""

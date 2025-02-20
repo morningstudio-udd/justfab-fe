@@ -401,6 +401,12 @@
     "claimReward": true,
     "getUnclaimedRewards": true,
     "getReferralLink": true,
-    "getRecruitedUsers": true
+    "getRecruitedUsers": true,
+    "TASK_TYPES": true,
+    "createTask": true,
+    "deleteTask": true,
+    "getAllTasks": true,
+    "getTask": true,
+    "updateTask": true
   }
 }

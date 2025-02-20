@@ -12,6 +12,7 @@ declare global {
   const ITEM_RARITIES: typeof import('./src/utils/constant.js')['ITEM_RARITIES']
   const REWARD_TYPES: typeof import('./src/utils/constant.js')['REWARD_TYPES']
   const ROLES: typeof import('./src/utils/constant.js')['ROLES']
+  const TASK_TYPES: typeof import('./src/utils/constant.js')['TASK_TYPES']
   const USER_ABILITY_RULES: typeof import('./src/utils/constant.js')['USER_ABILITY_RULES']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
   const addItemToInventory: typeof import('./src/api/game.js')['addItemToInventory']
@@ -46,6 +47,7 @@ declare global {
   const createReusableTemplate: typeof import('@vueuse/core')['createReusableTemplate']
   const createSharedComposable: typeof import('@vueuse/core')['createSharedComposable']
   const createSkill: typeof import('./src/api/admin.js')['createSkill']
+  const createTask: typeof import('./src/api/admin.js')['createTask']
   const createTemplatePromise: typeof import('@vueuse/core')['createTemplatePromise']
   const createUnrefFn: typeof import('@vueuse/core')['createUnrefFn']
   const customRef: typeof import('vue')['customRef']
@@ -60,6 +62,7 @@ declare global {
   const deleteFusion: typeof import('./src/api/admin.js')['deleteFusion']
   const deleteItem: typeof import('./src/api/admin.js')['deleteItem']
   const deleteSkill: typeof import('./src/api/admin.js')['deleteSkill']
+  const deleteTask: typeof import('./src/api/admin.js')['deleteTask']
   const eagerComputed: typeof import('@vueuse/core')['eagerComputed']
   const effectScope: typeof import('vue')['effectScope']
   const emailValidator: typeof import('./src/utils/validators.js')['emailValidator']
@@ -75,6 +78,7 @@ declare global {
   const getAllFusions: typeof import('./src/api/admin.js')['getAllFusions']
   const getAllItems: typeof import('./src/api/admin.js')['getAllItems']
   const getAllSkills: typeof import('./src/api/admin.js')['getAllSkills']
+  const getAllTasks: typeof import('./src/api/admin.js')['getAllTasks']
   const getApiPath: typeof import('./src/utils/helpers.js')['getApiPath']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
@@ -90,6 +94,7 @@ declare global {
   const getSkill: typeof import('./src/api/game.js')['getSkill']
   const getSkillById: typeof import('./src/api/admin.js')['getSkillById']
   const getSlotMachineConfig: typeof import('./src/api/game.js')['getSlotMachineConfig']
+  const getTask: typeof import('./src/api/admin.js')['getTask']
   const getUnclaimedRewards: typeof import('./src/api/game.js')['getUnclaimedRewards']
   const getUserInfo: typeof import('./src/api/user.js')['getUserInfo']
   const getUserInventory: typeof import('./src/api/game.js')['getUserInventory']
@@ -204,6 +209,7 @@ declare global {
   const updateFusion: typeof import('./src/api/admin.js')['updateFusion']
   const updateItem: typeof import('./src/api/admin.js')['updateItem']
   const updateSkill: typeof import('./src/api/admin.js')['updateSkill']
+  const updateTask: typeof import('./src/api/admin.js')['updateTask']
   const uploadAsset: typeof import('./src/api/admin.js')['uploadAsset']
   const urlValidator: typeof import('./src/utils/validators.js')['urlValidator']
   const useActiveElement: typeof import('@vueuse/core')['useActiveElement']
@@ -413,6 +419,7 @@ declare module 'vue' {
     readonly ITEM_RARITIES: UnwrapRef<typeof import('./src/utils/constant.js')['ITEM_RARITIES']>
     readonly REWARD_TYPES: UnwrapRef<typeof import('./src/utils/constant.js')['REWARD_TYPES']>
     readonly ROLES: UnwrapRef<typeof import('./src/utils/constant.js')['ROLES']>
+    readonly TASK_TYPES: UnwrapRef<typeof import('./src/utils/constant.js')['TASK_TYPES']>
     readonly USER_ABILITY_RULES: UnwrapRef<typeof import('./src/utils/constant.js')['USER_ABILITY_RULES']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
     readonly addItemToInventory: UnwrapRef<typeof import('./src/api/game.js')['addItemToInventory']>
@@ -446,6 +453,7 @@ declare module 'vue' {
     readonly createReusableTemplate: UnwrapRef<typeof import('@vueuse/core')['createReusableTemplate']>
     readonly createSharedComposable: UnwrapRef<typeof import('@vueuse/core')['createSharedComposable']>
     readonly createSkill: UnwrapRef<typeof import('./src/api/admin.js')['createSkill']>
+    readonly createTask: UnwrapRef<typeof import('./src/api/admin.js')['createTask']>
     readonly createTemplatePromise: UnwrapRef<typeof import('@vueuse/core')['createTemplatePromise']>
     readonly createUnrefFn: UnwrapRef<typeof import('@vueuse/core')['createUnrefFn']>
     readonly customRef: UnwrapRef<typeof import('vue')['customRef']>
@@ -460,6 +468,7 @@ declare module 'vue' {
     readonly deleteFusion: UnwrapRef<typeof import('./src/api/admin.js')['deleteFusion']>
     readonly deleteItem: UnwrapRef<typeof import('./src/api/admin.js')['deleteItem']>
     readonly deleteSkill: UnwrapRef<typeof import('./src/api/admin.js')['deleteSkill']>
+    readonly deleteTask: UnwrapRef<typeof import('./src/api/admin.js')['deleteTask']>
     readonly eagerComputed: UnwrapRef<typeof import('@vueuse/core')['eagerComputed']>
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
     readonly emailValidator: UnwrapRef<typeof import('./src/utils/validators.js')['emailValidator']>
@@ -474,6 +483,7 @@ declare module 'vue' {
     readonly getAllFusions: UnwrapRef<typeof import('./src/api/admin.js')['getAllFusions']>
     readonly getAllItems: UnwrapRef<typeof import('./src/api/admin.js')['getAllItems']>
     readonly getAllSkills: UnwrapRef<typeof import('./src/api/admin.js')['getAllSkills']>
+    readonly getAllTasks: UnwrapRef<typeof import('./src/api/admin.js')['getAllTasks']>
     readonly getApiPath: UnwrapRef<typeof import('./src/utils/helpers.js')['getApiPath']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
@@ -488,6 +498,7 @@ declare module 'vue' {
     readonly getReferralLink: UnwrapRef<typeof import('./src/api/user.js')['getReferralLink']>
     readonly getSkillById: UnwrapRef<typeof import('./src/api/admin.js')['getSkillById']>
     readonly getSlotMachineConfig: UnwrapRef<typeof import('./src/api/game.js')['getSlotMachineConfig']>
+    readonly getTask: UnwrapRef<typeof import('./src/api/admin.js')['getTask']>
     readonly getUnclaimedRewards: UnwrapRef<typeof import('./src/api/game.js')['getUnclaimedRewards']>
     readonly getUserInfo: UnwrapRef<typeof import('./src/api/user.js')['getUserInfo']>
     readonly getUserInventory: UnwrapRef<typeof import('./src/api/game.js')['getUserInventory']>
@@ -602,6 +613,7 @@ declare module 'vue' {
     readonly updateFusion: UnwrapRef<typeof import('./src/api/admin.js')['updateFusion']>
     readonly updateItem: UnwrapRef<typeof import('./src/api/admin.js')['updateItem']>
     readonly updateSkill: UnwrapRef<typeof import('./src/api/admin.js')['updateSkill']>
+    readonly updateTask: UnwrapRef<typeof import('./src/api/admin.js')['updateTask']>
     readonly uploadAsset: UnwrapRef<typeof import('./src/api/admin.js')['uploadAsset']>
     readonly urlValidator: UnwrapRef<typeof import('./src/utils/validators.js')['urlValidator']>
     readonly useActiveElement: UnwrapRef<typeof import('@vueuse/core')['useActiveElement']>

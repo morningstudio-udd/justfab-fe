@@ -24,6 +24,12 @@ const devVerticalNav = [
     to: "/dashboard/skills",
     icon: "material-symbols-light:home-outline",
   },
+  {
+    title: "Tasks",
+    isLink: true,
+    to: "/dashboard/tasks",
+    icon: "material-symbols-light:home-outline",
+  },
 ];
 
 const prodVerticalNav = [...devVerticalNav];

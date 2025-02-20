@@ -32,6 +32,13 @@ const API = {
     update: "/skill/:skillId",
     delete: "/skill/:skillId",
   },
+  task: {
+    all: "/task",
+    task: "/task/:id",
+    create: "/task",
+    update: "/task/:id",
+    delete: "/task/:id",
+  },
 };
 
 export const uploadAsset = async (file) => {
@@ -269,6 +276,64 @@ export const getFusedFrom = async (id) => {
   try {
     const url = getApiPath(API.fusion.fusedFrom, { id: id });
     const res = await $api.get(url);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
+  }
+};
+
+export const getAllTasks = async () => {
+  try {
+    const res = await $api.get(API.task.all);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
+  }
+};
+
+export const getTask = async (id) => {
+  try {
+    const url = getApiPath(API.task.task, { id: id });
+    const res = await $api.get(url);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
+  }
+};
+
+export const createTask = async (payload) => {
+  try {
+    const res = await $api.post(API.task.create, payload);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
+  }
+};
+
+export const updateTask = async (payload) => {
+  try {
+    const url = getApiPath(API.task.update, { id: payload._id });
+    const res = await $api.put(url, payload);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
+  }
+};
+
+export const deleteTask = async (id) => {
+  try {
+    const url = getApiPath(API.task.delete, { id: id });
+    const res = await $api.delete(url);
 
     return res.data;
   } catch (error) {

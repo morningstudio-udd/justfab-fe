@@ -87,4 +87,9 @@ export const REWARD_TYPES = {
   ENERGY: "ENERGY",
 };
 
+export const TASK_TYPES = {
+  LINK: "LINK",
+  TELEGRAM: "TELEGRAM",
+};
+
 export const ERROR_MESSAGE = {};

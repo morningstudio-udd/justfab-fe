@@ -15,6 +15,7 @@ declare module 'vue' {
     ClaimInviteDialog: typeof import('./src/components/Dialog/ClaimInviteDialog.vue')['default']
     ConfirmDialog: typeof import('./src/components/Dialog/ConfirmDialog.vue')['default']
     ConnectWalletBtn: typeof import('./src/components/Button/ConnectWalletBtn.vue')['default']
+    copy: typeof import('./src/components/Form/SkillForm copy.vue')['default']
     DialogCloseBtn: typeof import('./src/components/DialogCloseBtn.vue')['default']
     Footer: typeof import('./src/views/Footer.vue')['default']
     FusionDialog: typeof import('./src/components/Dialog/FusionDialog.vue')['default']
@@ -36,6 +37,8 @@ declare module 'vue' {
     SkillForm: typeof import('./src/components/Form/SkillForm.vue')['default']
     SlotMachine: typeof import('./src/components/Game/SlotMachine.vue')['default']
     SnackbarMessage: typeof import('./src/components/SnackbarMessage.vue')['default']
+    TaskDialog: typeof import('./src/components/Dialog/TaskDialog.vue')['default']
+    TaskForm: typeof import('./src/components/Form/TaskForm.vue')['default']
     TopBar: typeof import('./src/components/Game/TopBar.vue')['default']
     UserAvatar: typeof import('./src/components/UserAvatar.vue')['default']
   }

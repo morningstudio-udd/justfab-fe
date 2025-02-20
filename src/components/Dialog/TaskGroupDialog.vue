@@ -4,12 +4,7 @@ const modelValue = defineModel({
   event: "update:modelValue",
 });
 
-const props = defineProps({
-  taskGroup: {
-    type: Array,
-    default: () => [],
-  },
-});
+const props = defineProps({});
 
 const emit = defineEmits(["onSaveSuccess", "onCancel", "onDelete"]);
 
@@ -17,7 +12,7 @@ const { t } = useI18n();
 const appStore = useAppStore();
 const adminStore = useAdminStore();
 
-const taskDialog = ref(false);
+const taskGroupDialog = ref(false);
 const confirmDeleteDialog = ref(null);
 const loading = ref(false);
 
@@ -26,11 +21,11 @@ onMounted(async () => {});
 const closeDialog = () => {
   emit("onCancel");
 
-  taskDialog.value = false;
+  taskGroupDialog.value = false;
 };
 
 const openDialog = () => {
-  taskDialog.value = true;
+  taskGroupDialog.value = true;
 };
 
 const saveTask = async (task) => {
@@ -42,11 +37,11 @@ const saveTask = async (task) => {
     if (modelValue.value && modelValue.value._id) {
       console.log("update");
 
-      response = await updateTask(task);
+      response = await updateTaskGroup(task);
     } else {
       console.log("create");
 
-      response = await createTask(task);
+      response = await createTaskGroup(task);
     }
 
     appStore.showNotiSnackbar({
@@ -70,11 +65,11 @@ const saveTask = async (task) => {
   }
 };
 
-const delTask = async () => {
+const delTaskGroup = async () => {
   try {
     loading.value = true;
 
-    const response = await deleteTask(modelValue.value._id);
+    const response = await deleteTaskGroup(modelValue.value._id);
 
     appStore.showNotiSnackbar({
       color: "success",
@@ -105,18 +100,22 @@ defineExpose({
 </script>
 
 <template>
-  <v-dialog v-model="taskDialog" class="!tw-z-[2010]" width="90vw" persistent>
+  <v-dialog
+    v-model="taskGroupDialog"
+    class="!tw-z-[2010]"
+    width="90vw"
+    persistent
+  >
     <DialogCloseBtn @click="closeDialog" />
 
     <v-card class="!tw-rounded-2xl !tw-p-2 sm:!tw-p-10">
       <v-card-title class="">
-        {{ $t("Task") }}
+        {{ $t("Task Group") }}
       </v-card-title>
 
       <v-card-text class="tw-flex tw-flex-col tw-gap-4 tw-h-full">
-        <task-form
+        <task-group-form
           v-model="modelValue"
-          :taskGroup="taskGroup"
           @update:modelValue="modelValue = $event"
           @onSave="saveTask"
           @onDelete="confirmDeleteDialog?.openDialog"
@@ -126,9 +125,9 @@ defineExpose({
 
     <ConfirmDialog
       ref="confirmDeleteDialog"
-      title="Delete Task"
-      message="Are you sure you want to delete this task?"
-      @onConfirm="delTask"
+      title="Delete Task Group"
+      message="Are you sure you want to delete this task group?"
+      @onConfirm="delTaskGroup"
     />
 
     <v-overlay :model-value="loading" class="tw-justify-center tw-items-center">

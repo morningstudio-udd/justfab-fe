@@ -38,6 +38,15 @@ const API = {
     create: "/task",
     update: "/task/:id",
     delete: "/task/:id",
+    completed: "/:id/completed",
+  },
+  taskGroup: {
+    all: "/taskGroup",
+    taskGroup: "/taskGroup/:id",
+    create: "/taskGroup",
+    update: "/taskGroup/:id",
+    delete: "/taskGroup/:id",
+    deleteTask: "/taskGroup/task/:taskId",
   },
 };
 
@@ -333,6 +342,76 @@ export const updateTask = async (payload) => {
 export const deleteTask = async (id) => {
   try {
     const url = getApiPath(API.task.delete, { id: id });
+    const res = await $api.delete(url);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
+  }
+};
+
+export const completeTask = async (id) => {
+  try {
+    const url = getApiPath(API.task.completed, { id: id });
+    const res = await $api.patch(url);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
+  }
+};
+
+export const getAllTaskGroups = async () => {
+  try {
+    const res = await $api.get(API.taskGroup.all);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
+  }
+};
+
+export const getTaskGroupById = async (id) => {
+  try {
+    const url = getApiPath(API.taskGroup.taskGroup, { id: id });
+    const res = await $api.get(url);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
+  }
+};
+
+export const createTaskGroup = async (payload) => {
+  try {
+    const res = await $api.post(API.taskGroup.create, payload);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
+  }
+};
+
+export const updateTaskGroup = async (payload) => {
+  try {
+    const url = getApiPath(API.taskGroup.update, { id: payload._id });
+    const res = await $api.put(url, payload);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
+  }
+};
+
+export const deleteTaskGroup = async (id) => {
+  try {
+    const url = getApiPath(API.taskGroup.delete, { id: id });
     const res = await $api.delete(url);
 
     return res.data;

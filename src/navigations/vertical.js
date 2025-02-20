@@ -30,6 +30,12 @@ const devVerticalNav = [
     to: "/dashboard/tasks",
     icon: "material-symbols-light:home-outline",
   },
+  {
+    title: "Task Group",
+    isLink: true,
+    to: "/dashboard/task-group",
+    icon: "material-symbols-light:home-outline",
+  },
 ];
 
 const prodVerticalNav = [...devVerticalNav];

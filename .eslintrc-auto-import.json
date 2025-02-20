@@ -407,6 +407,13 @@
     "deleteTask": true,
     "getAllTasks": true,
     "getTask": true,
-    "updateTask": true
+    "updateTask": true,
+    "createTaskGroup": true,
+    "completeTask": true,
+    "deleteTaskGroup": true,
+    "getAllTaskGroups": true,
+    "getTaskGroup": true,
+    "updateTaskGroup": true,
+    "getTaskGroupById": true
   }
 }

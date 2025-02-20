@@ -6,7 +6,12 @@ const modelValue = defineModel({
   event: "update:modelValue",
 });
 
-const props = defineProps({});
+const props = defineProps({
+  taskGroup: {
+    type: Array,
+    default: () => [],
+  },
+});
 
 const emit = defineEmits(["onSave", "onDelete"]);
 
@@ -90,6 +95,18 @@ watch(
           dense
           clearable
           hide-details="auto"
+        />
+
+        <v-select
+          v-model="currentTask.group"
+          :items="taskGroup"
+          item-title="name"
+          item-value="_id"
+          :label="$t('Group')"
+          outlined
+          dense
+          hide-details="auto"
+          :rules="[requiredValidator]"
         />
 
         <!-- <v-sheet class="tw-border tw-border-gray-400 tw-gap-4"> -->

@@ -18,32 +18,15 @@ const adminStore = useAdminStore();
 const loading = ref(false);
 const dataItems = ref(null);
 const taskDialogRef = ref(null);
-const selectedTask = ref({});
+const selectedTaskGroup = ref({});
 const itemFusedFrom = ref([]);
 const itemFusedInto = ref([]);
 const fuseDialogRef = ref(null);
-const allTasks = ref([]);
 const allTaskGroup = ref([]);
 
 onMounted(async () => {
-  const p1 = getTasks();
-  const p2 = getTaskGroup();
-
-  await Promise.all([p1, p2]);
+  await getTaskGroup();
 });
-
-const getTasks = async () => {
-  try {
-    loading.value = true;
-    const tasksResponse = await getAllTasks();
-
-    allTasks.value = tasksResponse;
-  } catch (error) {
-    console.error(error);
-  } finally {
-    loading.value = false;
-  }
-};
 
 const getTaskGroup = async () => {
   try {
@@ -63,9 +46,9 @@ const openTaskDialog = async (task) => {
     taskDialogRef.value.loading = true;
 
     if (task && Object.keys(task).length) {
-      selectedTask.value = await getTask(task._id);
+      selectedTaskGroup.value = await getTaskGroupById(task._id);
     } else {
-      selectedTask.value = {};
+      selectedTaskGroup.value = {};
     }
 
     taskDialogRef.value.openDialog();
@@ -77,13 +60,13 @@ const openTaskDialog = async (task) => {
 };
 
 const onSaveSuccess = async () => {
-  await getTasks();
+  await getTaskGroup();
 
   clearSelected();
 };
 
 const clearSelected = () => {
-  selectedTask.value = {};
+  selectedTaskGroup.value = {};
 };
 
 const openFuseDialog = () => {
@@ -97,19 +80,16 @@ const openFuseDialog = () => {
 
     <v-btn color="primary" @click="openTaskDialog(null)">
       <v-icon icon="tabler-plus" />
-      {{ $t("Add Task") }}
+      {{ $t("Add Task Group") }}
     </v-btn>
   </div>
   <v-card class="!tw-rounded-2xl" :loading="loading">
     <v-list lines="two" border>
-      <template v-for="(task, index) of allTasks" :key="task._id">
+      <template v-for="(task, index) of allTaskGroup" :key="task._id">
         <v-list-item>
           <VListItemTitle>
-            {{ task.title }}
+            {{ task.name }}
           </VListItemTitle>
-          <VListItemSubtitle class="mt-1">
-            <div v-html="task.description"></div>
-          </VListItemSubtitle>
 
           <template #append>
             <IconBtn class="" @click="openTaskDialog(task)">
@@ -121,10 +101,9 @@ const openFuseDialog = () => {
     </v-list>
   </v-card>
 
-  <task-dialog
+  <task-group-dialog
     ref="taskDialogRef"
-    v-model="selectedTask"
-    :taskGroup="allTaskGroup"
+    v-model="selectedTaskGroup"
     @onSaveSuccess="onSaveSuccess"
     @onDelete="onSaveSuccess"
     @onCancel="clearSelected"

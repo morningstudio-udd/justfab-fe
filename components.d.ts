@@ -15,7 +15,6 @@ declare module 'vue' {
     ClaimInviteDialog: typeof import('./src/components/Dialog/ClaimInviteDialog.vue')['default']
     ConfirmDialog: typeof import('./src/components/Dialog/ConfirmDialog.vue')['default']
     ConnectWalletBtn: typeof import('./src/components/Button/ConnectWalletBtn.vue')['default']
-    copy: typeof import('./src/components/Form/TaskForm copy.vue')['default']
     DialogCloseBtn: typeof import('./src/components/DialogCloseBtn.vue')['default']
     Footer: typeof import('./src/views/Footer.vue')['default']
     FusionDialog: typeof import('./src/components/Dialog/FusionDialog.vue')['default']

@@ -104,6 +104,7 @@ declare global {
   const getUnclaimedRewards: typeof import('./src/api/game.js')['getUnclaimedRewards']
   const getUserInfo: typeof import('./src/api/user.js')['getUserInfo']
   const getUserInventory: typeof import('./src/api/game.js')['getUserInventory']
+  const getUserTasks: typeof import('./src/api/user.js')['getUserTasks']
   const h: typeof import('vue')['h']
   const ignorableWatch: typeof import('@vueuse/core')['ignorableWatch']
   const inject: typeof import('vue')['inject']
@@ -514,6 +515,7 @@ declare module 'vue' {
     readonly getUnclaimedRewards: UnwrapRef<typeof import('./src/api/game.js')['getUnclaimedRewards']>
     readonly getUserInfo: UnwrapRef<typeof import('./src/api/user.js')['getUserInfo']>
     readonly getUserInventory: UnwrapRef<typeof import('./src/api/game.js')['getUserInventory']>
+    readonly getUserTasks: UnwrapRef<typeof import('./src/api/user.js')['getUserTasks']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
     readonly ignorableWatch: UnwrapRef<typeof import('@vueuse/core')['ignorableWatch']>
     readonly inject: UnwrapRef<typeof import('vue')['inject']>

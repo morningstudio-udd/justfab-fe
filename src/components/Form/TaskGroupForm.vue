@@ -85,6 +85,17 @@ watch(
           {{ $t("Delete") }}
         </v-btn>
 
+        <v-btn
+          color="error"
+          variant="outlined"
+          :disabled="
+            !currentTaskGroup || Object.keys(currentTaskGroup).length === 0
+          "
+          @click="submitDelete"
+        >
+          {{ $t("Delete Tasks In Group") }}
+        </v-btn>
+
         <v-btn color="primary" type="submit">
           {{ $t("Save") }}
         </v-btn>

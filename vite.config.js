@@ -167,7 +167,7 @@ export default defineConfig(({ mode }) => {
     },
 
     optimizeDeps: {
-      exclude: ["vuetify"],
+      exclude: ["vuetify", "@telegram-apps/sdk"],
       entries: ["./src/**/*.vue"],
     },
 

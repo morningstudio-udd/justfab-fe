@@ -414,6 +414,7 @@
     "getAllTaskGroups": true,
     "getTaskGroup": true,
     "updateTaskGroup": true,
-    "getTaskGroupById": true
+    "getTaskGroupById": true,
+    "getUserTasks": true
   }
 }

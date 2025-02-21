@@ -48,6 +48,7 @@ onMounted(async () => {
     });
 
     resizeObserver.observe(gameContentRef.value);
+
   }
 
   const p1 = getUserInfo();
@@ -145,6 +146,7 @@ const onClaimEnergyClick = async (e) => {
     console.log("error", error);
   }
 };
+
 </script>
 
 <template>
@@ -160,9 +162,11 @@ const onClaimEnergyClick = async (e) => {
         :disabled="!enable"
         :jackpotRewards="jackpotRewards"
         :claimEnergyAt="claimEnergyAt"
+        :volume="1"
         @rollClick="onRollClick"
         @scriptCompleted="onScriptCompleted"
         @claimEnergyClick="onClaimEnergyClick"
+        
       ></slot-machine>
     </div>
   </div>

@@ -28,6 +28,10 @@ const props = defineProps({
   disabled: {
     type: Boolean,
   },
+  volume: {
+    type: Number,
+    default: 1
+  }
 });
 
 let inDuty = false;
@@ -73,6 +77,16 @@ watch(
   }
 );
 
+watch(
+  () => props.volume,
+  (v) => {
+    if (slotMachine.value != null) {
+      console.log("set volume", v);
+      slotMachine.value.setVolume(v);
+    }
+  }
+);
+
 const onIframeLoaded = () => {
   iframeContent.value = refIframe.value.contentWindow;
   iframeContent.value.SlotMachine = {};
@@ -91,6 +105,8 @@ const onIframeLoaded = () => {
     sm.Jackpot.setPrizes(props.jackpotRewards);
     sm.Jackpot.node.active = false;
     setInterval(updateEnergyBottle, 1000);
+    setTimeout(() => setVolume(props.volume), 50);
+    emit("loaded", sm);
   };
 };
 
@@ -136,6 +152,7 @@ const roll = async (scripts) => {
 };
 
 const rollScriptStep = async (step) => {
+  setVolume(props.volume);
   currentStep = step;
   currentScript = playScripts[currentStep];
   if(currentScript.type == 'slotMachine') {
@@ -179,13 +196,17 @@ const rollJackpot = (prize) => {
   slotMachine.value.Jackpot.roll(prize);
 };
 
+const setVolume = (v) => {
+  slotMachine.value.setVolume(v);
+}
+
 const waitForSeconds = async (s) => {
   return new Promise((res) => {
     setTimeout(res, s * 1000);
   });
 };
 
-const emit = defineEmits(["rollClick", "scriptCompleted", "claimEnergyClick"]);
+const emit = defineEmits(["rollClick", "scriptCompleted", "claimEnergyClick", "loaded"]);
 defineExpose({
   roll,
   rollNextStep,
@@ -193,6 +214,7 @@ defineExpose({
   setJackpotVisible,
   setButtonCloseVisible,
   rollJackpot,
+  setVolume
 });
 </script>
 

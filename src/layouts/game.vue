@@ -2,6 +2,15 @@
 import LoadingGame from "@/components/LoadingGame.vue";
 import gameBg from "@images/game/bg-game-2.png";
 import { emitter } from "@plugins/mitt";
+import {
+  expandViewport,
+  requestFullscreen,
+  isFullscreen,
+  on,
+  viewportSafeAreaInsets,
+  viewportSafeAreaInsetTop,
+  viewportContentSafeAreaInsetTop,
+} from "@telegram-apps/sdk-vue";
 
 const gameStore = useGameStore();
 
@@ -12,6 +21,8 @@ const gameContainerRef = ref(null);
 const isClaimingRewards = ref(false);
 const containerDivWidth = ref(0);
 const resultItemDialogWidth = ref();
+const viewportHeight = ref();
+const safeArea = ref({ top: 0, bottom: 0 });
 // const resultItemDialogWidth = computed({
 //   get: () => 0,
 //   set: (val) => console.log("temp", val),
@@ -23,6 +34,8 @@ const resultItemDialogRef = computed(() => gameStore.resultItemDialogRef);
 
 onMounted(() => {
   gameStore.setLoading(true);
+
+  // const removeListener = on("viewport_changed", updateViewportHeight);
 
   startClaiming();
   document.addEventListener("visibilitychange", () => {
@@ -52,10 +65,22 @@ onMounted(() => {
 onUnmounted(() => {
   stopClaiming();
   document.removeEventListener("visibilitychange", stopClaiming);
+
   // if (resizeObserver) {
   //   resizeObserver.disconnect();
   // }
 });
+
+// const updateViewportHeight = (payload) => {
+//   viewportHeight.value = payload.height;
+
+//   safeArea.value = {
+//     top: viewportContentSafeAreaInsetTop(),
+//     top2: viewportSafeAreaInsetTop(),
+//   };
+
+//   console.log(safeArea.value);
+// };
 
 const executeClaimRewards = async () => {
   if (isClaimingRewards.value) return;
@@ -99,7 +124,7 @@ const resetRewardsState = () => {
 <template>
   <div class="tw-h-full game-layout">
     <div
-      class="tw-bg-[#86C7E5] tw-w-screen tw-h-screen tw-flex tw-items-center tw-justify-center"
+      class="tw-bg-[#86C7E5] tw-w-screen tw-flex tw-items-center tw-justify-center tw-fixed"
     >
       <div
         class="game-container tw-w-auto tw-h-[1920px] tw-aspect-[9/16] tw-max-w-full tw-max-h-screen tw-bg-[#D9D9D9] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-flex tw-flex-col tw-relative"

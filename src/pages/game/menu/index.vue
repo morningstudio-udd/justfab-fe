@@ -1,9 +1,4 @@
 <script setup>
-import bgConnectWallet from "@images/game/bg-connect-wallet.png";
-import inputConnectWallet from "@images/game/input-connect-wallet.png";
-import btnConnectWallet from "@images/game/btn-connect-wallet.png";
-import { onUnmounted } from "vue";
-
 definePage({
   meta: {
     layout: "game",
@@ -106,7 +101,10 @@ const submitOpenSettingDialog = () => {
   box-shadow: 0 0 20px 0 #ffefbf;
   border-radius: clamp(16px, 1.5vw, 46px);
   .menu-link {
-    @apply tw-w-full tw-h-full tw-flex tw-items-center tw-justify-center tw-no-underline tw-text-[#953C0F];
+    @apply tw-w-full tw-h-full tw-flex tw-items-center tw-justify-center tw-no-underline tw-text-[#953C0F] tw-cursor-pointer;
+  }
+  &:hover {
+    /* @apply tw-animate-bounce; */
   }
 }
 </style>

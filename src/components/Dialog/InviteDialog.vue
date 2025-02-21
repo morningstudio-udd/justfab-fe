@@ -3,7 +3,6 @@ import bgPopupInvite from "@images/game/popup-invite.png";
 import btnCopyInvte from "@images/game/btn-copy-invite.png";
 import btnShareInvite from "@images/game/btn-share-invite.png";
 import iconClose from "@images/game/icon-close.png";
-import { computedEager } from "@vueuse/core";
 
 const props = defineProps({
   width: {

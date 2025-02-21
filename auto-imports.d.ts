@@ -25,6 +25,7 @@ declare global {
   const base64UrlDecode: typeof import('./src/utils/helpers.js')['base64UrlDecode']
   const betweenValidator: typeof import('./src/utils/validators.js')['betweenValidator']
   const claimAllRewards: typeof import('./src/api/game.js')['claimAllRewards']
+  const claimDailyReward: typeof import('./src/api/game.js')['claimDailyReward']
   const claimEnergy: typeof import('./src/api/game.js')['claimEnergy']
   const claimReward: typeof import('./src/api/game.js')['claimReward']
   const completeTask: typeof import('./src/api/admin.js')['completeTask']
@@ -86,6 +87,7 @@ declare global {
   const getApiPath: typeof import('./src/utils/helpers.js')['getApiPath']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
+  const getDailyReward: typeof import('./src/api/game.js')['getDailyReward']
   const getFusedFrom: typeof import('./src/api/admin.js')['getFusedFrom']
   const getFusedInto: typeof import('./src/api/admin.js')['getFusedInto']
   const getFusion: typeof import('./src/api/admin.js')['getFusion']
@@ -439,6 +441,7 @@ declare module 'vue' {
     readonly base64UrlDecode: UnwrapRef<typeof import('./src/utils/helpers.js')['base64UrlDecode']>
     readonly betweenValidator: UnwrapRef<typeof import('./src/utils/validators.js')['betweenValidator']>
     readonly claimAllRewards: UnwrapRef<typeof import('./src/api/game.js')['claimAllRewards']>
+    readonly claimDailyReward: UnwrapRef<typeof import('./src/api/game.js')['claimDailyReward']>
     readonly claimEnergy: UnwrapRef<typeof import('./src/api/game.js')['claimEnergy']>
     readonly claimReward: UnwrapRef<typeof import('./src/api/game.js')['claimReward']>
     readonly completeTask: UnwrapRef<typeof import('./src/api/admin.js')['completeTask']>
@@ -499,6 +502,7 @@ declare module 'vue' {
     readonly getApiPath: UnwrapRef<typeof import('./src/utils/helpers.js')['getApiPath']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
+    readonly getDailyReward: UnwrapRef<typeof import('./src/api/game.js')['getDailyReward']>
     readonly getFusedFrom: UnwrapRef<typeof import('./src/api/admin.js')['getFusedFrom']>
     readonly getFusedInto: UnwrapRef<typeof import('./src/api/admin.js')['getFusedInto']>
     readonly getFusion: UnwrapRef<typeof import('./src/api/admin.js')['getFusion']>

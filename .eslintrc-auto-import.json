@@ -415,6 +415,8 @@
     "getTaskGroup": true,
     "updateTaskGroup": true,
     "getTaskGroupById": true,
-    "getUserTasks": true
+    "getUserTasks": true,
+    "claimDailyReward": true,
+    "getDailyReward": true
   }
 }

@@ -105,6 +105,10 @@ watch(
         </v-text-field>
       </div>
       <div class="tw-flex tw-flex-wrap tw-mt-4 tw-gap-4 tw-justify-end">
+        <v-btn color="primary" type="submit">
+          {{ $t("Save") }}
+        </v-btn>
+
         <v-btn
           color="error"
           variant="outlined"
@@ -112,10 +116,6 @@ watch(
           @click="submitDelete"
         >
           {{ $t("Delete") }}
-        </v-btn>
-
-        <v-btn color="primary" type="submit">
-          {{ $t("Save") }}
         </v-btn>
       </div>
     </v-form>

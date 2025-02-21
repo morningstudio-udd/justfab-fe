@@ -38,7 +38,7 @@ const API = {
     create: "/task",
     update: "/task/:id",
     delete: "/task/:id",
-    completed: "/:id/completed",
+    complete: "/task/:id/complete",
   },
   taskGroup: {
     all: "/taskGroup",
@@ -353,8 +353,8 @@ export const deleteTask = async (id) => {
 
 export const completeTask = async (id) => {
   try {
-    const url = getApiPath(API.task.completed, { id: id });
-    const res = await $api.patch(url);
+    const url = getApiPath(API.task.complete, { id: id });
+    const res = await $api.post(url);
 
     return res.data;
   } catch (error) {

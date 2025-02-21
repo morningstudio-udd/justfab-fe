@@ -16,8 +16,9 @@ import dailyReward from "@images/game/daily-reward.png";
 import bgBoxTask from "@images/game/bg-box-task.png";
 import iconCheckedIn from "@images/game/icon-checked-in.png";
 // import { openLink } from "@telegram-apps/sdk";
-// import { openLink } from "@telegram-apps/sdk-vue";
-// import WebApp from "@twa-dev/sdk";
+import { openLink, openPopup, openTelegramLink } from "@telegram-apps/sdk-vue";
+import moment from "moment";
+import { delay } from "@/utils/mixin";
 
 definePage({
   meta: {
@@ -32,23 +33,23 @@ const isOpen = ref(false);
 const allTasks = ref([]);
 const allTaskGroup = ref([]);
 const userTasks = ref([]);
+const currentStreak = ref(0);
+const lastClaimedAt = ref(null);
+
+const currentIndex = computed(() => {
+  return currentStreak.value > 0 ? (currentStreak.value % 7) + 1 : 1;
+});
 
 onMounted(async () => {
   const p1 = getTasks();
   const p2 = getTaskGroup();
   const p3 = getSeftTasks();
-
-  await Promise.all([p1, p2, p3]);
-
-  Telegram.WebApp.ready();
-
-  Telegram.WebApp.MainButton.setParams({
-    text: "Main Button",
+  const p4 = getDailyReward().then((response) => {
+    currentStreak.value = response.streak;
+    lastClaimedAt.value = response.lastClaimedAt;
   });
-  Telegram.WebApp.MainButton.onClick(function () {
-    Telegram.WebApp.showAlert("Main Button was clicked");
-  });
-  Telegram.WebApp.MainButton.show();
+
+  await Promise.all([p1, p2, p3, p4]);
 });
 
 const getTasks = async () => {
@@ -92,30 +93,24 @@ const isCompleted = (taskId) => {
 };
 
 const doTask = async (task) => {
-  // Telegram.WebApp.showDebug();
   switch (task.type) {
     case TASK_TYPES.TELEGRAM: {
+      if (openTelegramLink.isAvailable()) {
+        openTelegramLink(task.target);
+      } else {
+        window.open(task.target, "_blank");
+      }
+
       break;
     }
     case TASK_TYPES.LINK: {
+      if (openLink.isAvailable()) {
+        openLink(task.target);
+      } else {
+        window.open(task.target, "_blank");
+      }
+
       await completeTask(task._id);
-
-      // if (openLink.isAvailable()) {
-      //   openLink(task.target);
-      // }
-
-      // openLink.ifAvailable(task.target, {
-      //   tryBrowser: "chrome",
-      //   tryInstantView: true,
-      // });
-
-      // if (window.Telegram?.WebApp) {
-      //   window.Telegram.WebApp.openLink(task.target);
-      // } else if (Telegram) {
-      //   Telegram.WebApp.openLink(task.target);
-      // } else {
-      //   window.open(task.target, "_blank");
-      // }
 
       await delay(5000);
 
@@ -128,10 +123,6 @@ const doTask = async (task) => {
   }
 };
 
-const submitFab = () => {
-  console.log("submitFab");
-};
-
 const submitNetwork = () => {
   console.log("submitNetwork");
 };
@@ -140,59 +131,35 @@ const submitFriend = () => {
   console.log("submitFriend");
 };
 
-const openTask1 = (url) => {
-  window.location.href = url;
+const submitFab = () => {
+  console.log("submitFab");
 };
 
-const openTask2 = (url) => {
-  if (window.Telegram?.WebApp?.requestWriteAccess) {
-    window.Telegram.WebApp.requestWriteAccess().then(() => {
-      window.Telegram.WebApp.openLink(url, {
-        try_instant_view: true,
-        force_external: true,
-      });
-    });
-  } else {
-    window.location.href = url;
+const onClaimReward = async () => {
+  try {
+    await claimDailyReward();
+
+    await delay(3000);
+
+    const rewardResponse = await getDailyReward();
+
+    currentStreak.value = rewardResponse.streak;
+    lastClaimedAt.value = rewardResponse.lastClaimedAt;
+  } catch (error) {
+    console.error(error);
   }
 };
 
-const openTask3 = (event) => {
-  if (window.Telegram?.WebApp?.requestWriteAccess) {
-    window.Telegram.WebApp.requestWriteAccess().then(() => {
-      window.Telegram.WebApp.openLink("https://example.com");
-    });
-  } else {
-    window.location.href = "https://example.com";
+const canClaimDailyReward = (index) => {
+  if (currentStreak.value === 0 && index === 1) {
+    return true;
   }
+
+  return index === currentIndex.value && isYesterday(lastClaimedAt.value);
 };
 
-const showPopup = () => {
-  Telegram.WebApp.showPopup(
-    {
-      title: "Title",
-      message: "Some message",
-      buttons: [
-        { id: "link", type: "default", text: "Open ton.org" },
-        { type: "cancel" },
-      ],
-    },
-    function (btn) {
-      if (btn === "link") {
-        Telegram.WebApp.openLink("https://morningstudio.vn");
-      }
-    }
-  );
-};
-
-const renderText = () => {
-  return (
-    window.Telegram?.WebApp?.platform +
-    "-" +
-    window.Telegram?.WebApp?.initData +
-    "-" +
-    navigator.userAgent
-  );
+const isYesterday = (lastClaimedAt) => {
+  return moment(lastClaimedAt).isSame(moment().subtract(1, "day"), "day");
 };
 </script>
 
@@ -212,7 +179,14 @@ const renderText = () => {
         <div
           class="tw-col-span-5 tw-row-span-1 tw-grid tw-grid-cols-3 tw-grid-rows-1 tw-gap-[5%]"
         >
-          <div class="daily-gift">
+          <div
+            class="daily-gift"
+            :class="{
+              'checked-in': currentIndex > 1,
+              'tw-cursor-pointer': canClaimDailyReward(1),
+            }"
+            @click="canClaimDailyReward(1) ? onClaimReward() : null"
+          >
             <div class="tw-aspect-[99/102] tw-w-1/2">
               <v-img :src="gift1" />
             </div>
@@ -222,7 +196,14 @@ const renderText = () => {
             </div>
           </div>
 
-          <div class="daily-gift">
+          <div
+            class="daily-gift"
+            :class="{
+              'checked-in': currentIndex > 2,
+              'tw-cursor-pointer': canClaimDailyReward(2),
+            }"
+            @click="canClaimDailyReward(2) ? onClaimReward() : null"
+          >
             <div class="tw-aspect-[99/102] tw-w-1/2">
               <v-img :src="gift2" />
             </div>
@@ -232,7 +213,14 @@ const renderText = () => {
             </div>
           </div>
 
-          <div class="daily-gift">
+          <div
+            class="daily-gift"
+            :class="{
+              'checked-in': currentIndex > 3,
+              'tw-cursor-pointer': canClaimDailyReward(3),
+            }"
+            @click="canClaimDailyReward(3) ? onClaimReward() : null"
+          >
             <div class="tw-aspect-[99/102] tw-w-1/2">
               <v-img :src="gift3" />
             </div>
@@ -244,7 +232,14 @@ const renderText = () => {
         </div>
 
         <div class="reward tw-row-span-2 tw-col-span-2">
-          <div class="special-gift checked-in">
+          <div
+            class="special-gift"
+            :class="{
+              'checked-in': currentIndex > 7,
+              'tw-cursor-pointer': canClaimDailyReward(7),
+            }"
+            @click="canClaimDailyReward(7) ? onClaimReward() : null"
+          >
             <div class="tw-aspect-[169/176] tw-w-3/4">
               <v-img :src="gift7" />
             </div>
@@ -258,7 +253,14 @@ const renderText = () => {
         <div
           class="tw-col-span-5 tw-row-span-1 tw-grid tw-grid-cols-3 tw-grid-rows-1 tw-gap-[5%]"
         >
-          <div class="daily-gift">
+          <div
+            class="daily-gift"
+            :class="{
+              'checked-in': currentIndex > 4,
+              'tw-cursor-pointer': canClaimDailyReward(4),
+            }"
+            @click="canClaimDailyReward(4) ? onClaimReward() : null"
+          >
             <div class="tw-aspect-[99/102] tw-w-1/2">
               <v-img :src="gift4" />
             </div>
@@ -268,7 +270,14 @@ const renderText = () => {
             </div>
           </div>
 
-          <div class="daily-gift">
+          <div
+            class="daily-gift"
+            :class="{
+              'checked-in': currentIndex > 5,
+              'tw-cursor-pointer': canClaimDailyReward(5),
+            }"
+            @click="canClaimDailyReward(5) ? onClaimReward() : null"
+          >
             <div class="tw-aspect-[99/102] tw-w-1/2">
               <v-img :src="gift5" />
             </div>
@@ -278,7 +287,14 @@ const renderText = () => {
             </div>
           </div>
 
-          <div class="daily-gift">
+          <div
+            class="daily-gift"
+            :class="{
+              'checked-in': currentIndex > 6,
+              'tw-cursor-pointer': canClaimDailyReward(6),
+            }"
+            @click="canClaimDailyReward(6) ? onClaimReward() : null"
+          >
             <div class="tw-aspect-[99/102] tw-w-1/2">
               <v-img :src="gift6" />
             </div>
@@ -354,19 +370,22 @@ const renderText = () => {
                       v-for="task in getTaskByGroup(group._id)"
                       :key="task._id"
                       :title="task.title"
+                      :subtitle="task.description"
+                      @click="doTask(task)"
                     >
-                      <button @click="openTask1(task.target)">Click 1</button>
+                      <!-- <button @click="openTask1(task.target)">Click 1</button>
                       <br />
                       <button @click="openTask2(task.target)">Click 2</button>
                       <br />
                       <button @click="openTask3">Click 3</button>
+                      <button @click="openTask4(task.target)">Click 4</button>
                       <br />
                       <button @click="showPopup">Launch Popup</button>
                       <br />
                       <a
                         href="javascript:Telegram.WebApp.openLink('https://morningstudio.vn');"
                         >Open link in external browser</a
-                      >
+                      > -->
 
                       <template #append>
                         <v-img
@@ -378,8 +397,6 @@ const renderText = () => {
                     </v-list-item>
                   </v-list>
                 </v-expansion-panel-text>
-
-                {{ renderText() }}
               </v-expansion-panel>
             </template>
           </v-expansion-panels>

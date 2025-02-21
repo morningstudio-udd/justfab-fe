@@ -44,6 +44,7 @@
     "destr": "^2.0.3",
     "lodash.clonedeep": "^4.5.0",
     "mitt": "^3.0.1",
+    "moment": "^2.30.1",
     "pinia": "^2.3.0",
     "playtiful": "^1.0.1",
     "rippleui": "^1.12.1",

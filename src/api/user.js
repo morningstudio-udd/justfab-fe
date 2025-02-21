@@ -16,6 +16,9 @@ const API = {
     refLink: "/referral/link",
     recruited: "/referral/count",
   },
+  task: {
+    seft: "/task/userTasks",
+  },
 };
 
 export const getUserInfo = async () => {
@@ -66,6 +69,17 @@ export const getReferralLink = async () => {
 export const getRecruitedUsers = async () => {
   try {
     const res = await $api.get(API.referral.recruited);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response?.data || error;
+  }
+};
+
+export const getUserTasks = async () => {
+  try {
+    const res = await $api.get(API.task.seft);
 
     return res.data;
   } catch (error) {

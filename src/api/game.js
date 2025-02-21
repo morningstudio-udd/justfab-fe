@@ -26,6 +26,8 @@ const API = {
     claim: "/reward/claim",
     claimAll: "/reward/claim/all",
     getUnclaimed: "/reward/unclaimed",
+    daily: "/reward/daily",
+    claimDaily: "/reward/daily/claim",
   },
 };
 
@@ -176,6 +178,28 @@ export const getUnclaimedRewards = async () => {
   try {
     const url = getApiPath(API.reward.getUnclaimed);
     const res = await $api.get(url);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
+  }
+};
+
+export const getDailyReward = async () => {
+  try {
+    const res = await $api.get(API.reward.daily);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
+  }
+};
+
+export const claimDailyReward = async () => {
+  try {
+    const res = await $api.post(API.reward.claimDaily);
 
     return res.data;
   } catch (error) {

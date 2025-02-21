@@ -1,7 +1,8 @@
 <script setup>
 import bgSetting from "@images/game/bg-setting.png";
-import iconClose from "@images/game/icon-close.png";
+import iconCloseBtn from "@images/game/icon-close-1.png";
 import buttonSlide from "@images/game/button-slide.png";
+import { emitter } from "@plugins/mitt";
 
 const props = defineProps({
   width: {
@@ -29,8 +30,15 @@ const openDialog = () => {
 };
 
 const closeDialog = () => {
-  emit("onClose");
   settingGameDialog.value = false;
+};
+
+const changeVolumn = (type) => {
+  if (type === "sound") {
+    emitter.emit("changeVolume", { type: "sound", value: soundVolume.value });
+  } else {
+    emitter.emit("changeVolume", { type: "sfx", value: sfxVolume.value });
+  }
 };
 
 defineExpose({ openDialog, settingGameDialog, closeDialog });
@@ -40,29 +48,28 @@ defineExpose({ openDialog, settingGameDialog, closeDialog });
   <v-dialog
     v-model="settingGameDialog"
     class=""
-    content-class="popup-invite"
+    content-class="popup-setting"
     max-width="731"
     :width="width"
     persistent
-    contained
   >
-    <IconBtn
-      flat
-      icon
-      color="transparent"
-      variant="elevated"
-      class="tw-absolute tw-top-[7%] tw-right-[7%] tw-z-[1]"
-      @click="closeDialog"
-    >
-      <v-img :src="iconClose" width="44" max-width="50%" />
-    </IconBtn>
-
     <v-card
       class="!tw-rounded-2xl tw-px-4 tw-py-2 !tw-shadow-none !tw-bg-cover tw-bg-center tw-bg-no-repeat tw-aspect-[731/705]"
       :style="{ backgroundImage: `url(${bgSetting})` }"
       color="transparent"
       flat
     >
+      <IconBtn
+        flat
+        color="transparent"
+        variant="elevated"
+        size="small"
+        class="btn-close-setting"
+        @click="closeDialog"
+      >
+        <v-img :src="iconCloseBtn" width="44" class="!tw-max-w-[50%]"></v-img>
+      </IconBtn>
+
       <v-card-text class="tw-text-center !tw-p-[3%]">
         <div class="!tw-p-[5%] tw-h-full tw-flex tw-flex-col tw-justify-center">
           <div
@@ -111,6 +118,7 @@ defineExpose({ openDialog, settingGameDialog, closeDialog });
                 track-fill-color="#00D8FF"
                 class="volumn-slider"
                 :step="1"
+                @update:model-value="changeVolumn('sound')"
               >
                 <template v-slot:append>
                   <svg
@@ -188,6 +196,7 @@ defineExpose({ openDialog, settingGameDialog, closeDialog });
                 track-fill-color="#00D8FF"
                 class="volumn-slider"
                 :step="1"
+                @update:model-value="changeVolumn('sfx')"
               >
                 <template v-slot:append>
                   <svg
@@ -251,5 +260,10 @@ defineExpose({ openDialog, settingGameDialog, closeDialog });
   box-shadow: inset 0 clamp(1px, 0.1vw, 4px) clamp(1px, 0.1vw, 4px) 0
       rgba(0, 0, 0, 0.25),
     0 clamp(1px, 0.1vw, 4px) clamp(1px, 0.1vw, 4px) 0 rgba(0, 0, 0, 0.25);
+}
+
+.btn-close-setting {
+  @apply tw-absolute tw-top-[7%] tw-right-[7%] tw-z-[1] tw-bg-no-repeat tw-bg-center;
+  /* background-size: 50%; */
 }
 </style>

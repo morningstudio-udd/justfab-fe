@@ -31,11 +31,21 @@ const closeDialog = () => {
   inviteDialog.value = false;
 };
 
-const submitCopyInvite = () => {
+const submitCopyInvite = ($event) => {
+  toggleClass(
+    $event,
+    "tw-animate-jump tw-animate-once tw-animate-ease-linear tw-animate-duration-[100ms]",
+    100
+  );
   copyToClipboard(inviteLink.value);
 };
 
-const submitShareInvite = async () => {
+const submitShareInvite = async ($event) => {
+  toggleClass(
+    $event,
+    "tw-animate-jump tw-animate-once tw-animate-ease-linear tw-animate-duration-[100ms]",
+    100
+  );
   if (navigator.share) {
     // If Web Share API is available, open the native share dialog
     try {

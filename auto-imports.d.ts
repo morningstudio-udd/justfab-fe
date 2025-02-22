@@ -108,6 +108,7 @@ declare global {
   const getUserInventory: typeof import('./src/api/game.js')['getUserInventory']
   const getUserTasks: typeof import('./src/api/user.js')['getUserTasks']
   const h: typeof import('vue')['h']
+  const handleNormalClickAnimation: typeof import('./src/utils/helpers.js')['handleNormalClickAnimation']
   const ignorableWatch: typeof import('@vueuse/core')['ignorableWatch']
   const inject: typeof import('vue')['inject']
   const injectLocal: typeof import('@vueuse/core')['injectLocal']
@@ -205,6 +206,7 @@ declare global {
   const toRef: typeof import('vue')['toRef']
   const toRefs: typeof import('vue')['toRefs']
   const toValue: typeof import('vue')['toValue']
+  const toggleClass: typeof import('./src/utils/helpers.js')['toggleClass']
   const triggerRef: typeof import('vue')['triggerRef']
   const truncateString: typeof import('./src/utils/helpers.js')['truncateString']
   const tryOnBeforeMount: typeof import('@vueuse/core')['tryOnBeforeMount']
@@ -521,6 +523,7 @@ declare module 'vue' {
     readonly getUserInventory: UnwrapRef<typeof import('./src/api/game.js')['getUserInventory']>
     readonly getUserTasks: UnwrapRef<typeof import('./src/api/user.js')['getUserTasks']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
+    readonly handleNormalClickAnimation: UnwrapRef<typeof import('./src/utils/helpers.js')['handleNormalClickAnimation']>
     readonly ignorableWatch: UnwrapRef<typeof import('@vueuse/core')['ignorableWatch']>
     readonly inject: UnwrapRef<typeof import('vue')['inject']>
     readonly injectLocal: UnwrapRef<typeof import('@vueuse/core')['injectLocal']>
@@ -618,6 +621,7 @@ declare module 'vue' {
     readonly toRef: UnwrapRef<typeof import('vue')['toRef']>
     readonly toRefs: UnwrapRef<typeof import('vue')['toRefs']>
     readonly toValue: UnwrapRef<typeof import('vue')['toValue']>
+    readonly toggleClass: UnwrapRef<typeof import('./src/utils/helpers.js')['toggleClass']>
     readonly triggerRef: UnwrapRef<typeof import('vue')['triggerRef']>
     readonly truncateString: UnwrapRef<typeof import('./src/utils/helpers.js')['truncateString']>
     readonly tryOnBeforeMount: UnwrapRef<typeof import('@vueuse/core')['tryOnBeforeMount']>

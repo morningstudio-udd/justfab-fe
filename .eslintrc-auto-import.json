@@ -417,6 +417,8 @@
     "getTaskGroupById": true,
     "getUserTasks": true,
     "claimDailyReward": true,
-    "getDailyReward": true
+    "getDailyReward": true,
+    "toggleClass": true,
+    "handleNormalClickAnimation": true
   }
 }

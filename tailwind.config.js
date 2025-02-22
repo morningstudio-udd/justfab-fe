@@ -1,4 +1,3 @@
-
 export default {
   corePlugins: {
     preflight: false,
@@ -14,5 +13,6 @@ export default {
       },
     },
   },
-  // plugins: [require("rippleui")],
+
+  plugins: [require("tailwindcss-animated")],
 };

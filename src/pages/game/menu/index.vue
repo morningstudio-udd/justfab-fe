@@ -96,7 +96,7 @@ const submitOpenSettingDialog = () => {
 
 <style lang="postcss" scoped>
 .menu {
-  @apply tw-bg-[#FFEFBF] tw-border-solid tw-border-[#953B0E]  tw-font-semibold tw-text-center;
+  @apply tw-bg-[#FFEFBF] tw-border-solid tw-border-[#953B0E]  tw-font-semibold tw-text-center tw-animate-fade-up tw-animate-once tw-animate-duration-500 tw-animate-ease-out;
   border-width: clamp(3px, 0.3vw, 6px);
   box-shadow: 0 0 20px 0 #ffefbf;
   border-radius: clamp(16px, 1.5vw, 46px);

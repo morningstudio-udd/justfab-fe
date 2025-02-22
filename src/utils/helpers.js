@@ -136,3 +136,29 @@ export const copyToClipboard = async (value) => {
     return Promise.reject(err);
   }
 };
+
+export const toggleClass = (event, classes, ms = null) => {
+  const element = event.currentTarget;
+  const classList = classes.split(" ");
+
+  const allClassesExist = classList.every((cls) =>
+    element.classList.contains(cls)
+  );
+  if (allClassesExist) return;
+
+  classList.forEach((cls) => element.classList.toggle(cls));
+
+  if (ms) {
+    setTimeout(() => {
+      classList.forEach((cls) => element.classList.remove(cls));
+    }, ms);
+  }
+};
+
+export const handleNormalClickAnimation = (event) => {
+  toggleClass(
+    event,
+    "tw-animate-shake tw-animate-twice tw-animate-ease-out tw-animate-duration-100 tw-animate-ease-linear tw-animate-fill-both",
+    100
+  );
+};

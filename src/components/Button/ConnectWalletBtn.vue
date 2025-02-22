@@ -5,14 +5,18 @@ import { getLoginURL } from "@/utils/FPClient";
 const walletAddress = ref(null);
 
 const connectWallet = async () => {
+  toggleClass(
+    $event,
+    "tw-animate-jump tw-animate-once tw-animate-ease-linear tw-animate-duration-[100ms]",
+    100
+  );
+
   const url = await getLoginURL();
   console.log(url);
   window.location.href = url;
 };
 
-const disconnectWallet = async () => {
-  
-};
+const disconnectWallet = async () => {};
 </script>
 
 <template>
@@ -20,7 +24,7 @@ const disconnectWallet = async () => {
     @click="connectWallet"
     color="transparent"
     flat
-    class="tw-mx-auto tw-bg-cover tw-bg-center tw-bg-no-repeat tw-aspect-[387/104] tw-w-[53%] !tw-h-auto !tw-rounded-[12%] tw-overflow-hidden"
+    class="tw-mx-auto tw-bg-cover tw-bg-center tw-bg-no-repeat tw-aspect-[387/104] tw-w-[53%] !tw-h-auto !tw-rounded-[12%] tw-overflow-hidden jump-in-anim"
     :style="{ backgroundImage: `url(${btnConnectWallet})` }"
   >
   </v-btn>

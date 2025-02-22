@@ -65,13 +65,16 @@ onMounted(async () => {
   await getRecruited();
 });
 
-const submitInvite = () => {
-  console.log("submitInvite");
+const submitInvite = ($event) => {
+  toggleClass(
+    $event,
+    "tw-animate-jump tw-animate-once tw-animate-ease-linear tw-animate-duration-[100ms]",
+    100
+  );
   inviteDialogRef.value.openDialog();
 };
 
 const submitClaimInvited = () => {
-  console.log("submitClaimInvited");
   claimInviteDialogRef.value.openDialog();
 };
 

@@ -131,15 +131,26 @@ const submitFriend = () => {
   console.log("submitFriend");
 };
 
-const submitFab = () => {
+const submitFab = ($event) => {
   console.log("submitFab");
+  handleNormalClickAnimation($event);
+};
+
+const handleDailyCheckIn = ($event) => {
+  toggleClass(
+    $event,
+    "tw-animate-jump tw-animate-once tw-animate-ease-linear tw-animate-duration-[1000ms]",
+    1000
+  );
+
+  onClaimReward();
 };
 
 const onClaimReward = async () => {
   try {
     await claimDailyReward();
 
-    await delay(3000);
+    await delay(1000);
 
     const rewardResponse = await getDailyReward();
 
@@ -173,7 +184,7 @@ const isYesterday = (lastClaimedAt) => {
       <!-- </div> -->
 
       <div
-        class="rewards-container tw-w-full tw-aspect-[1080/580] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-grid tw-grid-cols-7 tw-grid-rows-2 tw-pl-[8.5%] tw-pr-[9.2%] tw-py-[2.5%] tw-gap-x-[4%] tw-gap-y-[8%]"
+        class="rewards-container tw-w-full tw-aspect-[1080/580] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-grid tw-grid-cols-7 tw-grid-rows-2 tw-pl-[8.5%] tw-pr-[9.2%] tw-py-[2.5%] tw-gap-x-[4%] tw-gap-y-[8%] tw-animate-rotate-x tw-animate-duration-1000 tw-animate-ease-out"
         :style="{ backgroundImage: `url(${bgGifts})` }"
       >
         <div
@@ -185,7 +196,7 @@ const isYesterday = (lastClaimedAt) => {
               'checked-in': currentIndex > 1,
               'tw-cursor-pointer': canClaimDailyReward(1),
             }"
-            @click="canClaimDailyReward(1) ? onClaimReward() : null"
+            @click="canClaimDailyReward(2) ? handleDailyCheckIn($event) : null"
           >
             <div class="tw-aspect-[99/102] tw-w-1/2">
               <v-img :src="gift1" />
@@ -202,7 +213,7 @@ const isYesterday = (lastClaimedAt) => {
               'checked-in': currentIndex > 2,
               'tw-cursor-pointer': canClaimDailyReward(2),
             }"
-            @click="canClaimDailyReward(2) ? onClaimReward() : null"
+            @click="canClaimDailyReward(2) ? handleDailyCheckIn($event) : null"
           >
             <div class="tw-aspect-[99/102] tw-w-1/2">
               <v-img :src="gift2" />
@@ -219,7 +230,7 @@ const isYesterday = (lastClaimedAt) => {
               'checked-in': currentIndex > 3,
               'tw-cursor-pointer': canClaimDailyReward(3),
             }"
-            @click="canClaimDailyReward(3) ? onClaimReward() : null"
+            @click="canClaimDailyReward(3) ? handleDailyCheckIn($event) : null"
           >
             <div class="tw-aspect-[99/102] tw-w-1/2">
               <v-img :src="gift3" />
@@ -238,7 +249,7 @@ const isYesterday = (lastClaimedAt) => {
               'checked-in': currentIndex > 7,
               'tw-cursor-pointer': canClaimDailyReward(7),
             }"
-            @click="canClaimDailyReward(7) ? onClaimReward() : null"
+            @click="canClaimDailyReward(7) ? handleDailyCheckIn($event) : null"
           >
             <div class="tw-aspect-[169/176] tw-w-3/4">
               <v-img :src="gift7" />
@@ -259,7 +270,7 @@ const isYesterday = (lastClaimedAt) => {
               'checked-in': currentIndex > 4,
               'tw-cursor-pointer': canClaimDailyReward(4),
             }"
-            @click="canClaimDailyReward(4) ? onClaimReward() : null"
+            @click="canClaimDailyReward(4) ? handleDailyCheckIn($event) : null"
           >
             <div class="tw-aspect-[99/102] tw-w-1/2">
               <v-img :src="gift4" />
@@ -276,7 +287,7 @@ const isYesterday = (lastClaimedAt) => {
               'checked-in': currentIndex > 5,
               'tw-cursor-pointer': canClaimDailyReward(5),
             }"
-            @click="canClaimDailyReward(5) ? onClaimReward() : null"
+            @click="canClaimDailyReward(5) ? handleDailyCheckIn($event) : null"
           >
             <div class="tw-aspect-[99/102] tw-w-1/2">
               <v-img :src="gift5" />
@@ -293,7 +304,7 @@ const isYesterday = (lastClaimedAt) => {
               'checked-in': currentIndex > 6,
               'tw-cursor-pointer': canClaimDailyReward(6),
             }"
-            @click="canClaimDailyReward(6) ? onClaimReward() : null"
+            @click="canClaimDailyReward(6) ? handleDailyCheckIn($event) : null"
           >
             <div class="tw-aspect-[99/102] tw-w-1/2">
               <v-img :src="gift6" />
@@ -318,15 +329,17 @@ const isYesterday = (lastClaimedAt) => {
               <v-btn
                 color="transparent"
                 flat
-                class="tw-aspect-[220/97] tw-w-[24.2%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden"
-                :style="{ backgroundImage: `url(${btnFab})` }"
-                @click="submitFab"
+                class="tw-aspect-[220/97] tw-w-[24.2%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden jump-in-anim"
+                :style="{
+                  backgroundImage: `url(${btnFab})`,
+                }"
+                @click="submitFab($event)"
               ></v-btn>
 
               <v-btn
                 color="transparent"
                 flat
-                class="tw-aspect-[318/97] tw-w-[35.1%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden"
+                class="tw-aspect-[318/97] tw-w-[35.1%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden jump-in-anim"
                 :style="{ backgroundImage: `url(${btnNetwork})` }"
                 @click="submitNetwork"
               ></v-btn>
@@ -334,7 +347,7 @@ const isYesterday = (lastClaimedAt) => {
               <v-btn
                 color="transparent"
                 flat
-                class="tw-aspect-[220/97] tw-w-[24.2%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden"
+                class="tw-aspect-[220/97] tw-w-[24.2%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden jump-in-anim"
                 :style="{ backgroundImage: `url(${btnFriend})` }"
                 @click="submitFriend"
               ></v-btn>
@@ -373,20 +386,6 @@ const isYesterday = (lastClaimedAt) => {
                       :subtitle="task.description"
                       @click="doTask(task)"
                     >
-                      <!-- <button @click="openTask1(task.target)">Click 1</button>
-                      <br />
-                      <button @click="openTask2(task.target)">Click 2</button>
-                      <br />
-                      <button @click="openTask3">Click 3</button>
-                      <button @click="openTask4(task.target)">Click 4</button>
-                      <br />
-                      <button @click="showPopup">Launch Popup</button>
-                      <br />
-                      <a
-                        href="javascript:Telegram.WebApp.openLink('https://morningstudio.vn');"
-                        >Open link in external browser</a
-                      > -->
-
                       <template #append>
                         <v-img
                           :src="iconCheckedIn"

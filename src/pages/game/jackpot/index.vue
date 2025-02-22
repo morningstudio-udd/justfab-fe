@@ -3,7 +3,6 @@ import { claimEnergy } from "@/api/game";
 import ResultItemDialog from "@/components/Dialog/ResultItemDialog.vue";
 import gameBg from "@images/game/bg-game-1.png";
 import { emitter } from "@plugins/mitt";
-import { onUnmounted } from "vue";
 
 definePage({
   meta: {
@@ -28,6 +27,7 @@ const parentDivWidth = ref(0);
 const currentRewards = ref(null);
 const itemReward = ref(null);
 const resultItemDialogRef = ref(null);
+const sfxVolume = useLocalStorage("sfxVolume", 50);
 
 let resizeObserver;
 
@@ -48,7 +48,6 @@ onMounted(async () => {
     });
 
     resizeObserver.observe(gameContentRef.value);
-
   }
 
   const p1 = getUserInfo();
@@ -146,7 +145,6 @@ const onClaimEnergyClick = async (e) => {
     console.log("error", error);
   }
 };
-
 </script>
 
 <template>
@@ -162,11 +160,10 @@ const onClaimEnergyClick = async (e) => {
         :disabled="!enable"
         :jackpotRewards="jackpotRewards"
         :claimEnergyAt="claimEnergyAt"
-        :volume="1"
+        :volume="sfxVolume"
         @rollClick="onRollClick"
         @scriptCompleted="onScriptCompleted"
         @claimEnergyClick="onClaimEnergyClick"
-        
       ></slot-machine>
     </div>
   </div>

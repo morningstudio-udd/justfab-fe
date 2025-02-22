@@ -163,7 +163,7 @@ watch(
             </div>
 
             <div class="tw-col-span-1 sm:tw-col-span-1">
-              <v-text-field
+              <!-- <v-text-field
                 v-model="currentItem.rarity"
                 :label="$t('Init Rarity')"
                 outlined
@@ -171,6 +171,16 @@ watch(
                 clearable
                 hide-details="auto"
                 class="[&_input]:tw-uppercase"
+                :rules="[requiredValidator]"
+              /> -->
+              <v-select
+                v-model="currentItem.rarity"
+                :items="Object.values(ITEM_RARITIES)"
+                item-title="name"
+                :label="$t('Init Rarity')"
+                outlined
+                dense
+                hide-details="auto"
                 :rules="[requiredValidator]"
               />
             </div>

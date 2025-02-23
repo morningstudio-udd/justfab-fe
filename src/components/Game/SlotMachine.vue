@@ -206,6 +206,20 @@ const waitForSeconds = async (s) => {
   });
 };
 
+const flyEnergy = (n) => {
+  slotMachine.value.flyEnergy(n);
+}
+
+const showGoldEffect = () => {
+  slotMachine.value.GoldParticle.resetSystem();
+}
+const showTokenEffect = () => {
+  slotMachine.value.TokenParticle.resetSystem();
+}
+const showFoodEffect = () => {
+  slotMachine.value.FoodParticle.resetSystem();
+}
+
 const emit = defineEmits(["rollClick", "scriptCompleted", "claimEnergyClick", "loaded"]);
 defineExpose({
   roll,
@@ -214,7 +228,11 @@ defineExpose({
   setJackpotVisible,
   setButtonCloseVisible,
   rollJackpot,
-  setVolume
+  setVolume,
+  flyEnergy,
+  showGoldEffect,
+  showTokenEffect,
+  showFoodEffect
 });
 </script>
 

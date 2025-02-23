@@ -80,12 +80,13 @@ const onRollClick = async (betX) => {
     userStore.userData.energy = user.energy;
     currentRewards.value = rewards;
 
-    refSlotMachine.value.roll(playScripts);
+    await refSlotMachine.value.roll(playScripts);
   } catch (error) {
     console.log("error", error);
   } finally {
-    enable.value = true;
   }
+
+  enable.value = true;
 };
 
 const onScriptCompleted = async (script) => {
@@ -119,7 +120,15 @@ const processRewards = async (rewards) => {
   //   }
   // }
 
+  for(const r of rewards) {
+    if (r.type == "GOLD") refSlotMachine.value.showGoldEffect();
+    if (r.type == "FOOD") refSlotMachine.value.showFoodEffect();
+    if (r.type == "TOKEN") refSlotMachine.value.showTokenEffect();
+  }
+
   gameStore.handleRewards(rewards);
+
+  
 
   await refSlotMachine.value.rollNextStep();
   return true;
@@ -136,11 +145,15 @@ const onClaimEnergyClick = async (e) => {
   try {
     enable.value = false;
 
+    let oldEnergy = userStore.userData.energy;
+
     const { energy: newEnergy, lastClaimed: newClaimEnergyAt } =
       await claimEnergy();
 
     userStore.userData.claimEnergyAt = newClaimEnergyAt;
     userStore.userData.energy = newEnergy;
+
+    refSlotMachine.value.flyEnergy(newEnergy - oldEnergy);
   } catch (error) {
     console.log("error", error);
   }

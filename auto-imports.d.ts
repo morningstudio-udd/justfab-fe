@@ -180,6 +180,7 @@ declare global {
   const refreshToken: typeof import('./src/api/auth.js')['refreshToken']
   const regexValidator: typeof import('./src/utils/validators.js')['regexValidator']
   const registerPlugins: typeof import('./src/utils/plugins.js')['registerPlugins']
+  const removeClassAfter: typeof import('./src/utils/helpers.js')['removeClassAfter']
   const removeItemFromInventory: typeof import('./src/api/game.js')['removeItemFromInventory']
   const requiredValidator: typeof import('./src/utils/validators.js')['requiredValidator']
   const resolveComponent: typeof import('vue')['resolveComponent']

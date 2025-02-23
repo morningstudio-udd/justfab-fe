@@ -4,12 +4,8 @@ import { getLoginURL } from "@/utils/FPClient";
 
 const walletAddress = ref(null);
 
-const connectWallet = async () => {
-  toggleClass(
-    $event,
-    "tw-animate-jump tw-animate-once tw-animate-ease-linear tw-animate-duration-[100ms]",
-    100
-  );
+const connectWallet = async ($event) => {
+  handleNormalClickAnimation($event);
 
   const url = await getLoginURL();
   console.log(url);

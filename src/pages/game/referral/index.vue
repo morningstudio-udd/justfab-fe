@@ -66,11 +66,7 @@ onMounted(async () => {
 });
 
 const submitInvite = ($event) => {
-  toggleClass(
-    $event,
-    "tw-animate-jump tw-animate-once tw-animate-ease-linear tw-animate-duration-[100ms]",
-    100
-  );
+  handleNormalClickAnimation($event);
   inviteDialogRef.value.openDialog();
 };
 

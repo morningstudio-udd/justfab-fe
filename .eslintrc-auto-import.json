@@ -419,6 +419,7 @@
     "claimDailyReward": true,
     "getDailyReward": true,
     "toggleClass": true,
-    "handleNormalClickAnimation": true
+    "handleNormalClickAnimation": true,
+    "removeClassAfter": true
   }
 }

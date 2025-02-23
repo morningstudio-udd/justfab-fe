@@ -156,9 +156,5 @@ export const toggleClass = (event, classes, ms = null) => {
 };
 
 export const handleNormalClickAnimation = (event) => {
-  toggleClass(
-    event,
-    "tw-animate-shake tw-animate-twice tw-animate-ease-out tw-animate-duration-100 tw-animate-ease-linear tw-animate-fill-both",
-    100
-  );
+  toggleClass(event, "heartbeat", 1500);
 };

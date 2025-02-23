@@ -123,12 +123,14 @@ const doTask = async (task) => {
   }
 };
 
-const submitNetwork = () => {
+const submitNetwork = ($event) => {
   console.log("submitNetwork");
+  handleNormalClickAnimation($event);
 };
 
-const submitFriend = () => {
+const submitFriend = ($event) => {
   console.log("submitFriend");
+  handleNormalClickAnimation($event);
 };
 
 const submitFab = ($event) => {
@@ -184,7 +186,7 @@ const isYesterday = (lastClaimedAt) => {
       <!-- </div> -->
 
       <div
-        class="rewards-container tw-w-full tw-aspect-[1080/580] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-grid tw-grid-cols-7 tw-grid-rows-2 tw-pl-[8.5%] tw-pr-[9.2%] tw-py-[2.5%] tw-gap-x-[4%] tw-gap-y-[8%] tw-animate-rotate-x tw-animate-duration-1000 tw-animate-ease-out"
+        class="rewards-container tw-w-full tw-aspect-[1080/580] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-grid tw-grid-cols-7 tw-grid-rows-2 tw-pl-[8.5%] tw-pr-[9.2%] tw-py-[2.5%] tw-gap-x-[4%] tw-gap-y-[8%] slide-in-elliptic-top-fwd"
         :style="{ backgroundImage: `url(${bgGifts})` }"
       >
         <div
@@ -329,7 +331,7 @@ const isYesterday = (lastClaimedAt) => {
               <v-btn
                 color="transparent"
                 flat
-                class="tw-aspect-[220/97] tw-w-[24.2%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden jump-in-anim"
+                class="tw-aspect-[220/97] tw-w-[24.2%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden"
                 :style="{
                   backgroundImage: `url(${btnFab})`,
                 }"
@@ -339,7 +341,7 @@ const isYesterday = (lastClaimedAt) => {
               <v-btn
                 color="transparent"
                 flat
-                class="tw-aspect-[318/97] tw-w-[35.1%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden jump-in-anim"
+                class="tw-aspect-[318/97] tw-w-[35.1%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden"
                 :style="{ backgroundImage: `url(${btnNetwork})` }"
                 @click="submitNetwork"
               ></v-btn>
@@ -347,7 +349,7 @@ const isYesterday = (lastClaimedAt) => {
               <v-btn
                 color="transparent"
                 flat
-                class="tw-aspect-[220/97] tw-w-[24.2%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden jump-in-anim"
+                class="tw-aspect-[220/97] tw-w-[24.2%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden"
                 :style="{ backgroundImage: `url(${btnFriend})` }"
                 @click="submitFriend"
               ></v-btn>

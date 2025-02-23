@@ -32,20 +32,12 @@ const closeDialog = () => {
 };
 
 const submitCopyInvite = ($event) => {
-  toggleClass(
-    $event,
-    "tw-animate-jump tw-animate-once tw-animate-ease-linear tw-animate-duration-[100ms]",
-    100
-  );
+  handleNormalClickAnimation($event);
   copyToClipboard(inviteLink.value);
 };
 
 const submitShareInvite = async ($event) => {
-  toggleClass(
-    $event,
-    "tw-animate-jump tw-animate-once tw-animate-ease-linear tw-animate-duration-[100ms]",
-    100
-  );
+  handleNormalClickAnimation($event);
   if (navigator.share) {
     // If Web Share API is available, open the native share dialog
     try {

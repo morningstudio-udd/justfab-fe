@@ -113,7 +113,7 @@ const submitMerge = () => {
           class="tw-h-full tw-grid tw-grid-cols-4 tw-grid-rows-3 tw-gap-x-[4%] tw-gap-y-[6%]"
         >
           <div
-            class="tw-aspect-square tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
+            class="tw-aspect-square tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center roll-in-left"
             :style="{ backgroundImage: `url(${slot1})` }"
           ></div>
           <div class="tw-col-span-2 tw-row-span-3">
@@ -123,28 +123,28 @@ const submitMerge = () => {
             ></div>
 
             <div
-              class="tw-aspect-[371/417] tw-w-full -tw-ml-[8%] tw-mt-[13%] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
+              class="tw-aspect-[371/417] tw-w-full -tw-ml-[8%] tw-mt-[13%] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center bounce-in-top"
               :style="{ backgroundImage: `url(${kapybara})` }"
             ></div>
           </div>
           <div
-            class="tw-aspect-square tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
+            class="tw-aspect-square tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center roll-in-right"
             :style="{ backgroundImage: `url(${slot2})` }"
           ></div>
           <div
-            class="tw-aspect-square tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
+            class="tw-aspect-square tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center roll-in-left"
             :style="{ backgroundImage: `url(${slot3})` }"
           ></div>
           <div
-            class="tw-aspect-square tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
+            class="tw-aspect-square tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center roll-in-right"
             :style="{ backgroundImage: `url(${slot4})` }"
           ></div>
           <div
-            class="tw-aspect-square tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
+            class="tw-aspect-square tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center roll-in-left"
             :style="{ backgroundImage: `url(${slot5})` }"
           ></div>
           <div
-            class="tw-aspect-square tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
+            class="tw-aspect-square tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center roll-in-right"
             :style="{ backgroundImage: `url(${slot6})` }"
           ></div>
         </div>

@@ -12,6 +12,8 @@ const goldSvgRef = ref(null);
 const coinSvgRef = ref(null);
 const nameSvgRef = ref(null);
 const expSvgRef = ref(null);
+const updatingGold = ref(false);
+const updatingToken = ref(false);
 
 const displayName = computed(() =>
   truncateString(userStore.userData?.displayName)
@@ -19,8 +21,20 @@ const displayName = computed(() =>
 
 watch(
   () => userStore.userData?.gold,
-  (newGold, oldGold) => {
+  async (newGold, oldGold) => {
     if (newGold !== oldGold) {
+      if (updatingGold.value) {
+        updatingGold.value = false;
+
+        await nextTick();
+      }
+
+      updatingGold.value = true;
+
+      await delay(1000);
+
+      updatingGold.value = false;
+
       animateCounter(oldGold, newGold, 1000, (currentValue) => {
         currentGold.value = currentValue;
       });
@@ -30,10 +44,20 @@ watch(
 
 watch(
   () => userStore.userData?.token,
-  (newCoin, oldCoin) => {
-    console.log("newCoin, oldCoin", newCoin, oldCoin);
+  async (newCoin, oldCoin) => {
     if (newCoin !== oldCoin) {
-      console.log("newCoin !== oldCoin");
+      if (updatingToken.value) {
+        updatingToken.value = false;
+
+        await nextTick();
+      }
+
+      updatingToken.value = true;
+
+      await delay(1000);
+
+      updatingToken.value = false;
+
       animateCounter(oldCoin, newCoin, 1000, (currentValue) => {
         currentCoin.value = currentValue;
       });
@@ -125,6 +149,7 @@ watch(
           viewBox="0 0 68 23"
           xmlns="http://www.w3.org/2000/svg"
           class="tw-w-full tw-h-full"
+          :class="{ 'jello-horizontal': updatingGold }"
           ref="goldSvgRef"
         >
           <text
@@ -159,6 +184,7 @@ watch(
           viewBox="0 0 68 25"
           xmlns="http://www.w3.org/2000/svg"
           class="tw-w-full tw-h-full"
+          :class="{ 'jello-horizontal': updatingToken }"
           ref="coinSvgRef"
         >
           <text

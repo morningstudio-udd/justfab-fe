@@ -70,10 +70,10 @@ defineExpose({ openDialog, resultDialog, closeDialog });
         >
           <div
             class="tw-aspect-[349/194] tw-w-[50.8%] tw-mb-[10%]"
-            v-if="currentItem?.item?.photoUrl"
+            v-if="currentItem?.item?.item?.photoUrl"
           >
             <v-img
-              :src="srcAsset(currentItem?.item?.photoUrl)"
+              :src="srcAsset(currentItem?.item?.item?.photoUrl)"
               width="100%"
               class=""
             />

@@ -60,6 +60,9 @@ export const useGameStore = defineStore("game", () => {
           console.log("Reward: ", REWARD_TYPES.ENERGY);
           userStore.userData.energy += reward.value;
           break;
+        case REWARD_TYPES.POOL_PERCENTAGE:
+          emitter.emit("show-reward", reward);
+          break;
         default:
           console.warn(`Unknown reward type: ${reward.type}`);
           break;

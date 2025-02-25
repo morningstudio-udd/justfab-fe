@@ -39,15 +39,25 @@ const bottomValue = computed(() => {
   return `${parentDivWidth.value / (1080 / 170)}px`;
 });
 
-onMounted(async () => {
-  if (gameContentRef.value) {
-    resizeObserver = new ResizeObserver((entries) => {
-      for (let entry of entries) {
-        parentDivWidth.value = entry.contentRect.width;
-      }
-    });
+const { observe } = useMixin();
 
-    resizeObserver.observe(gameContentRef.value);
+const handleResize = (newWidth) => {
+  parentDivWidth.value = newWidth;
+};
+
+onMounted(async () => {
+  // if (gameContentRef.value) {
+  //   resizeObserver = new ResizeObserver((entries) => {
+  //     for (let entry of entries) {
+  //       parentDivWidth.value = entry.contentRect.width;
+  //     }
+  //   });
+
+  //   resizeObserver.observe(gameContentRef.value);
+  // }
+
+  if (gameContentRef.value) {
+    observe(gameContentRef.value, handleResize);
   }
 
   const p1 = getUserInfo();
@@ -62,10 +72,10 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  if (resizeObserver && gameContentRef.value) {
-    resizeObserver.unobserve(gameContentRef.value);
-    resizeObserver.disconnect();
-  }
+  // if (resizeObserver && gameContentRef.value) {
+  //   resizeObserver.unobserve(gameContentRef.value);
+  //   resizeObserver.disconnect();
+  // }
 
   emitter.off("reset-rewards-state");
 });
@@ -120,7 +130,7 @@ const processRewards = async (rewards) => {
   //   }
   // }
 
-  for(const r of rewards) {
+  for (const r of rewards) {
     if (r.type == "GOLD") refSlotMachine.value.showGoldEffect();
     if (r.type == "FOOD") refSlotMachine.value.showFoodEffect();
     if (r.type == "TOKEN") refSlotMachine.value.showTokenEffect();
@@ -128,17 +138,15 @@ const processRewards = async (rewards) => {
 
   gameStore.handleRewards(rewards);
 
-  
-
   await refSlotMachine.value.rollNextStep();
   return true;
 };
 
 onBeforeUnmount(() => {
-  if (resizeObserver && gameContentRef.value) {
-    resizeObserver.unobserve(gameContentRef.value);
-    resizeObserver.disconnect();
-  }
+  // if (resizeObserver && gameContentRef.value) {
+  //   resizeObserver.unobserve(gameContentRef.value);
+  //   resizeObserver.disconnect();
+  // }
 });
 
 const onClaimEnergyClick = async (e) => {

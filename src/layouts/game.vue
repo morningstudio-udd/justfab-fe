@@ -32,6 +32,13 @@ const fontSizeBase = computed(() => gameStore.baseFontSize);
 const resultItemDialogRef = computed(() => gameStore.resultItemDialogRef);
 // const resultItemDialogWidth = computed(() => containerDivWidth.value * 0.79);
 
+const { observe } = useMixin(); // Sử dụng lại observe từ mixin
+
+const handleResize = (newWidth) => {
+  containerDivWidth.value = newWidth;
+  resultItemDialogWidth.value = newWidth * 0.79;
+};
+
 onMounted(() => {
   gameStore.setLoading(true);
 
@@ -49,15 +56,18 @@ onMounted(() => {
   gameStore.gameContainer = gameContainerRef.value;
   gameStore.baseFontSize = gameStore.setResponsiveFont();
   if (gameContainerRef.value) {
-    resizeObserver = new ResizeObserver((entries) => {
-      for (let entry of entries) {
-        containerDivWidth.value = entry.contentRect.width;
-        resultItemDialogWidth.value = containerDivWidth.value * 0.79;
-      }
-    });
-
-    resizeObserver.observe(gameContainerRef.value);
+    observe(gameContainerRef.value, handleResize);
   }
+  // if (gameContainerRef.value) {
+  //   resizeObserver = new ResizeObserver((entries) => {
+  //     for (let entry of entries) {
+  //       containerDivWidth.value = entry.contentRect.width;
+  //       resultItemDialogWidth.value = containerDivWidth.value * 0.79;
+  //     }
+  //   });
+
+  //   resizeObserver.observe(gameContainerRef.value);
+  // }
 
   gameStore.setLoading(false);
 });
@@ -65,22 +75,7 @@ onMounted(() => {
 onUnmounted(() => {
   stopClaiming();
   document.removeEventListener("visibilitychange", stopClaiming);
-
-  // if (resizeObserver) {
-  //   resizeObserver.disconnect();
-  // }
 });
-
-// const updateViewportHeight = (payload) => {
-//   viewportHeight.value = payload.height;
-
-//   safeArea.value = {
-//     top: viewportContentSafeAreaInsetTop(),
-//     top2: viewportSafeAreaInsetTop(),
-//   };
-
-//   console.log(safeArea.value);
-// };
 
 const executeClaimRewards = async () => {
   if (isClaimingRewards.value) return;

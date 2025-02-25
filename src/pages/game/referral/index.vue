@@ -50,17 +50,25 @@ const invitedSvgRef = ref(null);
 const recruited = ref(0);
 
 let resizeObserver;
+const { observe } = useMixin(); // Lấy hàm observe từ mixin
+
+const handleResize = (newWidth) => {
+  parentDivWidth.value = newWidth;
+};
 
 onMounted(async () => {
   if (gameContentRef.value) {
-    resizeObserver = new ResizeObserver((entries) => {
-      for (let entry of entries) {
-        parentDivWidth.value = entry.contentRect.width;
-      }
-    });
-
-    resizeObserver.observe(gameContentRef.value);
+    observe(gameContentRef.value, handleResize);
   }
+  // if (gameContentRef.value) {
+  //   resizeObserver = new ResizeObserver((entries) => {
+  //     for (let entry of entries) {
+  //       parentDivWidth.value = entry.contentRect.width;
+  //     }
+  //   });
+
+  //   resizeObserver.observe(gameContentRef.value);
+  // }
 
   await getRecruited();
 });
@@ -75,10 +83,10 @@ const submitClaimInvited = () => {
 };
 
 onBeforeUnmount(() => {
-  if (resizeObserver && gameContentRef.value) {
-    resizeObserver.unobserve(gameContentRef.value);
-    resizeObserver.disconnect();
-  }
+  // if (resizeObserver && gameContentRef.value) {
+  //   resizeObserver.unobserve(gameContentRef.value);
+  //   resizeObserver.disconnect();
+  // }
 });
 
 const getRecruited = async () => {

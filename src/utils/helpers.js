@@ -158,3 +158,34 @@ export const toggleClass = (event, classes, ms = null) => {
 export const handleNormalClickAnimation = (event) => {
   toggleClass(event, "heartbeat", 1500);
 };
+
+/**
+ * Promise based setTimeout
+ *
+ * @param {*} ms
+ * @returns
+ */
+export const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/**
+ *
+ * Select all text in a input
+ *
+ * @param {*} target
+ */
+export const selectAllText = (target) => {
+  console.log(target);
+  nextTick(() => {
+    const textareaElement = target;
+    if (textareaElement) {
+      textareaElement.focus();
+      textareaElement.select();
+    }
+  });
+};
+
+export const srcAsset = (asset) => {
+  return asset
+    ? import.meta.env.VITE_ASSET_URL + "/" + asset
+    : "https://via.placeholder.com/150";
+};

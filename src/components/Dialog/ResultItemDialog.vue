@@ -3,6 +3,7 @@ import bgPopup from "@images/game/bg-popup.png";
 import energy from "@images/game/energy.svg";
 import btnClaim from "@images/game/btn-claim.svg";
 import { emitter } from "@plugins/mitt";
+import voucher from "@images/game/voucher.png";
 
 const props = defineProps({
   width: {
@@ -68,6 +69,13 @@ defineExpose({ openDialog, resultDialog, closeDialog });
         <div
           class="tw-flex tw-flex-col tw-justify-center tw-items-center tw-h-full"
         >
+          <div
+            class="tw-aspect-[349/194] tw-w-[50.8%] tw-mb-[10%]"
+            v-if="currentItem?.type === REWARD_TYPES.POOL_PERCENTAGE"
+          >
+            <v-img :src="voucher" width="100%" class="" />
+          </div>
+
           <div
             class="tw-aspect-[349/194] tw-w-[50.8%] tw-mb-[10%]"
             v-if="currentItem?.item?.item?.photoUrl"

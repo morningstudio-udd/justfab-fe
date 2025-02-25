@@ -18,7 +18,6 @@ import iconCheckedIn from "@images/game/icon-checked-in.png";
 // import { openLink } from "@telegram-apps/sdk";
 import { openLink, openPopup, openTelegramLink } from "@telegram-apps/sdk-vue";
 import moment from "moment";
-import { delay } from "@/utils/mixin";
 
 definePage({
   meta: {
@@ -331,7 +330,7 @@ const isYesterday = (lastClaimedAt) => {
               <v-btn
                 color="transparent"
                 flat
-                class="tw-aspect-[220/97] tw-w-[24.2%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden"
+                class="tw-aspect-[220/97] tw-w-[24.2%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden disable-element"
                 :style="{
                   backgroundImage: `url(${btnFab})`,
                 }"
@@ -341,7 +340,7 @@ const isYesterday = (lastClaimedAt) => {
               <v-btn
                 color="transparent"
                 flat
-                class="tw-aspect-[318/97] tw-w-[35.1%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden"
+                class="tw-aspect-[318/97] tw-w-[35.1%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden disable-element"
                 :style="{ backgroundImage: `url(${btnNetwork})` }"
                 @click="submitNetwork"
               ></v-btn>
@@ -349,7 +348,7 @@ const isYesterday = (lastClaimedAt) => {
               <v-btn
                 color="transparent"
                 flat
-                class="tw-aspect-[220/97] tw-w-[24.2%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden"
+                class="tw-aspect-[220/97] tw-w-[24.2%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden disable-element"
                 :style="{ backgroundImage: `url(${btnFriend})` }"
                 @click="submitFriend"
               ></v-btn>

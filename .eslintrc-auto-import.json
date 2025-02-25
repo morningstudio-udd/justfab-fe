@@ -420,6 +420,7 @@
     "getDailyReward": true,
     "toggleClass": true,
     "handleNormalClickAnimation": true,
-    "removeClassAfter": true
+    "removeClassAfter": true,
+    "useMixin": true
   }
 }

@@ -20,6 +20,9 @@ import slot4 from "@images/game/slot-4.png";
 import slot5 from "@images/game/slot-5.png";
 import slot6 from "@images/game/slot-6.png";
 import food from "@images/game/food.svg";
+import voucher from "@images/game/voucher.png";
+import rarityMythic from "@images/game/rarity-mythic.png";
+import { watch } from "vue";
 
 definePage({
   meta: {
@@ -30,7 +33,7 @@ definePage({
   },
 });
 
-let resizeObserver;
+let resizeObserver = null;
 
 const route = useRoute();
 const userStore = useUserStore();
@@ -44,6 +47,13 @@ const foodBarSvgRef = ref();
 const itemsContainerRef = ref();
 const itemsContainerWidth = ref(0);
 const itemsContainerHeight = ref(0);
+const voucherSvgRef = ref();
+const unclaimRewards = ref([]);
+// const itemsContainerGapX = ref(0);
+// const itemsContainerGapY = ref(0);
+// const itemsContainerPaddingX = ref(0);
+// const itemsContainerPaddingY = ref(0);
+const lastHeight = ref(0);
 
 const userInventory = computed(() => inventoryData.value?.items);
 const fontSizeBase = computed(() => gameStore.baseFontSize);
@@ -59,27 +69,74 @@ const itemsContainerPaddingX = computed(() =>
 const itemsContainerPaddingY = computed(() =>
   Math.round(itemsContainerHeight.value * 0.1)
 );
+const hasPoolPercentage = computed(() => {
+  if (!unclaimRewards.value) return false;
+  return unclaimRewards.value.find(
+    (reward) => reward.reward.type === REWARD_TYPES.POOL_PERCENTAGE
+  );
+});
+
+// const updateSize = (entries) => {
+//   requestAnimationFrame(() => {
+//     for (let entry of entries) {
+//       const newWidth = Math.round(entry.contentRect.width);
+//       const newHeight = Math.round(entry.contentRect.height);
+
+//       if (
+//         newWidth !== itemsContainerWidth.value ||
+//         Math.abs(newHeight - lastHeight.value) > 5
+//       ) {
+//         itemsContainerWidth.value = newWidth;
+//         itemsContainerHeight.value = newHeight;
+//         lastHeight.value = newHeight;
+
+//         nextTick(() => {
+//           console.log(
+//             "Updated itemsContainerHeight:",
+//             itemsContainerHeight.value
+//           );
+//         });
+//       }
+//     }
+//   });
+// };
+
+const { observe } = useMixin();
+
+const handleResize = (newWidth, newHeight) => {
+  if (
+    newWidth !== itemsContainerWidth.value ||
+    Math.abs(newHeight - lastHeight.value) > 5
+  ) {
+    itemsContainerWidth.value = newWidth;
+    itemsContainerHeight.value = newHeight;
+    lastHeight.value = newHeight;
+  }
+};
 
 onMounted(async () => {
+  // if (itemsContainerRef.value) {
+  //   resizeObserver = new ResizeObserver(updateSize);
+  //   resizeObserver.observe(itemsContainerRef.value);
+  // }
   if (itemsContainerRef.value) {
-    resizeObserver = new ResizeObserver((entries) => {
-      for (let entry of entries) {
-        itemsContainerWidth.value = entry.contentRect.width;
-        itemsContainerHeight.value = entry.contentRect.height;
-      }
-    });
-
-    resizeObserver.observe(itemsContainerRef.value);
+    observe(itemsContainerRef.value, handleResize);
   }
 
-  if (authStore.isLoggedIn) {
-    const p1 = getInventory();
+  const p1 = getInventory();
 
-    const p2 = getUserInfo();
+  const p2 = getUserInfo();
 
-    await Promise.all([p1, p2]);
-  }
+  const p3 = getUnclaim();
+
+  await Promise.all([p1, p2, p3]);
 });
+
+// onUnmounted(() => {
+//   if (resizeObserver) {
+//     resizeObserver.disconnect();
+//   }
+// });
 
 const getInventory = async () => {
   try {
@@ -87,8 +144,15 @@ const getInventory = async () => {
     inventoryData.value = response;
   } catch (error) {
     console.error(error);
-  } finally {
-    loading.value = false;
+  }
+};
+
+const getUnclaim = async () => {
+  try {
+    const response = await getUnclaimedRewards();
+    unclaimRewards.value = response;
+  } catch (error) {
+    console.error(error);
   }
 };
 
@@ -176,17 +240,23 @@ const submitMerge = () => {
         class="tw-w-full tw-aspect-[1080/100] tw-flex tw-justify-center tw-items-center"
       >
         <div
-          class="tw-aspect-[282/116] tw-w-[26%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md"
+          class="tw-aspect-[282/116] tw-w-[26%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md disable-element tw-flex tw-justify-center tw-items-center tw-pt-[2%] tw-pl-[2%]"
           :style="{ backgroundImage: `url(${hpIndex})` }"
-        ></div>
+        >
+          ???
+        </div>
         <div
-          class="tw-aspect-[282/116] tw-w-[26%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md"
+          class="tw-aspect-[282/116] tw-w-[26%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md disable-element tw-flex tw-justify-center tw-items-center tw-pt-[2%] tw-pl-[2%]"
           :style="{ backgroundImage: `url(${defenseIndex})` }"
-        ></div>
+        >
+          ???
+        </div>
         <div
-          class="tw-aspect-[284/116] tw-w-[26%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md"
+          class="tw-aspect-[284/116] tw-w-[26%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md disable-element tw-flex tw-justify-center tw-items-center tw-pt-[2%] tw-pl-[2%]"
           :style="{ backgroundImage: `url(${attackIndex})` }"
-        ></div>
+        >
+          ???
+        </div>
       </div>
 
       <div
@@ -195,7 +265,7 @@ const submitMerge = () => {
         <v-btn
           flat
           color="transparent"
-          class="tw-aspect-[213/76] tw-w-[21.4%] !tw-h-auto tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative tw-rounded-md"
+          class="tw-aspect-[213/76] tw-w-[21.4%] !tw-h-auto tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative tw-rounded-md disable-element"
           :style="{ backgroundImage: `url(${btnByQuality})` }"
           @click.stop="submitByQuality"
         ></v-btn>
@@ -203,7 +273,7 @@ const submitMerge = () => {
         <v-btn
           flat
           color="transparent"
-          class="tw-aspect-[214/76] tw-w-[21.5%] !tw-h-auto tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative tw-rounded-md"
+          class="tw-aspect-[214/76] tw-w-[21.5%] !tw-h-auto tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative tw-rounded-md disable-element"
           :style="{ backgroundImage: `url(${btnMerge})` }"
           @click.stop="submitMerge"
         ></v-btn>
@@ -220,6 +290,10 @@ const submitMerge = () => {
         'padding-right': `${itemsContainerPaddingX}px`,
       }"
     >
+      <!-- <div
+      ref="itemsContainerRef"
+      class="tw-bg-[#23212e] tw-aspect-[1080/420] tw-flex-auto tw-w-full tw-max-w-screen tw-box-border tw-overflow-y-scroll tw-px-[5%]"
+    > -->
       <div
         class="tw-grid tw-grid-cols-4"
         :style="{
@@ -247,7 +321,7 @@ const submitMerge = () => {
               font-family="DynaPuff"
               :font-size="`${gameStore.setFontSizeBasedOnViewBox(
                 foodSvgRef,
-                20
+                15
               )}px`"
               font-weight="700"
               fill="#fff"
@@ -260,6 +334,44 @@ const submitMerge = () => {
               width="100%"
             >
               {{ userStore.userData?.food || 0 }}
+            </text>
+          </svg>
+        </div>
+
+        <div
+          class="tw-aspect-[178/178] tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
+          :style="{ backgroundImage: `url(${rarityMythic})` }"
+          v-if="hasPoolPercentage"
+        >
+          <v-img :src="voucher" class="!tw-max-w-[70%] tw-w-full tw-h-auto" />
+
+          <svg
+            viewBox="0 0 50 50"
+            xmlns="http://www.w3.org/2000/svg"
+            class="tw-w-full tw-h-full tw-absolute"
+            ref="voucherSvgRef"
+          >
+            <text
+              x="80%"
+              y="75%"
+              dominant-baseline="middle"
+              text-anchor="end"
+              font-family="DynaPuff"
+              :font-size="`${gameStore.setFontSizeBasedOnViewBox(
+                voucherSvgRef,
+                15
+              )}px`"
+              font-weight="700"
+              fill="#fff"
+              stroke="#000000"
+              stroke-width="1.5"
+              paint-order="stroke fill"
+              text-overflow="ellipsis"
+              white-space="nowrap"
+              overflow="hidden"
+              width="100%"
+            >
+              0.001%
             </text>
           </svg>
         </div>
@@ -298,9 +410,9 @@ const submitMerge = () => {
         color="#91F8FD"
         bg-color="#000"
         bg-opacity="0.6"
-        model-value="50"
+        model-value="100"
         rounded="0"
-        class="foodbar !tw-h-[60%]"
+        class="foodbar !tw-h-[60%] disable-element"
       >
         <svg
           viewBox="0 0 80 40"
@@ -328,7 +440,7 @@ const submitMerge = () => {
             overflow="hidden"
             width="100%"
           >
-            5/10
+            ???
           </text>
         </svg>
       </v-progress-linear>
@@ -336,7 +448,7 @@ const submitMerge = () => {
       <v-btn
         flat
         color="transparent"
-        class="tw-aspect-[179/100] tw-w-[19%] !tw-h-auto tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%]"
+        class="tw-aspect-[179/100] tw-w-[19%] !tw-h-auto tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] disable-element"
         :style="{ backgroundImage: `url(${btnFeed})` }"
       ></v-btn>
     </div>

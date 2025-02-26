@@ -1,7 +1,7 @@
 <script setup>
 import gameBg from "@images/game/bg-game-2.png";
 import inputDailyTask from "@images/game/input-daily-task.png";
-import btnFab from "@images/game/btn-fab.png";
+import btnSegment from "@images/game/btn-segment.png";
 import btnNetwork from "@images/game/btn-network.png";
 import btnFriend from "@images/game/btn-friend.png";
 import bgGifts from "@images/game/bg-gifts.png";
@@ -355,10 +355,7 @@ const isYesterday = (lastClaimedAt) => {
                   <v-btn
                     color="transparent"
                     flat
-                    class="tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden !tw-text-white"
-                    :style="{
-                      backgroundImage: `url(${btnFab})`,
-                    }"
+                    class="tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden !tw-text-white btn-segment"
                     @click="toggle"
                   >
                     {{ group.name }}
@@ -534,5 +531,16 @@ const isYesterday = (lastClaimedAt) => {
     text-transform: lowercase;
     font-variant: small-caps;
   }
+}
+
+.btn-segment {
+  border-image: url(/src/assets/images/game/btn-segment.png) 30;
+  background: #ff3333 !important;
+  height: 57px !important;
+  width: auto;
+  border-width: 20px;
+  padding: 0;
+  border-image-outset: 0px;
+  border-radius: 20px;
 }
 </style>

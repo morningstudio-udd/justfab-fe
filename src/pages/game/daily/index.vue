@@ -18,6 +18,7 @@ import iconCheckedIn from "@images/game/icon-checked-in.png";
 // import { openLink } from "@telegram-apps/sdk";
 import { openLink, openPopup, openTelegramLink } from "@telegram-apps/sdk-vue";
 import moment from "moment";
+import { computed } from "vue";
 
 definePage({
   meta: {
@@ -34,9 +35,20 @@ const allTaskGroup = ref([]);
 const userTasks = ref([]);
 const currentStreak = ref(0);
 const lastClaimedAt = ref(null);
+const currentGroupParent = ref(null);
 
 const currentIndex = computed(() => {
   return currentStreak.value > 0 ? (currentStreak.value % 7) + 1 : 1;
+});
+const groupsParent = computed(() => {
+  return allTaskGroup.value.filter(
+    (group) => !group.parent || group.parent === null
+  );
+});
+const currentGroups = computed(() => {
+  return allTaskGroup.value.filter(
+    (group) => group.parent === currentGroupParent.value
+  );
 });
 
 onMounted(async () => {
@@ -49,6 +61,8 @@ onMounted(async () => {
   });
 
   await Promise.all([p1, p2, p3, p4]);
+
+  currentGroupParent.value = groupsParent.value[0]._id;
 });
 
 const getTasks = async () => {
@@ -327,7 +341,40 @@ const isYesterday = (lastClaimedAt) => {
             <div
               class="tw-w-full tw-h-full tw-flex tw-justify-between tw-items-center"
             >
-              <v-btn
+              <v-item-group
+                class="tw-w-full tw-flex tw-justify-between tw-items-center"
+                selected-class="bg-primary"
+                v-model="currentGroupParent"
+              >
+                <v-item
+                  v-slot="{ isSelected, selectedClass, toggle }"
+                  v-for="group in groupsParent"
+                  :key="group._id"
+                  :value="group._id"
+                >
+                  <v-btn
+                    color="transparent"
+                    flat
+                    class="tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden !tw-text-white"
+                    :style="{
+                      backgroundImage: `url(${btnFab})`,
+                    }"
+                    @click="toggle"
+                  >
+                    {{ group.name }}
+                  </v-btn>
+                </v-item>
+              </v-item-group>
+              <!-- <v-btn
+                color="transparent"
+                flat
+                class="tw-aspect-[220/97] tw-w-[24.2%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden disable-element"
+                :style="{
+                  backgroundImage: `url(${btnFab})`,
+                }"
+                @click="submitFab($event)"
+              ></v-btn> -->
+              <!-- <v-btn
                 color="transparent"
                 flat
                 class="tw-aspect-[220/97] tw-w-[24.2%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden disable-element"
@@ -351,7 +398,7 @@ const isYesterday = (lastClaimedAt) => {
                 class="tw-aspect-[220/97] tw-w-[24.2%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden disable-element"
                 :style="{ backgroundImage: `url(${btnFriend})` }"
                 @click="submitFriend"
-              ></v-btn>
+              ></v-btn> -->
             </div>
           </div>
         </div>
@@ -366,7 +413,7 @@ const isYesterday = (lastClaimedAt) => {
             bg-color="transparent"
             v-if="allTasks.length"
           >
-            <template v-for="group in allTaskGroup" :key="group._id">
+            <template v-for="group in currentGroups" :key="group._id">
               <v-expansion-panel class="daily-task">
                 <v-expansion-panel-title
                   static

@@ -4,7 +4,12 @@ const modelValue = defineModel({
   event: "update:modelValue",
 });
 
-const props = defineProps({});
+const props = defineProps({
+  groupsParent: {
+    type: Object,
+    default: () => {},
+  },
+});
 
 const emit = defineEmits(["onSaveSuccess", "onCancel", "onDelete"]);
 
@@ -116,6 +121,7 @@ defineExpose({
       <v-card-text class="tw-flex tw-flex-col tw-gap-4 tw-h-full">
         <task-group-form
           v-model="modelValue"
+          :groupsParent="groupsParent"
           @update:modelValue="modelValue = $event"
           @onSave="saveTask"
           @onDelete="confirmDeleteDialog?.openDialog"

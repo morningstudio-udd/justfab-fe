@@ -60,7 +60,7 @@ declare global {
   const defineAsyncComponent: typeof import('vue')['defineAsyncComponent']
   const defineComponent: typeof import('vue')['defineComponent']
   const defineStore: typeof import('pinia')['defineStore']
-  const delay: typeof import('./src/utils/mixin.js')['delay']
+  const delay: typeof import('./src/utils/helpers.js')['delay']
   const deleteAsset: typeof import('./src/api/admin.js')['deleteAsset']
   const deleteFusion: typeof import('./src/api/admin.js')['deleteFusion']
   const deleteItem: typeof import('./src/api/admin.js')['deleteItem']
@@ -186,7 +186,7 @@ declare global {
   const resolveComponent: typeof import('vue')['resolveComponent']
   const resolveRef: typeof import('@vueuse/core')['resolveRef']
   const resolveUnref: typeof import('@vueuse/core')['resolveUnref']
-  const selectAllText: typeof import('./src/utils/mixin.js')['selectAllText']
+  const selectAllText: typeof import('./src/utils/helpers.js')['selectAllText']
   const setActivePinia: typeof import('pinia')['setActivePinia']
   const setJackpot: typeof import('./src/api/game.js')['setJackpot']
   const setMapStoreSuffix: typeof import('pinia')['setMapStoreSuffix']
@@ -194,7 +194,7 @@ declare global {
   const shallowReactive: typeof import('vue')['shallowReactive']
   const shallowReadonly: typeof import('vue')['shallowReadonly']
   const shallowRef: typeof import('vue')['shallowRef']
-  const srcAsset: typeof import('./src/utils/mixin.js')['srcAsset']
+  const srcAsset: typeof import('./src/utils/helpers.js')['srcAsset']
   const storeToRefs: typeof import('pinia')['storeToRefs']
   const stringToSlug: typeof import('./src/utils/helpers.js')['stringToSlug']
   const syncRef: typeof import('@vueuse/core')['syncRef']
@@ -314,6 +314,7 @@ declare global {
   const useMediaQuery: typeof import('@vueuse/core')['useMediaQuery']
   const useMemoize: typeof import('@vueuse/core')['useMemoize']
   const useMemory: typeof import('@vueuse/core')['useMemory']
+  const useMixin: typeof import('./src/utils/mixin.js')['useMixin']
   const useModel: typeof import('vue')['useModel']
   const useMounted: typeof import('@vueuse/core')['useMounted']
   const useMouse: typeof import('@vueuse/core')['useMouse']
@@ -479,7 +480,7 @@ declare module 'vue' {
     readonly defineAsyncComponent: UnwrapRef<typeof import('vue')['defineAsyncComponent']>
     readonly defineComponent: UnwrapRef<typeof import('vue')['defineComponent']>
     readonly defineStore: UnwrapRef<typeof import('pinia')['defineStore']>
-    readonly delay: UnwrapRef<typeof import('./src/utils/mixin.js')['delay']>
+    readonly delay: UnwrapRef<typeof import('./src/utils/helpers.js')['delay']>
     readonly deleteAsset: UnwrapRef<typeof import('./src/api/admin.js')['deleteAsset']>
     readonly deleteFusion: UnwrapRef<typeof import('./src/api/admin.js')['deleteFusion']>
     readonly deleteItem: UnwrapRef<typeof import('./src/api/admin.js')['deleteItem']>
@@ -570,7 +571,6 @@ declare module 'vue' {
     readonly onUnmounted: UnwrapRef<typeof import('vue')['onUnmounted']>
     readonly onUpdated: UnwrapRef<typeof import('vue')['onUpdated']>
     readonly onWatcherCleanup: UnwrapRef<typeof import('vue')['onWatcherCleanup']>
-    readonly paginationMeta: UnwrapRef<typeof import('./src/utils/mixin.js')['paginationMeta']>
     readonly parseJwt: UnwrapRef<typeof import('./src/utils/helpers.js')['parseJwt']>
     readonly passwordValidator: UnwrapRef<typeof import('./src/utils/validators.js')['passwordValidator']>
     readonly pausableWatch: UnwrapRef<typeof import('@vueuse/core')['pausableWatch']>
@@ -601,7 +601,7 @@ declare module 'vue' {
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
     readonly resolveRef: UnwrapRef<typeof import('@vueuse/core')['resolveRef']>
     readonly resolveUnref: UnwrapRef<typeof import('@vueuse/core')['resolveUnref']>
-    readonly selectAllText: UnwrapRef<typeof import('./src/utils/mixin.js')['selectAllText']>
+    readonly selectAllText: UnwrapRef<typeof import('./src/utils/helpers.js')['selectAllText']>
     readonly setActivePinia: UnwrapRef<typeof import('pinia')['setActivePinia']>
     readonly setJackpot: UnwrapRef<typeof import('./src/api/game.js')['setJackpot']>
     readonly setMapStoreSuffix: UnwrapRef<typeof import('pinia')['setMapStoreSuffix']>
@@ -609,7 +609,7 @@ declare module 'vue' {
     readonly shallowReactive: UnwrapRef<typeof import('vue')['shallowReactive']>
     readonly shallowReadonly: UnwrapRef<typeof import('vue')['shallowReadonly']>
     readonly shallowRef: UnwrapRef<typeof import('vue')['shallowRef']>
-    readonly srcAsset: UnwrapRef<typeof import('./src/utils/mixin.js')['srcAsset']>
+    readonly srcAsset: UnwrapRef<typeof import('./src/utils/helpers.js')['srcAsset']>
     readonly storeToRefs: UnwrapRef<typeof import('pinia')['storeToRefs']>
     readonly stringToSlug: UnwrapRef<typeof import('./src/utils/helpers.js')['stringToSlug']>
     readonly syncRef: UnwrapRef<typeof import('@vueuse/core')['syncRef']>
@@ -729,6 +729,7 @@ declare module 'vue' {
     readonly useMediaQuery: UnwrapRef<typeof import('@vueuse/core')['useMediaQuery']>
     readonly useMemoize: UnwrapRef<typeof import('@vueuse/core')['useMemoize']>
     readonly useMemory: UnwrapRef<typeof import('@vueuse/core')['useMemory']>
+    readonly useMixin: UnwrapRef<typeof import('./src/utils/mixin.js')['useMixin']>
     readonly useModel: UnwrapRef<typeof import('vue')['useModel']>
     readonly useMounted: UnwrapRef<typeof import('@vueuse/core')['useMounted']>
     readonly useMouse: UnwrapRef<typeof import('@vueuse/core')['useMouse']>

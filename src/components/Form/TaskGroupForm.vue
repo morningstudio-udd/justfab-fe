@@ -6,7 +6,12 @@ const modelValue = defineModel({
   event: "update:modelValue",
 });
 
-const props = defineProps({});
+const props = defineProps({
+  groupsParent: {
+    type: Object,
+    default: () => {},
+  },
+});
 
 const emit = defineEmits(["onSave", "onDelete"]);
 
@@ -72,6 +77,17 @@ watch(
           clearable
           hide-details="auto"
         /> -->
+
+        <v-select
+          v-model="currentTaskGroup.parent"
+          :items="groupsParent"
+          item-title="name"
+          item-value="_id"
+          :label="$t('Group')"
+          outlined
+          dense
+          hide-details="auto"
+        />
       </div>
       <div class="tw-flex tw-flex-wrap tw-mt-4 tw-gap-4 tw-justify-end">
         <v-btn color="primary" type="submit">

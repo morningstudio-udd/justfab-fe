@@ -25,6 +25,10 @@ const fuseDialogRef = ref(null);
 const allTasks = ref([]);
 const allTaskGroup = ref([]);
 
+const availableGroups = computed(() => {
+  return allTaskGroup.value.filter((group) => group.parent != null);
+});
+
 onMounted(async () => {
   const p1 = getTasks();
   const p2 = getTaskGroup();
@@ -124,7 +128,7 @@ const openFuseDialog = () => {
   <task-dialog
     ref="taskDialogRef"
     v-model="selectedTask"
-    :taskGroup="allTaskGroup"
+    :taskGroup="availableGroups"
     @onSaveSuccess="onSaveSuccess"
     @onDelete="onSaveSuccess"
     @onCancel="clearSelected"

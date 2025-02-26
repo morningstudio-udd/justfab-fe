@@ -63,3 +63,9 @@ img {
       clamp(16px, 5%, 16px);
   }
 }
+.disable-element {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter: grayscale(100%);
+}

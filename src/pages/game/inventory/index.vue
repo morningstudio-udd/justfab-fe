@@ -76,6 +76,11 @@ const hasPoolPercentage = computed(() => {
   );
 });
 
+watch([itemsContainerWidth, itemsContainerHeight], ([newWidth, newHeight]) => {
+  console.log("Updated itemsContainerHeight:", newHeight);
+  console.log("Updated itemsContainerWidth:", newWidth);
+});
+
 // const updateSize = (entries) => {
 //   requestAnimationFrame(() => {
 //     for (let entry of entries) {

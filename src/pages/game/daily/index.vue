@@ -18,7 +18,7 @@ import iconCheckedIn from "@images/game/icon-checked-in.png";
 // import { openLink } from "@telegram-apps/sdk";
 import { openLink, openPopup, openTelegramLink } from "@telegram-apps/sdk-vue";
 import moment from "moment";
-import { computed } from "vue";
+import { computed, nextTick } from "vue";
 
 definePage({
   meta: {
@@ -29,14 +29,17 @@ definePage({
   },
 });
 
+const gameStore = useGameStore();
+
 const isOpen = ref(false);
 const allTasks = ref([]);
 const allTaskGroup = ref([]);
 const userTasks = ref([]);
 const currentStreak = ref(0);
 const lastClaimedAt = ref(null);
-const currentGroupParent = ref(null);
+const currentGroupParent = ref();
 
+const fontSizeBase = computed(() => gameStore.baseFontSize);
 const currentIndex = computed(() => {
   return currentStreak.value > 0 ? (currentStreak.value % 7) + 1 : 1;
 });
@@ -61,6 +64,8 @@ onMounted(async () => {
   });
 
   await Promise.all([p1, p2, p3, p4]);
+
+  await nextTick();
 
   currentGroupParent.value = groupsParent.value[0]._id;
 });
@@ -152,6 +157,7 @@ const submitFab = ($event) => {
 };
 
 const handleDailyCheckIn = ($event) => {
+  console.log("handleDailyCheckIn");
   toggleClass(
     $event,
     "tw-animate-jump tw-animate-once tw-animate-ease-linear tw-animate-duration-[1000ms]",
@@ -211,7 +217,7 @@ const isYesterday = (lastClaimedAt) => {
               'checked-in': currentIndex > 1,
               'tw-cursor-pointer': canClaimDailyReward(1),
             }"
-            @click="canClaimDailyReward(2) ? handleDailyCheckIn($event) : null"
+            @click="canClaimDailyReward(1) ? handleDailyCheckIn($event) : null"
           >
             <div class="tw-aspect-[99/102] tw-w-1/2">
               <v-img :src="gift1" />
@@ -336,33 +342,36 @@ const isYesterday = (lastClaimedAt) => {
         class="tw-flex-auto tw-flex tw-flex-col tw-overflow-hidden tw-bg-[#c26828] tw-bg-[100%_auto] tw-bg-top tw-bg-no-repeat"
         :style="{ backgroundImage: `url(${bgBoxTask})` }"
       >
-        <div class="tw-w-full tw-aspect-[1080/157]">
-          <div class="tw-px-[8%] tw-w-full tw-h-full">
-            <div
-              class="tw-w-full tw-h-full tw-flex tw-justify-between tw-items-center"
+        <div
+          class="tw-w-full tw-flex-col tw-aspect-[1080/157] tw-flex tw-justify-center tw-items-center tw-px-[8%]"
+        >
+          <!-- <div class="tw-px-[8%] tw-w-full tw-h-full"> -->
+          <!-- <div
+            class="tw-w-full tw-h-full tw-flex tw-justify-between tw-items-center"
+          > -->
+          <v-item-group
+            class="tasks-root"
+            selected-class="heartbeat-infinite"
+            v-model="currentGroupParent"
+          >
+            <v-item
+              v-slot="{ isSelected, selectedClass, toggle }"
+              v-for="group in groupsParent"
+              :key="group._id"
+              :value="group._id"
             >
-              <v-item-group
-                class="tw-w-full tw-flex tw-justify-between tw-items-center"
-                selected-class="bg-primary"
-                v-model="currentGroupParent"
+              <v-btn
+                color="transparent"
+                flat
+                class="tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden !tw-text-white btn-segment !tw-h-full"
+                :class="selectedClass"
+                @click="toggle"
               >
-                <v-item
-                  v-slot="{ isSelected, selectedClass, toggle }"
-                  v-for="group in groupsParent"
-                  :key="group._id"
-                  :value="group._id"
-                >
-                  <v-btn
-                    color="transparent"
-                    flat
-                    class="tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden !tw-text-white btn-segment"
-                    @click="toggle"
-                  >
-                    {{ group.name }}
-                  </v-btn>
-                </v-item>
-              </v-item-group>
-              <!-- <v-btn
+                {{ group.name }}
+              </v-btn>
+            </v-item>
+          </v-item-group>
+          <!-- <v-btn
                 color="transparent"
                 flat
                 class="tw-aspect-[220/97] tw-w-[24.2%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden disable-element"
@@ -371,7 +380,7 @@ const isYesterday = (lastClaimedAt) => {
                 }"
                 @click="submitFab($event)"
               ></v-btn> -->
-              <!-- <v-btn
+          <!-- <v-btn
                 color="transparent"
                 flat
                 class="tw-aspect-[220/97] tw-w-[24.2%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden disable-element"
@@ -396,8 +405,8 @@ const isYesterday = (lastClaimedAt) => {
                 :style="{ backgroundImage: `url(${btnFriend})` }"
                 @click="submitFriend"
               ></v-btn> -->
-            </div>
-          </div>
+          <!-- </div> -->
+          <!-- </div> -->
         </div>
 
         <div
@@ -430,6 +439,10 @@ const isYesterday = (lastClaimedAt) => {
                       :title="task.title"
                       :subtitle="task.description"
                       @click="doTask(task)"
+                      :style="{
+                        fontSize: `${fontSizeBase}px !important`,
+                        '--base-font-size': `${fontSizeBase}px`,
+                      }"
                     >
                       <template #append>
                         <v-img
@@ -499,10 +512,18 @@ const isYesterday = (lastClaimedAt) => {
   .task-content {
     @apply tw-mx-[2%] tw-bg-[#FFF0C3]/60 !tw-border-[0.3vh] !tw-border-t-0 tw-border-solid tw-border-[#8D2E02] tw-rounded-b-[1em];
     /* border-width: 2%; */
-    font-size: clamp(0.625rem, 1.5vh, 2.125rem);
+    /* font-size: clamp(0.625rem, 1.5vh, 2.125rem); */
+    font-size: var(--base-font-size);
     .task {
       .v-list-item {
         @apply tw-p-0;
+        .v-list-item-title {
+          font-size: var(--base-font-size);
+        }
+        .v-list-item-subtitle {
+          font-size: var(--base-font-size) * 0.6;
+          line-height: normal;
+        }
       }
     }
   }
@@ -536,11 +557,23 @@ const isYesterday = (lastClaimedAt) => {
 .btn-segment {
   border-image: url(/src/assets/images/game/btn-segment.png) 30;
   background: #ff3333 !important;
-  height: 57px !important;
+  /* height: 57px !important; */
   width: auto;
   border-width: 20px;
   padding: 0;
   border-image-outset: 0px;
   border-radius: 20px;
+  .v-btn\_\_content {
+    font-size: var(--base-font-size);
+  }
+}
+
+.tasks-root {
+  @apply tw-w-full tw-flex tw-justify-between tw-items-center tw-h-[60%] tw-gap-[2%] tw-overflow-x-auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 </style>

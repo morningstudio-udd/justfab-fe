@@ -4,6 +4,7 @@ import energy from "@images/game/energy.svg";
 import btnClaim from "@images/game/btn-claim.svg";
 import { emitter } from "@plugins/mitt";
 import voucher from "@images/game/voucher.png";
+import rarityMythic from "@images/game/rarity-mythic.png";
 
 const props = defineProps({
   width: {
@@ -12,9 +13,12 @@ const props = defineProps({
   },
 });
 
+const gameStore = useGameStore();
+
 const resultDialog = ref(false);
 const currentItem = ref(null);
 
+const fontSizeBase = computed(() => gameStore.baseFontSize);
 const widthDialog = computed(() => `${props.width}px`);
 
 const emit = defineEmits(["onConfirm", "onClose"]);
@@ -70,21 +74,35 @@ defineExpose({ openDialog, resultDialog, closeDialog });
           class="tw-flex tw-flex-col tw-justify-center tw-items-center tw-h-full"
         >
           <div
-            class="tw-aspect-[349/194] tw-w-[50.8%] tw-mb-[10%]"
+            class="tw-aspect-[178/178] tw-w-[45%] tw-mb-[3%] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
+            :style="{ backgroundImage: `url(${rarityMythic})` }"
             v-if="currentItem?.type === REWARD_TYPES.POOL_PERCENTAGE"
           >
-            <v-img :src="voucher" width="100%" class="" />
+            <v-img :src="voucher" class="!tw-max-w-[75%] tw-w-full tw-h-auto" />
           </div>
 
           <div
-            class="tw-aspect-[349/194] tw-w-[50.8%] tw-mb-[10%]"
             v-if="currentItem?.item?.item?.photoUrl"
+            class="tw-aspect-[178/178] tw-w-[45%] tw-mb-[3%] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
+            :style="{
+              backgroundImage: `url(${
+                ITEM_RARITIES[currentItem?.item.item?.rarity].background
+              })`,
+            }"
           >
             <v-img
               :src="srcAsset(currentItem?.item?.item?.photoUrl)"
-              width="100%"
-              class=""
+              class="!tw-max-w-[75%] tw-w-full tw-h-auto"
             />
+          </div>
+
+          <div
+            class="tw-font-[DynaPuff] tw-mb-[10%]"
+            :style="{
+              fontSize: `${fontSizeBase * 1.2}px`,
+            }"
+          >
+            {{ currentItem?.item?.item?.name }}
           </div>
 
           <v-btn

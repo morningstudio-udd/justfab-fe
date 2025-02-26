@@ -43,13 +43,6 @@ watch(
   modelValue,
   (newVal) => {
     currentTaskGroup.value = cloneDeep(newVal) || {};
-
-    if (!currentTaskGroup.value.reward) {
-      currentTaskGroup.value.reward = {
-        type: "",
-        value: 0,
-      };
-    }
   },
   { deep: true, immediate: true }
 );

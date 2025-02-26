@@ -22,7 +22,6 @@ import slot6 from "@images/game/slot-6.png";
 import food from "@images/game/food.svg";
 import voucher from "@images/game/voucher.png";
 import rarityMythic from "@images/game/rarity-mythic.png";
-import { watch } from "vue";
 
 definePage({
   meta: {

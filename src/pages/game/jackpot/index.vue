@@ -92,6 +92,7 @@ const onRollClick = async (betX) => {
 
     await refSlotMachine.value.roll(playScripts);
   } catch (error) {
+    enable.value = true;
     console.log("error", error);
   } finally {
   }
@@ -110,49 +111,31 @@ const resetRewardsState = () => {
 };
 
 const processRewards = async (rewards) => {
-  // for (const reward of rewards) {
-  //   switch (reward.type) {
-  //     case REWARD_TYPES.JACKPOT: {
-  //       break;
-  //     }
-  //     case REWARD_TYPES.GOLD:
-  //       console.log("Add gold to user", reward.value);
-  //       userStore.userData.gold += reward.value;
-  //       break;
-  //     case REWARD_TYPES.ITEM:
-  //       itemReward.value = reward;
-  //       resultItemDialogRef.value.openDialog();
-  //       break;
-
-  //     default:
-  //       console.warn(`Unknown reward type: ${reward.type}`);
-  //       break;
-  //   }
-  // }
-
   for (const r of rewards) {
-    if (r.type == "GOLD") refSlotMachine.value.showGoldEffect();
-    if (r.type == "FOOD") refSlotMachine.value.showFoodEffect();
-    if (r.type == "TOKEN") refSlotMachine.value.showTokenEffect();
+    if (r.type == "GOLD") {
+      refSlotMachine.value.showGoldEffect();
+      refSlotMachine.value.showValue(`+${r.value}`);
+    }
+    if (r.type == "FOOD") {
+      refSlotMachine.value.showFoodEffect();
+      refSlotMachine.value.showValue(`+${r.value}`);
+    }
+    if (r.type == "TOKEN") {
+      refSlotMachine.value.showTokenEffect();
+      refSlotMachine.value.showValue(`+${r.value}`);
+    }
   }
 
   gameStore.handleRewards(rewards);
-
   await refSlotMachine.value.rollNextStep();
   return true;
 };
 
 onBeforeUnmount(() => {
-  // if (resizeObserver && gameContentRef.value) {
-  //   resizeObserver.unobserve(gameContentRef.value);
-  //   resizeObserver.disconnect();
-  // }
 });
 
 const onClaimEnergyClick = async (e) => {
   try {
-    enable.value = false;
-
     let oldEnergy = userStore.userData.energy;
 
     const { energy: newEnergy, lastClaimed: newClaimEnergyAt } =

@@ -144,10 +144,12 @@ const onButtonRoolClick = () => {
 let playScripts = [];
 let currentStep = 0;
 let currentScript = null;
+let turns = 0;
 
 const roll = async (scripts) => { 
   currentStep = 0;
   playScripts = scripts;
+  turns = 1;
   await rollScriptStep(0);
 };
 
@@ -158,7 +160,18 @@ const rollScriptStep = async (step) => {
   if(currentScript.type == 'slotMachine') {
     setJackpotVisible(false);
     slotMachine.value.roll(currentScript.reelSymbols);
+    if(turns > 1) {
+      await waitForSeconds(1);
+      slotMachine.value.LabelTurn.show(`turn ${turns}`);
+    }
+    turns--;
     await waitForSeconds(4);
+    for(const r of currentScript.rewards) {
+      if(r.type == "SPIN") {
+        turns += r.value;
+        slotMachine.value.LabelTurn.show(`+${r.value} turns`)
+      }
+    }
     emit("scriptCompleted", currentScript);
   }else{
     setJackpotVisible(true);
@@ -219,6 +232,9 @@ const showTokenEffect = () => {
 const showFoodEffect = () => {
   slotMachine.value.FoodParticle.resetSystem();
 }
+const showValue = (v) => {
+  slotMachine.value.LabelValue.show(v);
+}
 
 const emit = defineEmits(["rollClick", "scriptCompleted", "claimEnergyClick", "loaded"]);
 defineExpose({
@@ -232,7 +248,8 @@ defineExpose({
   flyEnergy,
   showGoldEffect,
   showTokenEffect,
-  showFoodEffect
+  showFoodEffect,
+  showValue
 });
 </script>
 

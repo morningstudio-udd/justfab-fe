@@ -29,14 +29,18 @@ const safeArea = ref({ top: 0, bottom: 0 });
 // });
 
 const fontSizeBase = computed(() => gameStore.baseFontSize);
+const containerWidth = computed(() => gameStore.parentWidth);
 const resultItemDialogRef = computed(() => gameStore.resultItemDialogRef);
 // const resultItemDialogWidth = computed(() => containerDivWidth.value * 0.79);
 
-const { observe } = useMixin(); // Sử dụng lại observe từ mixin
+const { observe } = useMixin();
 
 const handleResize = (newWidth) => {
   containerDivWidth.value = newWidth;
   resultItemDialogWidth.value = newWidth * 0.79;
+
+  gameStore.gameContainer = gameContainerRef.value;
+  gameStore.baseFontSize = gameStore.setResponsiveFont();
 };
 
 onMounted(() => {
@@ -127,6 +131,7 @@ const resetRewardsState = () => {
           backgroundImage: `url(${gameBg})`,
           fontSize: `${fontSizeBase}px`,
           '--base-font-size': `${fontSizeBase}px`,
+          '--container-width': `${containerWidth}px`,
         }"
         ref="gameContainerRef"
       >

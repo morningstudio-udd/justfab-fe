@@ -126,13 +126,12 @@ const processRewards = async (rewards) => {
     }
   }
 
-  gameStore.handleRewards(rewards);
+  gameStore.handleRewards(rewards, true);
   await refSlotMachine.value.rollNextStep();
   return true;
 };
 
-onBeforeUnmount(() => {
-});
+onBeforeUnmount(() => {});
 
 const onClaimEnergyClick = async (e) => {
   try {

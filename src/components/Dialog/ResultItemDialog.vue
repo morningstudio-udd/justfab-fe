@@ -1,10 +1,12 @@
 <script setup>
 import bgPopup from "@images/game/bg-popup.png";
 import energy from "@images/game/energy.svg";
+import gold from "@images/game/gold.png";
 import btnClaim from "@images/game/btn-claim.svg";
 import { emitter } from "@plugins/mitt";
 import voucher from "@images/game/voucher.png";
 import rarityMythic from "@images/game/rarity-mythic.png";
+import { ref } from "vue";
 
 const props = defineProps({
   width: {
@@ -17,6 +19,8 @@ const gameStore = useGameStore();
 
 const resultDialog = ref(false);
 const currentItem = ref(null);
+const goldSvgRef = ref();
+const energySvgRef = ref();
 
 const fontSizeBase = computed(() => gameStore.baseFontSize);
 const widthDialog = computed(() => `${props.width}px`);
@@ -74,9 +78,87 @@ defineExpose({ openDialog, resultDialog, closeDialog });
           class="tw-flex tw-flex-col tw-justify-center tw-items-center tw-h-full"
         >
           <div
+            class="tw-w-[45%] tw-relative"
+            v-if="currentItem?.type === REWARD_TYPES.GOLD"
+          >
+            <div class="tw-w-full">
+              <v-img :src="gold" width="100%" class="" />
+            </div>
+
+            <div class="tw-w-full tw-h-auto tw-absolute tw-top-[85%]">
+              <svg
+                viewBox="0 0 130 40"
+                xmlns="http://www.w3.org/2000/svg"
+                width="100%"
+                height="100%"
+                preserveAspectRatio="xMidYMid meet"
+                ref="goldSvgRef"
+              >
+                <text
+                  x="50%"
+                  y="50%"
+                  dominant-baseline="middle"
+                  text-anchor="middle"
+                  font-family="DynaPuff"
+                  :font-size="`${gameStore.setFontSizeBasedOnViewBox(
+                    goldSvgRef,
+                    65
+                  )}px`"
+                  font-weight="700"
+                  fill="#fff"
+                  stroke="#7E2009"
+                  stroke-width="6"
+                  paint-order="stroke fill"
+                >
+                  {{ currentItem?.value }}
+                </text>
+              </svg>
+            </div>
+          </div>
+
+          <div
+            class="tw-w-[45%]"
+            v-else-if="currentItem?.type === REWARD_TYPES.ENERGY"
+          >
+            <div class="tw-aspect-[349/194] tw-w-full">
+              <v-img :src="energy" width="100%" class="" />
+            </div>
+
+            <div class="tw-w-full tw-h-auto">
+              <svg
+                viewBox="0 0 130 40"
+                xmlns="http://www.w3.org/2000/svg"
+                width="100%"
+                height="100%"
+                preserveAspectRatio="xMidYMid meet"
+                ref="energySvgRef"
+              >
+                <text
+                  x="50%"
+                  y="50%"
+                  dominant-baseline="middle"
+                  text-anchor="middle"
+                  font-family="DynaPuff"
+                  :font-size="`${gameStore.setFontSizeBasedOnViewBox(
+                    energySvgRef,
+                    65
+                  )}px`"
+                  font-weight="700"
+                  fill="#fff"
+                  stroke="#000"
+                  stroke-width="6"
+                  paint-order="stroke fill"
+                >
+                  {{ currentItem?.value }}
+                </text>
+              </svg>
+            </div>
+          </div>
+
+          <div
             class="tw-aspect-[178/178] tw-w-[45%] tw-mb-[3%] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
             :style="{ backgroundImage: `url(${rarityMythic})` }"
-            v-if="currentItem?.type === REWARD_TYPES.POOL_PERCENTAGE"
+            v-else-if="currentItem?.type === REWARD_TYPES.POOL_PERCENTAGE"
           >
             <v-img :src="voucher" class="!tw-max-w-[75%] tw-w-full tw-h-auto" />
           </div>
@@ -86,7 +168,7 @@ defineExpose({ openDialog, resultDialog, closeDialog });
             class="tw-aspect-[178/178] tw-w-[45%] tw-mb-[3%] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
             :style="{
               backgroundImage: `url(${
-                ITEM_RARITIES[currentItem?.item.item?.rarity].background
+                ITEM_RARITIES[currentItem?.item?.rarity].background
               })`,
             }"
           >

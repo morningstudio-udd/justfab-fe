@@ -18,7 +18,6 @@ import iconCheckedIn from "@images/game/icon-checked-in.png";
 // import { openLink } from "@telegram-apps/sdk";
 import { openLink, openPopup, openTelegramLink } from "@telegram-apps/sdk-vue";
 import moment from "moment";
-import { computed, nextTick } from "vue";
 
 definePage({
   meta: {
@@ -119,6 +118,9 @@ const doTask = async (task) => {
         window.open(task.target, "_blank");
       }
 
+      await getSeftTasks();
+
+      gameStore.handleRewards(task.reward);
       break;
     }
     case TASK_TYPES.LINK: {
@@ -130,9 +132,11 @@ const doTask = async (task) => {
 
       await completeTask(task._id);
 
-      await delay(5000);
+      await delay(3000);
 
       await getSeftTasks();
+
+      gameStore.handleRewards(task.reward);
       break;
     }
     default:
@@ -177,6 +181,8 @@ const onClaimReward = async () => {
 
     currentStreak.value = rewardResponse.streak;
     lastClaimedAt.value = rewardResponse.lastClaimedAt;
+
+    gameStore.handleRewards(rewardResponse.rewards);
   } catch (error) {
     console.error(error);
   }
@@ -353,6 +359,7 @@ const isYesterday = (lastClaimedAt) => {
             class="tasks-root"
             selected-class="heartbeat-infinite"
             v-model="currentGroupParent"
+            mandatory
           >
             <v-item
               v-slot="{ isSelected, selectedClass, toggle }"
@@ -363,11 +370,14 @@ const isYesterday = (lastClaimedAt) => {
               <v-btn
                 color="transparent"
                 flat
-                class="tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden !tw-text-white btn-segment !tw-h-full"
+                :ripple="false"
+                class="btn-segment"
                 :class="selectedClass"
                 @click="toggle"
               >
-                {{ group.name }}
+                <div>
+                  {{ group.name }}
+                </div>
               </v-btn>
             </v-item>
           </v-item-group>
@@ -437,13 +447,20 @@ const isYesterday = (lastClaimedAt) => {
                       v-for="task in getTaskByGroup(group._id)"
                       :key="task._id"
                       :title="task.title"
-                      :subtitle="task.description"
+                      :subtitle="task.description || ''"
                       @click="doTask(task)"
                       :style="{
                         fontSize: `${fontSizeBase}px !important`,
                         '--base-font-size': `${fontSizeBase}px`,
                       }"
                     >
+                      <div
+                        :style="{
+                          fontSize: `${fontSizeBase * 0.8}px !important`,
+                        }"
+                      >
+                        Reward: {{ task.reward.value }} {{ task.reward.type }}
+                      </div>
                       <template #append>
                         <v-img
                           :src="iconCheckedIn"
@@ -515,12 +532,14 @@ const isYesterday = (lastClaimedAt) => {
     /* font-size: clamp(0.625rem, 1.5vh, 2.125rem); */
     font-size: var(--base-font-size);
     .task {
+      @apply tw-divide-y;
       .v-list-item {
-        @apply tw-p-0;
+        @apply tw-py-3;
         .v-list-item-title {
           font-size: var(--base-font-size);
         }
         .v-list-item-subtitle {
+          @apply tw-line-clamp-none;
           font-size: var(--base-font-size) * 0.6;
           line-height: normal;
         }
@@ -536,8 +555,6 @@ const isYesterday = (lastClaimedAt) => {
   }
   .v-select__menu-icon {
     @apply !tw-transform-none tw-text-[230%] tw-text-[#8d2e02] !tw-opacity-100;
-  }
-  &.v-select--active-menu {
   }
   .dropdown-toggle {
     border: none;
@@ -555,21 +572,32 @@ const isYesterday = (lastClaimedAt) => {
 }
 
 .btn-segment {
+  @apply tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden !tw-text-white !tw-h-full;
+  --dynamic-border: calc(0.02 * var(--container-width));
   border-image: url(/src/assets/images/game/btn-segment.png) 30;
-  background: #ff3333 !important;
+  background: #ff3b4c !important;
   /* height: 57px !important; */
   width: auto;
-  border-width: 20px;
+  border-width: clamp(3px, var(--dynamic-border), 20px);
   padding: 0;
   border-image-outset: 0px;
-  border-radius: 20px;
+  border-radius: 10px;
+  flex: 1 1 0;
   .v-btn\_\_content {
-    font-size: var(--base-font-size);
+    font-size: calc(0.8 * var(--base-font-size));
+    line-height: calc(0.8 * var(--base-font-size));
+    max-width: 100%;
+    white-space: pre-wrap;
+  }
+  &:hover {
+    .v-btn\_\_overlay {
+      opacity: 0 !important;
+    }
   }
 }
 
 .tasks-root {
-  @apply tw-w-full tw-flex tw-justify-between tw-items-center tw-h-[60%] tw-gap-[2%] tw-overflow-x-auto;
+  @apply tw-w-full tw-flex tw-justify-between tw-items-center tw-h-[60%] tw-gap-[2%] tw-max-w-full;
   scrollbar-width: none;
   -ms-overflow-style: none;
   &::-webkit-scrollbar {

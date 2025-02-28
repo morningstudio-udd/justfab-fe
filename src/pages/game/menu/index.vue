@@ -64,25 +64,25 @@ const submitOpenSettingDialog = () => {
         </router-link>
       </div>
 
-      <div class="menu tw-col-span-1 tw-row-span-2">
+      <div class="menu tw-col-span-1 tw-row-span-2 disable-element">
         <span class="menu-link">
           {{ $t("???") }}
         </span>
       </div>
 
-      <div class="menu tw-col-span-1 tw-row-span-2">
+      <div class="menu tw-col-span-1 tw-row-span-2 disable-element">
         <span class="menu-link">
           {{ $t("???") }}
         </span>
       </div>
 
-      <div class="menu tw-col-span-2 tw-row-span-1">
+      <div class="menu tw-col-span-2 tw-row-span-1 disable-element">
         <span class="menu-link">
           {{ $t("???") }}
         </span>
       </div>
 
-      <div class="menu tw-col-span-1 tw-row-span-1">
+      <div class="menu tw-col-span-1 tw-row-span-1 disable-element">
         <span class="menu-link">
           {{ $t("???") }}
         </span>

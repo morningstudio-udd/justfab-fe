@@ -9,6 +9,7 @@ export const useGameStore = defineStore("game", () => {
   const baseFontSize = ref(16);
   const gameContainer = ref(null);
   const resultItemDialogRef = ref(null);
+  const parentWidth = ref(0);
 
   const setLoading = (value) => {
     isLoading.value = value;
@@ -16,21 +17,21 @@ export const useGameStore = defineStore("game", () => {
 
   const setResponsiveFont = (parent = gameContainer.value, scale = 0.03) => {
     if (!parent) return;
-    const parentWidth = parent.offsetWidth;
+    parentWidth.value = parent.offsetWidth;
 
-    const calculatedFontSize = parentWidth * scale;
+    const calculatedFontSize = parentWidth.value * scale;
 
-    const fontSize = Math.min(36, Math.max(14, calculatedFontSize));
+    const fontSize = Math.min(36, Math.max(10, calculatedFontSize));
 
     return fontSize;
   };
 
   const setResponsiveFontPercentage = (parent, percent) => {
     if (!parent) return;
-    const parentWidth = parent.offsetWidth;
-    console.log("Parent width: ", parentWidth);
+    parentWidth.value = parent.offsetWidth;
+    console.log("Parent width: ", parentWidth.value);
 
-    const fontSize = parentWidth * (percent / 100);
+    const fontSize = parentWidth.value * (percent / 100);
 
     return fontSize;
   };
@@ -43,15 +44,29 @@ export const useGameStore = defineStore("game", () => {
     return viewBoxHeight * (percent / 100);
   };
 
-  const handleRewards = (rewards) => {
+  const handleRewards = (rewards, isSlotMachine = false) => {
     for (const reward of rewards) {
       switch (reward.type) {
         case REWARD_TYPES.JACKPOT: {
           break;
         }
+        case REWARD_TYPES.TOKEN: {
+          break;
+        }
+        case REWARD_TYPES.FOOD: {
+          break;
+        }
+        case REWARD_TYPES.SPIN: {
+          break;
+        }
         case REWARD_TYPES.GOLD:
           console.log("Reward: ", REWARD_TYPES.GOLD);
           userStore.userData.gold += reward.value;
+
+          if (!isSlotMachine) {
+            emitter.emit("show-reward", reward);
+          }
+
           break;
         case REWARD_TYPES.ITEM:
           emitter.emit("show-reward", reward);
@@ -59,6 +74,10 @@ export const useGameStore = defineStore("game", () => {
         case REWARD_TYPES.ENERGY:
           console.log("Reward: ", REWARD_TYPES.ENERGY);
           userStore.userData.energy += reward.value;
+
+          if (!isSlotMachine) {
+            emitter.emit("show-reward", reward);
+          }
           break;
         case REWARD_TYPES.POOL_PERCENTAGE:
           emitter.emit("show-reward", reward);
@@ -75,6 +94,7 @@ export const useGameStore = defineStore("game", () => {
     baseFontSize,
     gameContainer,
     resultItemDialogRef,
+    parentWidth,
     setLoading,
     setResponsiveFont,
     setResponsiveFontPercentage,

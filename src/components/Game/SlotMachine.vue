@@ -182,11 +182,11 @@ const rollScriptStep = async (step) => {
     setJackpotVisible(false);
     slotMachine.value.roll(currentScript.reelSymbols);
     if(turns > 1) {
-      await waitForSeconds(0.25);
+      //await waitForSeconds(0.25);
       slotMachine.value.LabelTurn.show(`bonus turn ${turns}`);
     }
     turns--;
-    await waitForSeconds(2);
+    await waitForSeconds(1.75);
     for(const r of currentScript.rewards) {
       if(r.type == "SPIN") {
         turns += r.value;

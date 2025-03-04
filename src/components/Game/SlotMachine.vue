@@ -38,11 +38,9 @@ let inDuty = false;
 const currentX = ref(1);
 
 watch(
-  () => props.claimEnergy,
-  (v) => {
-    if (slotMachine.value != null) {
-      slotMachine.value.LabelClaimEnergy.string = `${v}/50`;
-    }
+  () => props.claimEnergyAt,
+  (v, vo) => {
+    drainEnergyBottle();
   }
 );
 
@@ -87,6 +85,27 @@ watch(
   }
 );
 
+let _energy = 0;
+let drainEnergyInterval = null;
+
+const drainEnergyBottle = () => {
+  if (slotMachine.value != null) {
+    if(drainEnergyInterval != null) {
+      clearInterval(drainEnergyInterval);
+      drainEnergyInterval = null;
+    }
+    drainEnergyInterval = setInterval(() => {
+      if(_energy > 0) {
+        _energy -= 1;
+      }else{
+        clearInterval(drainEnergyInterval);
+        drainEnergyInterval = null;
+      }
+      slotMachine.value.LabelClaimEnergy.string = `${_energy}/50`;
+    }, 50)
+  }
+}
+
 const onIframeLoaded = () => {
   iframeContent.value = refIframe.value.contentWindow;
   iframeContent.value.SlotMachine = {};
@@ -111,9 +130,11 @@ const onIframeLoaded = () => {
 };
 
 const updateEnergyBottle = () => {
+  if(drainEnergyInterval != null) return;
   let now = new Date();
   let minutes = Math.floor((now - props.claimEnergyAt) / 60000);
   if(minutes > 50) minutes = 50;
+  _energy = minutes;
   slotMachine.value.LabelClaimEnergy.string = `${minutes}/50`;
 }
 
@@ -161,15 +182,15 @@ const rollScriptStep = async (step) => {
     setJackpotVisible(false);
     slotMachine.value.roll(currentScript.reelSymbols);
     if(turns > 1) {
-      await waitForSeconds(1);
-      slotMachine.value.LabelTurn.show(`turn ${turns}`);
+      await waitForSeconds(0.25);
+      slotMachine.value.LabelTurn.show(`bonus turn ${turns}`);
     }
     turns--;
-    await waitForSeconds(4);
+    await waitForSeconds(2);
     for(const r of currentScript.rewards) {
       if(r.type == "SPIN") {
         turns += r.value;
-        slotMachine.value.LabelTurn.show(`+${r.value} turns`)
+        slotMachine.value.LabelValue.show(`+${r.value} turns`)
       }
     }
     emit("scriptCompleted", currentScript);

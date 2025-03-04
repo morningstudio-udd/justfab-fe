@@ -74,7 +74,9 @@ onMounted(async () => {
 
   await nextTick();
 
-  currentGroupParent.value = groupsParent.value[0]._id;
+  if (groupsParent.value.length) {
+    currentGroupParent.value = groupsParent.value[0]._id;
+  }
 
   emitter.on("onClaimeDailySuccess", () => getDaily());
 });

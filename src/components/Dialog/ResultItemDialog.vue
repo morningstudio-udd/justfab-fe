@@ -46,6 +46,7 @@ const closeDialog = (id) => {
 
 const submitClaim = async (item, rewardsType = "slot-machine") => {
   try {
+    console.log("submitClaim -> item", item, rewardsType);
     if (rewardsType !== "slot-machine") {
       await claimReward(item._id);
 

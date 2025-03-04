@@ -14,6 +14,8 @@ import invitedReward9 from "@images/game/invited-reward-9.png";
 import invitedReward10 from "@images/game/invited-reward-10.png";
 import invitedReward11 from "@images/game/invited-reward-11.png";
 import invitedReward12 from "@images/game/invited-reward-12.png";
+import iconCheckedIn from "@images/game/icon-checked-in.png";
+import { emitter } from "@plugins/mitt";
 
 definePage({
   meta: {
@@ -50,8 +52,24 @@ const invitedSvgRef = ref(null);
 const recruited = ref(0);
 const notClaimed = ref([]);
 
-const claimedReferrals = computed(() => {
-  return;
+const canClaimLevels = computed(() => {
+  const specialCounts = new Set(specialLevels.map((sp) => sp.count));
+
+  return [
+    ...new Set(
+      notClaimed.value
+        .map((item) => item.level)
+        .filter((level) => specialCounts.has(level))
+    ),
+  ];
+});
+
+const claimedLevels = computed(() => {
+  const notClaimedSet = new Set(notClaimed.value.map((item) => item.level));
+
+  return specialLevels
+    .map((sp) => sp.count)
+    .filter((count) => count <= recruited.value && !notClaimedSet.has(count));
 });
 
 let resizeObserver;
@@ -76,6 +94,8 @@ onMounted(async () => {
   // }
 
   await getRecruited();
+
+  emitter.on("onClaimeReferralSuccess", () => getRecruited());
 });
 
 const submitInvite = ($event) => {
@@ -83,8 +103,16 @@ const submitInvite = ($event) => {
   inviteDialogRef.value.openDialog();
 };
 
-const submitClaimInvited = () => {
-  claimInviteDialogRef.value.openDialog();
+const submitClaimInvited = (level) => {
+  const rewards = notClaimed.value
+    .filter((item) => item.level === level)
+    .map((item) => item.reward);
+
+  console.log("submitClaimInvited", rewards);
+
+  gameStore.handleRewards(rewards, notClaimed.value[0].reason);
+
+  // claimInviteDialogRef.value.openDialog();
 };
 
 onBeforeUnmount(() => {
@@ -102,7 +130,7 @@ const getRecruited = async () => {
 
     if (notClaimed.value.length > 0) {
       const rw = notClaimed.value
-        .filter((item) => !specialLevels.includes(item.level))
+        .filter((item) => !specialLevels.some((sp) => sp.count === item.level))
         .map((item) => item.reward);
 
       console.log("rw", rw);
@@ -168,10 +196,27 @@ const getRecruited = async () => {
               v-for="(level, index) in specialLevels"
               :key="index"
               :src="level.image"
-              :class="{ received: index < recruited }"
-              class="tw-w-full tw-h-full"
-              @click.stop="submitClaimInvited"
-            />
+              :class="{
+                received: index < recruited,
+                'tw-cursor-pointer': canClaimLevels.includes(level.count),
+                'disable-element': !canClaimLevels.includes(level.count),
+              }"
+              class="tw-w-full tw-h-full [&_.v-responsive\_\_content]:tw-flex [&_.v-responsive\_\_content]:tw-justify-center [&_.v-responsive\_\_content]:tw-items-center"
+              @click.prevent="
+                canClaimLevels.includes(level.count)
+                  ? submitClaimInvited(level.count)
+                  : ''
+              "
+            >
+              <v-img
+                :src="iconCheckedIn"
+                class="!tw-max-w-[70%] tw-h-auto"
+                :class="{
+                  '!tw-flex': claimedLevels.includes(level.count),
+                  '!tw-hidden': !claimedLevels.includes(level.count),
+                }"
+              />
+            </v-img>
           </div>
         </div>
       </div>

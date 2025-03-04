@@ -55,6 +55,8 @@ const submitClaim = async (item, rewardsType = "slot-machine") => {
 
       if (rewardsType === "daily") {
         emitter.emit("onClaimeDailySuccess", "");
+      } else if (rewardsType === "REFERRAL") {
+        emitter.emit("onClaimeReferralSuccess", "");
       }
     }
 

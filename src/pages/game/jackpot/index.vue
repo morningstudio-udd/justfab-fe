@@ -126,7 +126,7 @@ const processRewards = async (rewards) => {
     }
   }
 
-  gameStore.handleRewards(rewards, true);
+  gameStore.handleRewards(rewards, "slot-machine");
   await refSlotMachine.value.rollNextStep();
   return true;
 };

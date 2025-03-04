@@ -153,8 +153,7 @@ export const getJackpotRewards = async () => {
 
 export const claimReward = async (rewardId) => {
   try {
-    const url = getApiPath(API.reward.claim, { rewardId: rewardId });
-    const res = await $api.post(url);
+    const res = await $api.post(API.reward.claim, { rewardId });
 
     return res.data;
   } catch (error) {

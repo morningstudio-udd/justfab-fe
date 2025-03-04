@@ -24,23 +24,23 @@ definePage({
   },
 });
 
+const specialLevels = [
+  { count: 1, image: invitedReward1 },
+  { count: 2, image: invitedReward2 },
+  { count: 3, image: invitedReward3 },
+  { count: 10, image: invitedReward4 },
+  { count: 50, image: invitedReward5 },
+  { count: 100, image: invitedReward6 },
+  { count: 200, image: invitedReward7 },
+  { count: 500, image: invitedReward8 },
+  { count: 1000, image: invitedReward9 },
+  { count: 2000, image: invitedReward10 },
+  { count: 5000, image: invitedReward11 },
+  { count: 10000, image: invitedReward12 },
+];
+
 const gameStore = useGameStore();
 const userStore = useUserStore();
-
-const invitedRewards = [
-  invitedReward1,
-  invitedReward2,
-  invitedReward3,
-  invitedReward4,
-  invitedReward5,
-  invitedReward6,
-  invitedReward7,
-  invitedReward8,
-  invitedReward9,
-  invitedReward10,
-  invitedReward11,
-  invitedReward12,
-];
 
 const gameContentRef = ref(null);
 const inviteDialogRef = ref(null);
@@ -48,6 +48,11 @@ const claimInviteDialogRef = ref(null);
 const parentDivWidth = ref(0);
 const invitedSvgRef = ref(null);
 const recruited = ref(0);
+const notClaimed = ref([]);
+
+const claimedReferrals = computed(() => {
+  return;
+});
 
 let resizeObserver;
 const { observe } = useMixin(); // Lấy hàm observe từ mixin
@@ -91,8 +96,21 @@ onBeforeUnmount(() => {
 
 const getRecruited = async () => {
   try {
-    const { onboarded } = await getRecruitedUsers();
+    const { onboarded, rewards } = await getRecruitedUsers();
     recruited.value = onboarded;
+    notClaimed.value = rewards;
+
+    if (notClaimed.value.length > 0) {
+      const rw = notClaimed.value
+        .filter((item) => !specialLevels.includes(item.level))
+        .map((item) => item.reward);
+
+      console.log("rw", rw);
+
+      if (rw.length > 0) {
+        gameStore.handleRewards(rw, notClaimed.value[0].reason);
+      }
+    }
   } catch (error) {
     console.log("error", error);
   }
@@ -147,9 +165,9 @@ const getRecruited = async () => {
             class="tw-h-full tw-grid tw-grid-cols-6 tw-grid-rows-2 tw-gap-[2%]"
           >
             <v-img
-              v-for="(src, index) in invitedRewards"
+              v-for="(level, index) in specialLevels"
               :key="index"
-              :src="src"
+              :src="level.image"
               :class="{ received: index < recruited }"
               class="tw-w-full tw-h-full"
               @click.stop="submitClaimInvited"

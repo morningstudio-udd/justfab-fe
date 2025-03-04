@@ -18,6 +18,7 @@ import iconCheckedIn from "@images/game/icon-checked-in.png";
 // import { openLink } from "@telegram-apps/sdk";
 import { openLink, openPopup, openTelegramLink } from "@telegram-apps/sdk-vue";
 import moment from "moment";
+import { emitter } from "@plugins/mitt";
 
 definePage({
   meta: {
@@ -34,14 +35,24 @@ const isOpen = ref(false);
 const allTasks = ref([]);
 const allTaskGroup = ref([]);
 const userTasks = ref([]);
-const currentStreak = ref(0);
-const lastClaimedAt = ref(null);
 const currentGroupParent = ref();
 
+const currentStreak = ref(0);
+// const lastClaimedAt = ref(null);
+const streakRewards = ref([]);
+
 const fontSizeBase = computed(() => gameStore.baseFontSize);
-const currentIndex = computed(() => {
-  return currentStreak.value > 0 ? (currentStreak.value % 7) + 1 : 1;
+
+const currentIndex = computed(() => currentStreak.value % 7);
+const canClaimIndexs = computed(() => {
+  return streakRewards.value.reduce((acc, item) => {
+    if (!acc.includes(item.level)) {
+      acc.push(item.level);
+    }
+    return acc;
+  }, []);
 });
+
 const groupsParent = computed(() => {
   return allTaskGroup.value.filter(
     (group) => !group.parent || group.parent === null
@@ -57,17 +68,27 @@ onMounted(async () => {
   const p1 = getTasks();
   const p2 = getTaskGroup();
   const p3 = getSeftTasks();
-  const p4 = getDailyReward().then((response) => {
-    currentStreak.value = response.streak;
-    lastClaimedAt.value = response.lastClaimedAt;
-  });
+  const p4 = getDaily();
 
   await Promise.all([p1, p2, p3, p4]);
 
   await nextTick();
 
   currentGroupParent.value = groupsParent.value[0]._id;
+
+  emitter.on("onClaimeDailySuccess", () => getDaily());
 });
+
+const getDaily = async () => {
+  try {
+    const response = await getDailyReward();
+
+    currentStreak.value = response.record.streak;
+    streakRewards.value = response.rewards;
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 const getTasks = async () => {
   try {
@@ -93,7 +114,13 @@ const getSeftTasks = async () => {
   try {
     const tasksResponse = await getUserTasks();
 
-    userTasks.value = tasksResponse;
+    userTasks.value = tasksResponse.task;
+
+    if (tasksResponse.rewards.length) {
+      tasksResponse.rewards.forEach((item) => {
+        gameStore.handleRewards([item.reward], "task");
+      });
+    }
   } catch (error) {
     console.error(error);
   }
@@ -120,7 +147,7 @@ const doTask = async (task) => {
 
       await getSeftTasks();
 
-      gameStore.handleRewards(task.reward);
+      gameStore.handleRewards([task.reward], "task");
       break;
     }
     case TASK_TYPES.LINK: {
@@ -136,7 +163,7 @@ const doTask = async (task) => {
 
       await getSeftTasks();
 
-      gameStore.handleRewards(task.reward);
+      gameStore.handleRewards([task.reward], "task");
       break;
     }
     default:
@@ -160,45 +187,54 @@ const submitFab = ($event) => {
   handleNormalClickAnimation($event);
 };
 
-const handleDailyCheckIn = ($event) => {
+const handleDailyCheckIn = ($event, level) => {
   console.log("handleDailyCheckIn");
+
   toggleClass(
     $event,
     "tw-animate-jump tw-animate-once tw-animate-ease-linear tw-animate-duration-[1000ms]",
     1000
   );
 
-  onClaimReward();
+  const rewards = streakRewards.value
+    .filter((item) => item.level === level)
+    .map((item) => item.reward);
+
+  gameStore.handleRewards(rewards, "daily");
 };
 
-const onClaimReward = async () => {
-  try {
-    await claimDailyReward();
+// const onClaimReward = async () => {
+//   try {
+//     await claimDailyReward();
 
-    await delay(1000);
+//     await delay(1000);
 
-    const rewardResponse = await getDailyReward();
+//     const rewardResponse = await getDailyReward();
 
-    currentStreak.value = rewardResponse.streak;
-    lastClaimedAt.value = rewardResponse.lastClaimedAt;
+//     currentStreak.value = rewardResponse.streak;
+//     lastClaimedAt.value = rewardResponse.lastClaimedAt;
 
-    gameStore.handleRewards(rewardResponse.rewards);
-  } catch (error) {
-    console.error(error);
-  }
-};
+//     gameStore.handleRewards(rewardResponse.rewards);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
 
 const canClaimDailyReward = (index) => {
-  if (currentStreak.value === 0 && index === 1) {
-    return true;
-  }
+  // if (currentStreak.value === 0 && index === 1) {
+  //   return true;
+  // }
 
-  return index === currentIndex.value && isYesterday(lastClaimedAt.value);
+  return index === currentIndex.value && canClaimIndexs.value.includes(index);
 };
 
-const isYesterday = (lastClaimedAt) => {
-  return moment(lastClaimedAt).isSame(moment().subtract(1, "day"), "day");
+const claimedDailyReward = (index) => {
+  return index <= currentIndex.value && !canClaimIndexs.value.includes(index);
 };
+
+// const isYesterday = (lastClaimedAt) => {
+//   return moment(lastClaimedAt).isSame(moment().subtract(1, "day"), "day");
+// };
 </script>
 
 <template>
@@ -220,10 +256,12 @@ const isYesterday = (lastClaimedAt) => {
           <div
             class="daily-gift"
             :class="{
-              'checked-in': currentIndex > 1,
+              'checked-in': claimedDailyReward(1),
               'tw-cursor-pointer': canClaimDailyReward(1),
             }"
-            @click="canClaimDailyReward(1) ? handleDailyCheckIn($event) : null"
+            @click="
+              canClaimDailyReward(1) ? handleDailyCheckIn($event, 1) : null
+            "
           >
             <div class="tw-aspect-[99/102] tw-w-1/2">
               <v-img :src="gift1" />
@@ -237,10 +275,12 @@ const isYesterday = (lastClaimedAt) => {
           <div
             class="daily-gift"
             :class="{
-              'checked-in': currentIndex > 2,
+              'checked-in': claimedDailyReward(2),
               'tw-cursor-pointer': canClaimDailyReward(2),
             }"
-            @click="canClaimDailyReward(2) ? handleDailyCheckIn($event) : null"
+            @click="
+              canClaimDailyReward(2) ? handleDailyCheckIn($event, 2) : null
+            "
           >
             <div class="tw-aspect-[99/102] tw-w-1/2">
               <v-img :src="gift2" />
@@ -254,10 +294,12 @@ const isYesterday = (lastClaimedAt) => {
           <div
             class="daily-gift"
             :class="{
-              'checked-in': currentIndex > 3,
+              'checked-in': claimedDailyReward(3),
               'tw-cursor-pointer': canClaimDailyReward(3),
             }"
-            @click="canClaimDailyReward(3) ? handleDailyCheckIn($event) : null"
+            @click="
+              canClaimDailyReward(3) ? handleDailyCheckIn($event, 3) : null
+            "
           >
             <div class="tw-aspect-[99/102] tw-w-1/2">
               <v-img :src="gift3" />
@@ -273,10 +315,12 @@ const isYesterday = (lastClaimedAt) => {
           <div
             class="special-gift"
             :class="{
-              'checked-in': currentIndex > 7,
+              'checked-in': claimedDailyReward(7),
               'tw-cursor-pointer': canClaimDailyReward(7),
             }"
-            @click="canClaimDailyReward(7) ? handleDailyCheckIn($event) : null"
+            @click="
+              canClaimDailyReward(7) ? handleDailyCheckIn($event, 7) : null
+            "
           >
             <div class="tw-aspect-[169/176] tw-w-3/4">
               <v-img :src="gift7" />
@@ -294,10 +338,12 @@ const isYesterday = (lastClaimedAt) => {
           <div
             class="daily-gift"
             :class="{
-              'checked-in': currentIndex > 4,
+              'checked-in': claimedDailyReward(4),
               'tw-cursor-pointer': canClaimDailyReward(4),
             }"
-            @click="canClaimDailyReward(4) ? handleDailyCheckIn($event) : null"
+            @click="
+              canClaimDailyReward(4) ? handleDailyCheckIn($event, 4) : null
+            "
           >
             <div class="tw-aspect-[99/102] tw-w-1/2">
               <v-img :src="gift4" />
@@ -311,10 +357,12 @@ const isYesterday = (lastClaimedAt) => {
           <div
             class="daily-gift"
             :class="{
-              'checked-in': currentIndex > 5,
+              'checked-in': claimedDailyReward(5),
               'tw-cursor-pointer': canClaimDailyReward(5),
             }"
-            @click="canClaimDailyReward(5) ? handleDailyCheckIn($event) : null"
+            @click="
+              canClaimDailyReward(5) ? handleDailyCheckIn($event, 5) : null
+            "
           >
             <div class="tw-aspect-[99/102] tw-w-1/2">
               <v-img :src="gift5" />
@@ -328,10 +376,12 @@ const isYesterday = (lastClaimedAt) => {
           <div
             class="daily-gift"
             :class="{
-              'checked-in': currentIndex > 6,
+              'checked-in': claimedDailyReward(6),
               'tw-cursor-pointer': canClaimDailyReward(6),
             }"
-            @click="canClaimDailyReward(6) ? handleDailyCheckIn($event) : null"
+            @click="
+              canClaimDailyReward(6) ? handleDailyCheckIn($event, 6) : null
+            "
           >
             <div class="tw-aspect-[99/102] tw-w-1/2">
               <v-img :src="gift6" />

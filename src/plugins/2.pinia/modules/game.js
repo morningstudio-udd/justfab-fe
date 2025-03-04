@@ -8,8 +8,10 @@ export const useGameStore = defineStore("game", () => {
   const isLoading = ref(false);
   const baseFontSize = ref(16);
   const gameContainer = ref(null);
-  const resultItemDialogRef = ref(null);
   const parentWidth = ref(0);
+
+  const resultItemDialogRef = ref(null);
+  const arrayResultItemDialogRef = ref([]);
 
   const setLoading = (value) => {
     isLoading.value = value;
@@ -21,9 +23,7 @@ export const useGameStore = defineStore("game", () => {
 
     const calculatedFontSize = parentWidth.value * scale;
 
-    const fontSize = Math.min(36, Math.max(10, calculatedFontSize));
-
-    return fontSize;
+    return Math.min(36, Math.max(10, calculatedFontSize));
   };
 
   const setResponsiveFontPercentage = (parent, percent) => {
@@ -31,9 +31,7 @@ export const useGameStore = defineStore("game", () => {
     parentWidth.value = parent.offsetWidth;
     console.log("Parent width: ", parentWidth.value);
 
-    const fontSize = parentWidth.value * (percent / 100);
-
-    return fontSize;
+    return parentWidth.value * (percent / 100);
   };
 
   const setFontSizeBasedOnViewBox = (svgElement, percent) => {
@@ -44,43 +42,28 @@ export const useGameStore = defineStore("game", () => {
     return viewBoxHeight * (percent / 100);
   };
 
-  const handleRewards = (rewards, isSlotMachine = false) => {
+  const handleRewards = (rewards, rewardsType = "slot-machine") => {
+    console.log("Rewards: ", rewards, rewardsType);
     for (const reward of rewards) {
       switch (reward.type) {
-        case REWARD_TYPES.JACKPOT: {
+        case REWARD_TYPES.JACKPOT:
+        case REWARD_TYPES.TOKEN:
+        case REWARD_TYPES.FOOD:
+        case REWARD_TYPES.SPIN:
           break;
-        }
-        case REWARD_TYPES.TOKEN: {
-          break;
-        }
-        case REWARD_TYPES.FOOD: {
-          break;
-        }
-        case REWARD_TYPES.SPIN: {
-          break;
-        }
         case REWARD_TYPES.GOLD:
           console.log("Reward: ", REWARD_TYPES.GOLD);
-          userStore.userData.gold += reward.value;
-
-          if (!isSlotMachine) {
-            emitter.emit("show-reward", reward);
+          // userStore.userData.gold += reward.value;
+          if (rewardsType === "slot-machine") {
+            userStore.userData.gold += reward.value;
+          } else {
+            openResultDialog(reward, rewardsType);
           }
-
           break;
         case REWARD_TYPES.ITEM:
-          emitter.emit("show-reward", reward);
-          break;
         case REWARD_TYPES.ENERGY:
-          console.log("Reward: ", REWARD_TYPES.ENERGY);
-          userStore.userData.energy += reward.value;
-
-          if (!isSlotMachine) {
-            emitter.emit("show-reward", reward);
-          }
-          break;
         case REWARD_TYPES.POOL_PERCENTAGE:
-          emitter.emit("show-reward", reward);
+          openResultDialog(reward, rewardsType);
           break;
         default:
           console.warn(`Unknown reward type: ${reward.type}`);
@@ -89,16 +72,35 @@ export const useGameStore = defineStore("game", () => {
     }
   };
 
+  const openResultDialog = (item, rewardsType = "slot-machine") => {
+    console.log("Item, ", item);
+    arrayResultItemDialogRef.value.push({
+      id: item._id,
+      item,
+      open: true,
+      rewardsType,
+    });
+  };
+
+  const closeDialog = (id) => {
+    arrayResultItemDialogRef.value = arrayResultItemDialogRef.value.filter(
+      (dialog) => dialog.id !== id
+    );
+  };
+
   return {
     isLoading,
     baseFontSize,
     gameContainer,
-    resultItemDialogRef,
     parentWidth,
+    resultItemDialogRef,
+    arrayResultItemDialogRef,
     setLoading,
     setResponsiveFont,
     setResponsiveFontPercentage,
     setFontSizeBasedOnViewBox,
     handleRewards,
+    openResultDialog,
+    closeDialog,
   };
 });

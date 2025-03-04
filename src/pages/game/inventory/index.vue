@@ -186,9 +186,11 @@ const submitMerge = () => {
           ></div>
           <div class="tw-col-span-2 tw-row-span-3">
             <div
-              class="tw-aspect-[274/91] tw-w-3/4 tw-mx-auto tw-mt-[4%] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
+              class="tw-aspect-[274/91] tw-w-3/4 tw-mx-auto tw-mt-[4%] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center tw-pl-[20%] tw-text-white"
               :style="{ backgroundImage: `url(${bgRibbon})` }"
-            ></div>
+            >
+              ???
+            </div>
 
             <div
               class="tw-aspect-[371/417] tw-w-full -tw-ml-[8%] tw-mt-[13%] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center bounce-in-top"

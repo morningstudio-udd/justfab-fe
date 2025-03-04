@@ -35,6 +35,7 @@ declare module 'vue-router/auto-routes' {
     'game-menu': RouteRecordInfo<'game-menu', '/game/menu', Record<never, never>, Record<never, never>>,
     'game-referral': RouteRecordInfo<'game-referral', '/game/referral', Record<never, never>, Record<never, never>>,
     'home': RouteRecordInfo<'home', '/home', Record<never, never>, Record<never, never>>,
+    'telegram-auth': RouteRecordInfo<'telegram-auth', '/telegram-auth', Record<never, never>, Record<never, never>>,
     'telegram-login-token': RouteRecordInfo<'telegram-login-token', '/telegram-login/:token', { token: ParamValue<true> }, { token: ParamValue<false> }>,
     'telegram-login-admin-token': RouteRecordInfo<'telegram-login-admin-token', '/telegram-login-admin/:token', { token: ParamValue<true> }, { token: ParamValue<false> }>,
   }

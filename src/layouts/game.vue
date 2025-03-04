@@ -48,14 +48,14 @@ onMounted(() => {
 
   // const removeListener = on("viewport_changed", updateViewportHeight);
 
-  startClaiming();
-  document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible") {
-      startClaiming();
-    } else {
-      stopClaiming();
-    }
-  });
+  // startClaiming();
+  // document.addEventListener("visibilitychange", () => {
+  //   if (document.visibilityState === "visible") {
+  //     startClaiming();
+  //   } else {
+  //     stopClaiming();
+  //   }
+  // });
 
   gameStore.gameContainer = gameContainerRef.value;
   gameStore.baseFontSize = gameStore.setResponsiveFont();
@@ -77,43 +77,43 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  stopClaiming();
+  // stopClaiming();
   document.removeEventListener("visibilitychange", stopClaiming);
 });
 
-const executeClaimRewards = async () => {
-  if (isClaimingRewards.value) return;
+// const executeClaimRewards = async () => {
+//   if (isClaimingRewards.value) return;
 
-  try {
-    isClaimingRewards.value = true;
-    console.log("Executing claim rewards...");
-    const { rewards } = await claimAllRewards();
+//   try {
+//     isClaimingRewards.value = true;
+//     console.log("Executing claim rewards...");
+//     const { rewards } = await claimAllRewards();
 
-    gameStore.handleRewards(rewards);
-  } catch (error) {
-    console.error("Error while claiming rewards:", error);
-  } finally {
-    isClaimingRewards.value = false;
-  }
-};
+//     gameStore.handleRewards(rewards);
+//   } catch (error) {
+//     console.error("Error while claiming rewards:", error);
+//   } finally {
+//     isClaimingRewards.value = false;
+//   }
+// };
 
-const startClaiming = () => {
-  if (!intervalId) {
-    executeClaimRewards();
-    intervalId = setInterval(async () => {
-      if (document.visibilityState === "visible") {
-        await executeClaimRewards();
-      }
-    }, 5000);
-  }
-};
+// const startClaiming = () => {
+//   if (!intervalId) {
+//     executeClaimRewards();
+//     intervalId = setInterval(async () => {
+//       if (document.visibilityState === "visible") {
+//         await executeClaimRewards();
+//       }
+//     }, 5000);
+//   }
+// };
 
-const stopClaiming = () => {
-  if (intervalId) {
-    clearInterval(intervalId);
-    intervalId = null;
-  }
-};
+// const stopClaiming = () => {
+//   if (intervalId) {
+//     clearInterval(intervalId);
+//     intervalId = null;
+//   }
+// };
 
 const resetRewardsState = () => {
   emitter.emit("reset-rewards-state");

@@ -154,7 +154,9 @@ const doTask = async (task) => {
     }
     case TASK_TYPES.LINK: {
       if (openLink.isAvailable()) {
-        openLink(task.target);
+        openLink(task.target, {
+          tryInstantView: true,
+        });
       } else {
         window.open(task.target, "_blank");
       }

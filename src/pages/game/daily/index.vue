@@ -74,7 +74,9 @@ onMounted(async () => {
 
   await nextTick();
 
-  currentGroupParent.value = groupsParent.value[0]._id;
+  if (groupsParent.value.length) {
+    currentGroupParent.value = groupsParent.value[0]._id;
+  }
 
   emitter.on("onClaimeDailySuccess", () => getDaily());
 });
@@ -152,7 +154,9 @@ const doTask = async (task) => {
     }
     case TASK_TYPES.LINK: {
       if (openLink.isAvailable()) {
-        openLink(task.target);
+        openLink(task.target, {
+          tryInstantView: true,
+        });
       } else {
         window.open(task.target, "_blank");
       }

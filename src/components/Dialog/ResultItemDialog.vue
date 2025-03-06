@@ -19,6 +19,7 @@ const userStore = useUserStore();
 
 const goldSvgRefs = ref({});
 const energySvgRefs = ref({});
+const voucherSvgRefs = ref({});
 
 const fontSizeBase = computed(() => gameStore.baseFontSize);
 const widthDialog = computed(() => `${props.width}px`);
@@ -39,6 +40,10 @@ const setEnergyRef = (el, id) => {
   if (el) energySvgRefs.value[id] = el;
 };
 
+const setVoucherRef = (el, id) => {
+  if (el) voucherSvgRefs.value[id] = el;
+};
+
 const closeDialog = (id) => {
   emit("onClose");
   gameStore.closeDialog(id);
@@ -55,6 +60,8 @@ const submitClaim = async (item, rewardsType = "slot-machine") => {
 
       if (rewardsType === "daily") {
         emitter.emit("onClaimeDailySuccess", "");
+      } else if (rewardsType === "REFERRAL") {
+        emitter.emit("onClaimeReferralSuccess", "");
       }
     }
 
@@ -176,6 +183,36 @@ defineExpose({
                 :src="voucher"
                 class="!tw-max-w-[75%] tw-w-full tw-h-auto"
               />
+
+              <svg
+                viewBox="0 0 50 50"
+                xmlns="http://www.w3.org/2000/svg"
+                class="tw-w-full tw-h-full tw-absolute"
+                :ref="(el) => setVoucherRef(el, dialog.id)"
+              >
+                <text
+                  x="85%"
+                  y="75%"
+                  dominant-baseline="middle"
+                  text-anchor="end"
+                  font-family="DynaPuff"
+                  :font-size="`${gameStore.setFontSizeBasedOnViewBox(
+                    voucherSvgRefs[dialog.id],
+                    15
+                  )}px`"
+                  font-weight="700"
+                  fill="#fff"
+                  stroke="#000000"
+                  stroke-width="1.5"
+                  paint-order="stroke fill"
+                  text-overflow="ellipsis"
+                  white-space="nowrap"
+                  overflow="hidden"
+                  width="100%"
+                >
+                  {{ dialog.item.percentage }}%
+                </text>
+              </svg>
             </div>
 
             <div

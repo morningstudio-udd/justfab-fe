@@ -15,7 +15,7 @@ import {
 // import { Vuetify3Resolver } from "unplugin-vue-components/resolvers";
 
 // import pluginRewriteAll from "vite-plugin-rewrite-all";
-// import basicSsl from "@vitejs/plugin-basic-ssl";
+import basicSsl from "@vitejs/plugin-basic-ssl";
 
 export default defineConfig(({ mode }) => {
   const base = mode === "staging" ? "/smk/" : "/";
@@ -24,6 +24,7 @@ export default defineConfig(({ mode }) => {
     base,
     plugins: [
       // basicSsl(),
+
       VueRouter({
         getRouteName: (routeNode) => {
           // Convert pascal case to kebab case

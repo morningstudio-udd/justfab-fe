@@ -9,8 +9,8 @@ import { getApiPath } from "@/utils/helpers";
 const API = {
   user: {
     auth: "/user/auth",
-  }
-}
+  },
+};
 
 export const refreshToken = async () => {
   try {
@@ -31,14 +31,19 @@ export const refreshToken = async () => {
 
 export const authTelegram = async (payload) => {
   try {
-    const res = await $api.post(API.user.auth, payload, {
-      useAuthToken: false,
-    });
+    const res = await $api.post(
+      API.user.auth,
+      {
+        initData: payload,
+      },
+      {
+        useAuthToken: false,
+      }
+    );
     console.log(res);
-    return res;
+    return res.data;
   } catch (error) {
-    // console.error(error);
-    //throw error.response.data || error;
+    console.error(error);
+    throw error.response.data || error;
   }
 };
-

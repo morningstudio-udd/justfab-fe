@@ -1,44 +1,86 @@
 <script setup>
-import { onMounted, ref } from 'vue';
-import { retrieveLaunchParams } from '@telegram-apps/sdk';
+import bgLoadingGame from "@images/game/bg-loading-game.png";
+import { retrieveLaunchParams } from "@telegram-apps/sdk";
 
 const route = useRoute();
 const router = useRouter();
-const initDataRef = ref();
+const userStore = useUserStore();
+const gameStore = useGameStore();
+const authStore = useAuthStore();
+
 definePage({
   meta: {
     layout: "blank",
     public: true,
+    unauthenticated: true,
   },
-}); 
+});
+
+onBeforeMount(() => {
+  gameStore.setLoading(true);
+});
+
+onUnmounted(() => {
+  gameStore.setLoading(false);
+});
 
 onMounted(async () => {
-  let hashes = window.location.hash.substring(1).split('&').reduce((acc, curr) => {
-    const [key, value] = curr.split('=');
-    acc[key] = value;
-    return acc;
-  }, {});
-  try{
-
+  let hashes = window.location.hash
+    .substring(1)
+    .split("&")
+    .reduce((acc, curr) => {
+      const [key, value] = curr.split("=");
+      acc[key] = value;
+      return acc;
+    }, {});
+  try {
     const initData = decodeURIComponent(hashes.tgWebAppData);
-    initDataRef.value = initData;
-    console.log({initData});
-    const data = await authTelegram({initData});
-    console.log(data);
-  }catch(e){
+
+    console.log({ initData });
+    const data = await authTelegram(initData);
+
+    if (data.token) {
+      authStore.token = data.token;
+      await fetchData();
+    }
+  } catch (e) {
     console.log(e);
   }
-  
+
   return;
 });
+
+const fetchData = async () => {
+  try {
+    await getUserInfo();
+
+    if (userStore.userData && Object.keys(userStore.userData).length) {
+      router.push("/game/jackpot");
+    }
+  } catch (error) {
+    console.error(error);
+
+    userStore.userData = null;
+    userStore.token = null;
+
+    router.push("/");
+  }
+};
 </script>
 
 <template>
-  <div style>
-    login in telegram
-    <div>
-    <input type="text" v-model="initDataRef" />
-  
+  <div
+    class="tw-bg-[#86C7E5] tw-w-screen tw-h-screen tw-flex tw-items-center tw-justify-center"
+  >
+    <div
+      class="game-container tw-w-auto tw-h-[1920px] tw-aspect-[9/16] tw-max-w-full tw-max-h-full tw-bg-[#D9D9D9] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-flex tw-flex-col tw-relative"
+      :style="{ backgroundImage: `url(${bgLoadingGame})` }"
+    >
+      <div
+        class="game-content tw-flex-grow tw-flex tw-justify-center tw-items-center tw-text-white"
+      >
+        Redirect user...
+      </div>
     </div>
   </div>
 </template>

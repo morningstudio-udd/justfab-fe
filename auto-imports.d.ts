@@ -21,6 +21,7 @@ declare global {
   const animateCounter: typeof import('./src/utils/helpers.js')['animateCounter']
   const asyncComputed: typeof import('@vueuse/core')['asyncComputed']
   const authClient: typeof import('./src/utils/authClient.js')['authClient']
+  const authTelegram: typeof import('./src/api/auth.js')['authTelegram']
   const autoResetRef: typeof import('@vueuse/core')['autoResetRef']
   const base64UrlDecode: typeof import('./src/utils/helpers.js')['base64UrlDecode']
   const betweenValidator: typeof import('./src/utils/validators.js')['betweenValidator']
@@ -441,6 +442,7 @@ declare module 'vue' {
     readonly alphaValidator: UnwrapRef<typeof import('./src/utils/validators.js')['alphaValidator']>
     readonly animateCounter: UnwrapRef<typeof import('./src/utils/helpers.js')['animateCounter']>
     readonly asyncComputed: UnwrapRef<typeof import('@vueuse/core')['asyncComputed']>
+    readonly authTelegram: UnwrapRef<typeof import('./src/api/auth.js')['authTelegram']>
     readonly autoResetRef: UnwrapRef<typeof import('@vueuse/core')['autoResetRef']>
     readonly base64UrlDecode: UnwrapRef<typeof import('./src/utils/helpers.js')['base64UrlDecode']>
     readonly betweenValidator: UnwrapRef<typeof import('./src/utils/validators.js')['betweenValidator']>

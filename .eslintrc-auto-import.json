@@ -421,6 +421,7 @@
     "toggleClass": true,
     "handleNormalClickAnimation": true,
     "removeClassAfter": true,
-    "useMixin": true
+    "useMixin": true,
+    "authTelegram": true
   }
 }

@@ -15,8 +15,8 @@ import gift7 from "@images/game/gift-7.png";
 import dailyReward from "@images/game/daily-reward.png";
 import bgBoxTask from "@images/game/bg-box-task.png";
 import iconCheckedIn from "@images/game/icon-checked-in.png";
-// import { openLink } from "@telegram-apps/sdk";
-import { openLink, openPopup, openTelegramLink } from "@telegram-apps/sdk-vue";
+import { openLink, openTelegramLink } from "@telegram-apps/sdk";
+// import { openLink, openPopup, openTelegramLink } from "@telegram-apps/sdk-vue";
 import moment from "moment";
 import { emitter } from "@plugins/mitt";
 

@@ -197,9 +197,10 @@ const getRecruited = async () => {
               :key="index"
               :src="level.image"
               :class="{
-                received: index < recruited,
                 'tw-cursor-pointer': canClaimLevels.includes(level.count),
-                'disable-element': !canClaimLevels.includes(level.count),
+                'disable-element':
+                  !canClaimLevels.includes(level.count) &&
+                  !claimedLevels.includes(level.count),
               }"
               class="tw-w-full tw-h-full [&_.v-responsive\_\_content]:tw-flex [&_.v-responsive\_\_content]:tw-justify-center [&_.v-responsive\_\_content]:tw-items-center"
               @click.prevent="

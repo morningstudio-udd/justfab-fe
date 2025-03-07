@@ -388,9 +388,7 @@ const submitMerge = () => {
           :key="item._id"
           class="tw-aspect-[178/178] tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
           :style="{
-            backgroundImage: `url(${
-              ITEM_RARITIES[item.item?.rarity].background
-            })`,
+            backgroundImage: `url(${ITEM_RARITIES[item?.rarity].background})`,
           }"
         >
           <v-img

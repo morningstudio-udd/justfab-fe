@@ -2,15 +2,6 @@
 import LoadingGame from "@/components/LoadingGame.vue";
 import gameBg from "@images/game/bg-game-2.png";
 import { emitter } from "@plugins/mitt";
-import {
-  expandViewport,
-  requestFullscreen,
-  isFullscreen,
-  on,
-  viewportSafeAreaInsets,
-  viewportSafeAreaInsetTop,
-  viewportContentSafeAreaInsetTop,
-} from "@telegram-apps/sdk-vue";
 
 const gameStore = useGameStore();
 

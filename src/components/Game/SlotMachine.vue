@@ -45,6 +45,15 @@ watch(
 );
 
 watch(
+  () => props.disabled,
+  (v, vo) => {
+    if (slotMachine.value != null) {
+      slotMachine.value.ButtonRoll.interactable = !v;
+    }
+  }
+);
+
+watch(
   () => props.energy,
   (v) => {
     if (slotMachine.value != null) {
@@ -87,6 +96,7 @@ watch(
 
 let _energy = 0;
 let drainEnergyInterval = null;
+let isRolling = false;
 
 const drainEnergyBottle = () => {
   if (slotMachine.value != null) {
@@ -157,7 +167,7 @@ const onButtonCloseClick = () => {
 };
 
 const onButtonRoolClick = () => {
-  console.log(props.disabled);
+  console.log("button click", props.disabled);
   if (props.disabled) return;
   emit("rollClick", {betX: currentX.value});
 };
@@ -172,6 +182,8 @@ const roll = async (scripts) => {
   playScripts = scripts;
   turns = 1;
   await rollScriptStep(0);
+  isRolling = true;
+  return;
 };
 
 const rollScriptStep = async (step) => {
@@ -200,15 +212,15 @@ const rollScriptStep = async (step) => {
     rollJackpot(currentScript.rewards[0].description);
     await waitForSeconds(4);
     setButtonCloseVisible(true);
+    isRolling = false;
     emit("scriptCompleted", currentScript);
   }
-  if(currentScript >= playScripts.length - 1) 
+  if(currentStep >= playScripts.length - 1) 
     emit("allScriptCompleted");
 }
 
 const rollNextStep = async () => {
   if(currentStep >= playScripts.length - 1) {
-    // emit("allScriptCompleted");
     return;
   }
   await rollScriptStep(currentStep + 1);
@@ -257,7 +269,7 @@ const showValue = (v) => {
   slotMachine.value.LabelValue.show(v);
 }
 
-const emit = defineEmits(["rollClick", "scriptCompleted", "claimEnergyClick", "loaded"]);
+const emit = defineEmits(["rollClick", "scriptCompleted", "allScriptCompleted", "claimEnergyClick", "loaded"]);
 defineExpose({
   roll,
   rollNextStep,

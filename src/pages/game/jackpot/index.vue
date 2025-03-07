@@ -72,17 +72,13 @@ onMounted(async () => {
 });
 
 onUnmounted(() => {
-  // if (resizeObserver && gameContentRef.value) {
-  //   resizeObserver.unobserve(gameContentRef.value);
-  //   resizeObserver.disconnect();
-  // }
-
   emitter.off("reset-rewards-state");
 });
 
 const onRollClick = async (betX) => {
   if (!enable.value) return;
   try {
+    console.log("enable", enable.value);
     enable.value = false;
 
     const { playScripts, rewards, user } = await playSlotMachine({ betX });
@@ -96,13 +92,16 @@ const onRollClick = async (betX) => {
     console.log("error", error);
   } finally {
   }
-
-  enable.value = true;
 };
 
 const onScriptCompleted = async (script) => {
   console.log("complete", script);
   await processRewards(script.rewards);
+};
+
+const onAllScriptCompleted = async () => {
+  console.log("all complete");
+  enable.value = true;
 };
 
 const resetRewardsState = () => {
@@ -166,6 +165,7 @@ const onClaimEnergyClick = async (e) => {
         :volume="sfxVolume"
         @rollClick="onRollClick"
         @scriptCompleted="onScriptCompleted"
+        @allScriptCompleted="onAllScriptCompleted"
         @claimEnergyClick="onClaimEnergyClick"
       ></slot-machine>
     </div>

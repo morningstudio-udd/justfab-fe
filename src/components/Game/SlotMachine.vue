@@ -112,6 +112,7 @@ const drainEnergyBottle = () => {
         drainEnergyInterval = null;
       }
       slotMachine.value.LabelClaimEnergy.string = `${_energy}/50`;
+      slotMachine.value.ProgressEnergy.value = _energy / 50;
     }, 50)
   }
 }
@@ -134,6 +135,7 @@ const onIframeLoaded = () => {
     sm.Jackpot.setPrizes(props.jackpotRewards);
     sm.Jackpot.node.active = false;
     setInterval(updateEnergyBottle, 1000);
+    updateEnergyBottle();
     setTimeout(() => setVolume(props.volume), 50);
     emit("loaded", sm);
   };
@@ -143,9 +145,20 @@ const updateEnergyBottle = () => {
   if(drainEnergyInterval != null) return;
   let now = new Date();
   let minutes = Math.floor((now - props.claimEnergyAt) / 60000);
-  if(minutes > 50) minutes = 50;
+  let seconds = Math.floor((now - props.claimEnergyAt) / 1000) % 60;
+  if(minutes > 50) {
+    minutes = 50;
+    slotMachine.value.LabelCountdownEnergy.string = "--:--";
+  }else{
+    slotMachine.value.LabelCountdownEnergy.string = `00:${seconds < 10 ? "0" : ""}${seconds}`;
+  }
+  
+    
   _energy = minutes;
-  slotMachine.value.LabelClaimEnergy.string = `${minutes}/50`;
+  console.log("update energy", minutes, seconds);
+  slotMachine.value.LabelClaimEnergy.string = `${minutes < 10?"0":""}${minutes}/50`;
+  slotMachine.value.ProgressEnergy.value = minutes / 50;
+  
 }
 
 const XS = [1, 2, 3, 5, 10]

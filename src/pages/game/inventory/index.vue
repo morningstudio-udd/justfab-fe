@@ -46,7 +46,7 @@ const foodBarSvgRef = ref();
 const itemsContainerRef = ref();
 const itemsContainerWidth = ref(0);
 const itemsContainerHeight = ref(0);
-const voucherSvgRef = ref();
+const voucherSvgRefs = ref([]);
 const unclaimRewards = ref([]);
 // const itemsContainerGapX = ref(0);
 // const itemsContainerGapY = ref(0);
@@ -56,6 +56,12 @@ const lastHeight = ref(0);
 
 const userInventory = computed(() => inventoryData.value?.items);
 const fontSizeBase = computed(() => gameStore.baseFontSize);
+const voucherFontSize = computed(() => {
+  if (!voucherSvgRefs.value?.length) return 0;
+  if (voucherFontSize.value > 0) return;
+
+  return gameStore.setFontSizeBasedOnViewBox(voucherSvgRefs.value[0], 18);
+});
 const itemsContainerGapX = computed(() =>
   Math.round(itemsContainerWidth.value * 0.05)
 );
@@ -70,7 +76,7 @@ const itemsContainerPaddingY = computed(() =>
 );
 const hasPoolPercentage = computed(() => {
   if (!unclaimRewards.value) return false;
-  return unclaimRewards.value.find(
+  return unclaimRewards.value.filter(
     (reward) => reward.reward.type === REWARD_TYPES.POOL_PERCENTAGE
   );
 });
@@ -347,7 +353,8 @@ const submitMerge = () => {
         <div
           class="tw-aspect-[178/178] tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
           :style="{ backgroundImage: `url(${rarityMythic})` }"
-          v-if="hasPoolPercentage"
+          v-if="hasPoolPercentage.length"
+          v-for="voucherItem in hasPoolPercentage"
         >
           <v-img :src="voucher" class="!tw-max-w-[70%] tw-w-full tw-h-auto" />
 
@@ -355,18 +362,16 @@ const submitMerge = () => {
             viewBox="0 0 50 50"
             xmlns="http://www.w3.org/2000/svg"
             class="tw-w-full tw-h-full tw-absolute"
-            ref="voucherSvgRef"
+            ref="voucherSvgRefs"
           >
             <text
+              v-if="voucherFontSize"
               x="80%"
               y="75%"
               dominant-baseline="middle"
               text-anchor="end"
               font-family="DynaPuff"
-              :font-size="`${gameStore.setFontSizeBasedOnViewBox(
-                voucherSvgRef,
-                15
-              )}px`"
+              :font-size="`${voucherFontSize}px`"
               font-weight="700"
               fill="#fff"
               stroke="#000000"
@@ -377,7 +382,7 @@ const submitMerge = () => {
               overflow="hidden"
               width="100%"
             >
-              0.001%
+              {{ voucherItem.reward.value }}%
             </text>
           </svg>
         </div>

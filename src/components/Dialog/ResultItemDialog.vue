@@ -210,7 +210,7 @@ defineExpose({
                   overflow="hidden"
                   width="100%"
                 >
-                  {{ dialog.item.percentage }}%
+                  {{ dialog.item.value }}%
                 </text>
               </svg>
             </div>

@@ -12,8 +12,8 @@ export function useMixin() {
     resizeObserver = new ResizeObserver((entries) => {
       requestAnimationFrame(() => {
         for (let entry of entries) {
-          const newWidth = Math.round(entry.contentRect.width);
-          const newHeight = Math.round(entry.contentRect.height);
+          const newWidth = Math.round(entry.contentRect?.width);
+          const newHeight = Math.round(entry.contentRect?.height);
           const lastSize = lastSizes.get(entry.target) || {
             width: 0,
             height: 0,

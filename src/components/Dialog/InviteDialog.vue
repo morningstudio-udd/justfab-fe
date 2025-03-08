@@ -3,6 +3,7 @@ import bgPopupInvite from "@images/game/popup-invite.png";
 import btnCopyInvte from "@images/game/btn-copy-invite.png";
 import btnShareInvite from "@images/game/btn-share-invite.png";
 import iconClose from "@images/game/icon-close.png";
+import { shareURL } from "@telegram-apps/sdk";
 
 const props = defineProps({
   width: {
@@ -38,21 +39,30 @@ const submitCopyInvite = ($event) => {
 
 const submitShareInvite = async ($event) => {
   handleNormalClickAnimation($event);
-  if (navigator.share) {
-    // If Web Share API is available, open the native share dialog
-    try {
-      await navigator.share({
-        title: "JUSTFAB",
-        text: "Yo, welcome to the world of Fabs! We’re about to go on some crazy ride, where we’ll probably try to save this whole damn thing. Or not, we’ll see what happens.You’re a key part of this madness. Join the Fabs crew, help out your empire and contribute to some good times, which we are all trying to bring back. There’s food, laughs, and all that, or at least there will be when we fix things up.Hit that “Play Now” button and let’s get this show on the road!",
-        url: inviteLink.value,
-      });
-      console.log("Sharing successful.");
-    } catch (error) {
-      console.error("Error while sharing:", error);
-    }
+
+  if (shareURL.isAvailable()) {
+    console.log("share telegram");
+    shareURL(
+      inviteLink.value,
+      "Yo, welcome to the world of Fabs! We’re about to go on some crazy ride, where we’ll probably try to save this whole damn thing. Or not, we’ll see what happens.You’re a key part of this madness. Join the Fabs crew, help out your empire and contribute to some good times, which we are all trying to bring back. There’s food, laughs, and all that, or at least there will be when we fix things up.Hit that “Play Now” button and let’s get this show on the road!"
+    );
   } else {
-    // If Web Share API is not available, show fallback options
-    console.warn("Web Share API is not supported in this browser.");
+    if (navigator.share) {
+      // If Web Share API is available, open the native share dialog
+      try {
+        await navigator.share({
+          title: "JUSTFAB",
+          text: "Yo, welcome to the world of Fabs! We’re about to go on some crazy ride, where we’ll probably try to save this whole damn thing. Or not, we’ll see what happens.You’re a key part of this madness. Join the Fabs crew, help out your empire and contribute to some good times, which we are all trying to bring back. There’s food, laughs, and all that, or at least there will be when we fix things up.Hit that “Play Now” button and let’s get this show on the road!",
+          url: inviteLink.value,
+        });
+        console.log("Sharing successful.");
+      } catch (error) {
+        console.error("Error while sharing:", error);
+      }
+    } else {
+      // If Web Share API is not available, show fallback options
+      console.warn("Web Share API is not supported in this browser.");
+    }
   }
 };
 

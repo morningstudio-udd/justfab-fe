@@ -60,13 +60,17 @@ onMounted(async () => {
     observe(gameContentRef.value, handleResize);
   }
 
-  const p1 = getUserInfo();
-  const p2 = getJackpotRewards().then(({ rewards, pool }) => {
-    jackpotRewards.value = rewards;
-    jackpot.value = pool;
-  });
+  try {
+    const p1 = getUserInfo();
+    const p2 = getJackpotRewards().then(({ rewards, pool }) => {
+      jackpotRewards.value = rewards;
+      jackpot.value = pool;
+    });
 
-  await Promise.all([p1, p2]);
+    await Promise.all([p1, p2]);
+  } catch (error) {
+    console.log("error", error);
+  }
 
   emitter.on("reset-rewards-state", resetRewardsState);
 });

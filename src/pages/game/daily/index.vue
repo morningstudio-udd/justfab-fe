@@ -19,6 +19,8 @@ import { openLink, openTelegramLink } from "@telegram-apps/sdk";
 // import { openLink, openPopup, openTelegramLink } from "@telegram-apps/sdk-vue";
 import moment from "moment";
 import { emitter } from "@plugins/mitt";
+import { delay } from "@/utils/helpers";
+import { nextTick } from "vue";
 
 definePage({
   meta: {
@@ -36,6 +38,7 @@ const allTasks = ref([]);
 const allTaskGroup = ref([]);
 const userTasks = ref([]);
 const currentGroupParent = ref();
+const currentTask = ref();
 
 const currentStreak = ref(0);
 // const lastClaimedAt = ref(null);
@@ -43,9 +46,16 @@ const streakRewards = ref([]);
 
 const fontSizeBase = computed(() => gameStore.baseFontSize);
 
-const currentIndex = computed(() => currentStreak.value % 7);
+const currentIndex = computed(() => {
+  if (!currentStreak.value) {
+    return;
+  }
+  return currentStreak.value % 7;
+});
+
 const canClaimIndexs = computed(() => {
   return streakRewards.value.reduce((acc, item) => {
+    console.log("item", item, acc);
     if (!acc.includes(item.level)) {
       acc.push(item.level);
     }
@@ -65,6 +75,8 @@ const currentGroups = computed(() => {
 });
 
 onMounted(async () => {
+  // Telegram.WebApp.ready();
+
   const p1 = getTasks();
   const p2 = getTaskGroup();
   const p3 = getSeftTasks();
@@ -79,6 +91,24 @@ onMounted(async () => {
   }
 
   emitter.on("onClaimeDailySuccess", () => getDaily());
+
+  document.addEventListener("visibilitychange", async () => {
+    if (document.visibilityState === "visible") {
+      if (currentTask.value && Object.keys(currentTask.value).length) {
+        // await delay(5000);
+
+        // await nextTick();
+
+        await getSeftTasks();
+
+        // await nextTick();
+
+        // gameStore.handleRewards([...currentTask.value.reward], "task");
+
+        currentTask.value = null;
+      }
+    }
+  });
 });
 
 const getDaily = async () => {
@@ -116,6 +146,8 @@ const getSeftTasks = async () => {
   try {
     const tasksResponse = await getUserTasks();
 
+    console.log("tasksResponse", tasksResponse);
+
     userTasks.value = tasksResponse.task;
 
     if (tasksResponse.rewards.length) {
@@ -139,40 +171,51 @@ const isCompleted = (taskId) => {
 };
 
 const doTask = async (task) => {
-  switch (task.type) {
-    case TASK_TYPES.TELEGRAM: {
-      if (openTelegramLink.isAvailable()) {
-        openTelegramLink(task.target);
-      } else {
-        window.open(task.target, "_blank");
+  try {
+    switch (task.type) {
+      case TASK_TYPES.TELEGRAM: {
+        currentTask.value = task;
+
+        if (openTelegramLink.isAvailable()) {
+          openTelegramLink(task.target);
+        } else {
+          window.open(task.target, "_blank");
+        }
+
+        // await getSeftTasks();
+
+        // gameStore.handleRewards([task.reward], "task");
+        break;
       }
+      case TASK_TYPES.LINK: {
+        currentTask.value = task;
 
-      await getSeftTasks();
+        console.log("Task:", currentTask.value);
 
-      gameStore.handleRewards([task.reward], "task");
-      break;
-    }
-    case TASK_TYPES.LINK: {
-      if (openLink.isAvailable()) {
-        openLink(task.target, {
-          tryInstantView: true,
-        });
-      } else {
-        window.open(task.target, "_blank");
+        if (openLink.isAvailable()) {
+          openLink(task.target, {
+            tryInstantView: true,
+          });
+          // Telegram.WebApp.openLink(task.target, { try_instant_view: true });
+        } else {
+          window.open(task.target, "_blank");
+        }
+
+        await completeTask(task._id);
+
+        await delay(3000);
+
+        // await getSeftTasks();
+
+        // gameStore.handleRewards([task.reward], "task");
+        break;
       }
-
-      await completeTask(task._id);
-
-      await delay(3000);
-
-      await getSeftTasks();
-
-      gameStore.handleRewards([task.reward], "task");
-      break;
+      default:
+        console.warn(`Unknown reward type: ${reward.type}`);
+        break;
     }
-    default:
-      console.warn(`Unknown reward type: ${reward.type}`);
-      break;
+  } catch (error) {
+    console.error(error);
   }
 };
 
@@ -228,8 +271,15 @@ const canClaimDailyReward = (index) => {
   // if (currentStreak.value === 0 && index === 1) {
   //   return true;
   // }
+  // console.log(
+  //   "canClaimDailyReward",
+  //   index,
+  //   currentIndex.value,
+  //   canClaimIndexs.value,
+  //   index === currentIndex.value && canClaimIndexs.value.includes(index)
+  // );
 
-  return index === currentIndex.value && canClaimIndexs.value.includes(index);
+  return canClaimIndexs.value.includes(index);
 };
 
 const claimedDailyReward = (index) => {
@@ -262,6 +312,8 @@ const claimedDailyReward = (index) => {
             :class="{
               'checked-in': claimedDailyReward(1),
               'tw-cursor-pointer': canClaimDailyReward(1),
+              'disable-element':
+                !canClaimDailyReward(1) && !claimedDailyReward(1),
             }"
             @click="
               canClaimDailyReward(1) ? handleDailyCheckIn($event, 1) : null
@@ -281,6 +333,8 @@ const claimedDailyReward = (index) => {
             :class="{
               'checked-in': claimedDailyReward(2),
               'tw-cursor-pointer': canClaimDailyReward(2),
+              'disable-element':
+                !canClaimDailyReward(2) && !claimedDailyReward(2),
             }"
             @click="
               canClaimDailyReward(2) ? handleDailyCheckIn($event, 2) : null
@@ -300,6 +354,8 @@ const claimedDailyReward = (index) => {
             :class="{
               'checked-in': claimedDailyReward(3),
               'tw-cursor-pointer': canClaimDailyReward(3),
+              'disable-element':
+                !canClaimDailyReward(3) && !claimedDailyReward(3),
             }"
             @click="
               canClaimDailyReward(3) ? handleDailyCheckIn($event, 3) : null
@@ -321,6 +377,8 @@ const claimedDailyReward = (index) => {
             :class="{
               'checked-in': claimedDailyReward(7),
               'tw-cursor-pointer': canClaimDailyReward(7),
+              'disable-element':
+                !canClaimDailyReward(7) && !claimedDailyReward(7),
             }"
             @click="
               canClaimDailyReward(7) ? handleDailyCheckIn($event, 7) : null
@@ -344,6 +402,8 @@ const claimedDailyReward = (index) => {
             :class="{
               'checked-in': claimedDailyReward(4),
               'tw-cursor-pointer': canClaimDailyReward(4),
+              'disable-element':
+                !canClaimDailyReward(4) && !claimedDailyReward(4),
             }"
             @click="
               canClaimDailyReward(4) ? handleDailyCheckIn($event, 4) : null
@@ -363,6 +423,8 @@ const claimedDailyReward = (index) => {
             :class="{
               'checked-in': claimedDailyReward(5),
               'tw-cursor-pointer': canClaimDailyReward(5),
+              'disable-element':
+                !canClaimDailyReward(5) && !claimedDailyReward(5),
             }"
             @click="
               canClaimDailyReward(5) ? handleDailyCheckIn($event, 5) : null
@@ -382,6 +444,8 @@ const claimedDailyReward = (index) => {
             :class="{
               'checked-in': claimedDailyReward(6),
               'tw-cursor-pointer': canClaimDailyReward(6),
+              'disable-element':
+                !canClaimDailyReward(6) && !claimedDailyReward(6),
             }"
             @click="
               canClaimDailyReward(6) ? handleDailyCheckIn($event, 6) : null
@@ -502,7 +566,7 @@ const claimedDailyReward = (index) => {
                       :key="task._id"
                       :title="task.title"
                       :subtitle="task.description || ''"
-                      @click="doTask(task)"
+                      @click="isCompleted(task._id) ? '' : doTask(task)"
                       :style="{
                         fontSize: `${fontSizeBase}px !important`,
                         '--base-font-size': `${fontSizeBase}px`,

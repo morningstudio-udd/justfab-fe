@@ -37,12 +37,13 @@ watch(soundVolume, (newVolume) => {
 });
 </script> -->
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, onBeforeUnmount } from "vue";
 import { useLocalStorage } from "@vueuse/core";
 
 const refAudio = ref(null);
 const audioContext = ref(null);
 const gainNode = ref(null);
+const mediaSource = ref(null);
 const soundVolume = useLocalStorage("soundVolume", 50);
 
 onMounted(() => {
@@ -51,13 +52,20 @@ onMounted(() => {
     return;
   }
 
-  audioContext.value = new (window.AudioContext || window.webkitAudioContext)();
-  gainNode.value = audioContext.value.createGain();
+  if (!audioContext.value) {
+    audioContext.value = new (window.AudioContext ||
+      window.webkitAudioContext)();
+    gainNode.value = audioContext.value.createGain();
+  }
 
-  refAudio.value.loop = true;
-
-  const track = audioContext.value.createMediaElementSource(refAudio.value);
-  track.connect(gainNode.value).connect(audioContext.value.destination);
+  if (!mediaSource.value && refAudio.value) {
+    mediaSource.value = audioContext.value.createMediaElementSource(
+      refAudio.value
+    );
+    mediaSource.value
+      .connect(gainNode.value)
+      .connect(audioContext.value.destination);
+  }
 
   gainNode.value.gain.value = soundVolume.value / 100;
 
@@ -79,6 +87,15 @@ watch(soundVolume, (newVolume) => {
   if (gainNode.value) {
     console.log("change volume", newVolume);
     gainNode.value.gain.value = newVolume / 100;
+  }
+});
+
+onBeforeUnmount(() => {
+  if (audioContext.value) {
+    audioContext.value.close();
+    audioContext.value = null;
+    mediaSource.value = null;
+    gainNode.value = null;
   }
 });
 </script>

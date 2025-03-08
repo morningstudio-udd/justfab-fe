@@ -47,9 +47,18 @@ export const useGameStore = defineStore("game", () => {
     for (const reward of rewards) {
       switch (reward.type) {
         case REWARD_TYPES.JACKPOT:
-        case REWARD_TYPES.TOKEN:
+
         case REWARD_TYPES.FOOD:
         case REWARD_TYPES.SPIN:
+          break;
+        case REWARD_TYPES.TOKEN:
+          console.log("Reward: ", REWARD_TYPES.TOKEN);
+          // userStore.userData.token += reward.value;
+          if (rewardsType === "slot-machine") {
+            userStore.userData.token += reward.value;
+          } else {
+            openResultDialog(reward, rewardsType);
+          }
           break;
         case REWARD_TYPES.GOLD:
           console.log("Reward: ", REWARD_TYPES.GOLD);

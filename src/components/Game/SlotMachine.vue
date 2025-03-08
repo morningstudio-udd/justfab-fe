@@ -152,10 +152,7 @@ const updateEnergyBottle = () => {
   }else{
     slotMachine.value.LabelCountdownEnergy.string = `00:${seconds < 10 ? "0" : ""}${seconds}`;
   }
-  
-    
   _energy = minutes;
-  console.log("update energy", minutes, seconds);
   slotMachine.value.LabelClaimEnergy.string = `${minutes < 10?"0":""}${minutes}/50`;
   slotMachine.value.ProgressEnergy.value = minutes / 50;
   
@@ -200,6 +197,10 @@ const roll = async (scripts) => {
 };
 
 const rollScriptStep = async (step) => {
+  if(step > playScripts.length - 1) {
+    emit("allScriptCompleted");
+    return;
+  }
   setVolume(props.volume);
   currentStep = step;
   currentScript = playScripts[currentStep];
@@ -228,14 +229,12 @@ const rollScriptStep = async (step) => {
     isRolling = false;
     emit("scriptCompleted", currentScript);
   }
-  if(currentStep >= playScripts.length - 1) 
-    emit("allScriptCompleted");
 }
 
 const rollNextStep = async () => {
-  if(currentStep >= playScripts.length - 1) {
-    return;
-  }
+  // if(currentStep >= playScripts.length - 1) {
+  //   return;
+  // }
   await rollScriptStep(currentStep + 1);
 }
 
@@ -260,8 +259,10 @@ const setVolume = (v) => {
 }
 
 const waitForSeconds = async (s) => {
-  return new Promise((res) => {
-    setTimeout(res, s * 1000);
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, s * 1000);
   });
 };
 

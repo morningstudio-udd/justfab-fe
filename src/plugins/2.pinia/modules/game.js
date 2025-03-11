@@ -47,7 +47,6 @@ export const useGameStore = defineStore("game", () => {
     for (const reward of rewards) {
       switch (reward.type) {
         case REWARD_TYPES.JACKPOT:
-
         case REWARD_TYPES.FOOD:
         case REWARD_TYPES.SPIN:
           break;

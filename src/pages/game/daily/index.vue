@@ -44,6 +44,8 @@ const currentStreak = ref(0);
 // const lastClaimedAt = ref(null);
 const streakRewards = ref([]);
 
+let checkTask = null;
+
 const fontSizeBase = computed(() => gameStore.baseFontSize);
 
 const currentIndex = computed(() => {
@@ -93,17 +95,10 @@ onMounted(async () => {
   emitter.on("onClaimeDailySuccess", () => getDaily());
 
   document.addEventListener("visibilitychange", async () => {
+    console.log("currentTask.value", currentTask.value);
     if (document.visibilityState === "visible") {
       if (currentTask.value && Object.keys(currentTask.value).length) {
-        // await delay(5000);
-
-        // await nextTick();
-
         await getSeftTasks();
-
-        // await nextTick();
-
-        // gameStore.handleRewards([...currentTask.value.reward], "task");
 
         currentTask.value = null;
       }
@@ -177,14 +172,19 @@ const doTask = async (task) => {
         currentTask.value = task;
 
         if (openTelegramLink.isAvailable()) {
-          openTelegramLink(task.target);
+          openTelegramLink(`https://t.me/${task.target}`);
         } else {
-          window.open(task.target, "_blank");
+          window.open(`https://t.me/${task.target}`, "_blank");
         }
 
-        // await getSeftTasks();
+        // if (window.Telegram?.WebApp) {
+        //   window.Telegram.WebApp.openTelegramLink(
+        //     `https://t.me/${task.target}`
+        //   );
+        // } else {
+        //   window.open(`https://t.me/${task.target}`, "_blank");
+        // }
 
-        // gameStore.handleRewards([task.reward], "task");
         break;
       }
       case TASK_TYPES.LINK: {
@@ -200,6 +200,14 @@ const doTask = async (task) => {
         } else {
           window.open(task.target, "_blank");
         }
+
+        // if (window.Telegram?.WebApp) {
+        //   window.Telegram.WebApp.openLink(task.target, {
+        //     try_instant_view: true,
+        //   });
+        // } else {
+        //   window.open(`https://t.me/${task.target}`, "_blank");
+        // }
 
         await completeTask(task._id);
 
@@ -217,21 +225,6 @@ const doTask = async (task) => {
   } catch (error) {
     console.error(error);
   }
-};
-
-const submitNetwork = ($event) => {
-  console.log("submitNetwork");
-  handleNormalClickAnimation($event);
-};
-
-const submitFriend = ($event) => {
-  console.log("submitFriend");
-  handleNormalClickAnimation($event);
-};
-
-const submitFab = ($event) => {
-  console.log("submitFab");
-  handleNormalClickAnimation($event);
 };
 
 const handleDailyCheckIn = ($event, level) => {

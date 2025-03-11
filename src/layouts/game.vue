@@ -69,7 +69,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   // stopClaiming();
-  document.removeEventListener("visibilitychange", stopClaiming);
+  // document.removeEventListener("visibilitychange", stopClaiming);
 });
 
 // const executeClaimRewards = async () => {

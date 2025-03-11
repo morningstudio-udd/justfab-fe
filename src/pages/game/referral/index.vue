@@ -31,14 +31,14 @@ const specialLevels = [
   { count: 2, image: invitedReward2 },
   { count: 3, image: invitedReward3 },
   { count: 10, image: invitedReward4 },
-  { count: 50, image: invitedReward5 },
-  { count: 100, image: invitedReward6 },
-  { count: 200, image: invitedReward7 },
-  { count: 500, image: invitedReward8 },
-  { count: 1000, image: invitedReward9 },
-  { count: 2000, image: invitedReward10 },
-  { count: 5000, image: invitedReward11 },
-  { count: 10000, image: invitedReward12 },
+  { count: 20, image: invitedReward5 },
+  { count: 50, image: invitedReward6 },
+  { count: 100, image: invitedReward7 },
+  { count: 200, image: invitedReward8 },
+  { count: 500, image: invitedReward9 },
+  { count: 1000, image: invitedReward10 },
+  { count: 2000, image: invitedReward11 },
+  { count: 3000, image: invitedReward12 },
 ];
 
 const gameStore = useGameStore();

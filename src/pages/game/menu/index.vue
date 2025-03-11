@@ -51,7 +51,7 @@ const submitOpenSettingDialog = () => {
     >
       <div class="menu tw-col-span-1 tw-row-span-2">
         <router-link class="menu-link" :to="{ path: '/game/referral' }">
-          {{ $t("Invite Fab") }}
+          {{ $t("Invite to Fab") }}
         </router-link>
       </div>
 
@@ -90,7 +90,7 @@ const submitOpenSettingDialog = () => {
 
       <div class="menu tw-col-span-1 tw-row-span-1">
         <div class="menu-link" @click="submitOpenSettingDialog">
-          {{ $t("Setting") }}
+          {{ $t("Settings") }}
         </div>
       </div>
     </div>

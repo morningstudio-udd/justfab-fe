@@ -103,7 +103,7 @@ defineExpose({ openDialog, settingGameDialog, closeDialog });
                   overflow="hidden"
                   width="100%"
                 >
-                  Volume Music
+                  Music Volume
                 </text>
               </svg>
             </div>
@@ -181,7 +181,7 @@ defineExpose({ openDialog, settingGameDialog, closeDialog });
                   overflow="hidden"
                   width="100%"
                 >
-                  Volume SFX
+                  SFX Volume
                 </text>
               </svg>
             </div>

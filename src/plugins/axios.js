@@ -15,17 +15,25 @@ const $api = axios.create({
 
 // ℹ️ Add request interceptor to send the authorization header on each subsequent request after login
 $api.interceptors.request.use(
-  function (config) {
+  async function (config) {
     if (config.useAuthToken === false) {
       delete config.headers.Authorization;
     } else {
-      if (authStore.token) {
-        config.headers["Authorization"] = "Bearer " + authStore.token;
-      }
+      const timeLeft = authStore.jwtExpiration
+        ? authStore.jwtExpiration - Date.now()
+        : null;
+
+      // if (authStore.token && timeLeft > 0) {
+      config.headers["Authorization"] = "Bearer " + authStore.token;
+      // }
+
+      // if (timeLeft !== null && timeLeft < 5 * 60 * 1000) {
+      //   await refreshToken();
+      //   config.headers["Authorization"] = "Bearer " + authStore.token;
+      // }
     }
 
     delete config.useAuthToken;
-
     return config;
   },
   function (error) {
@@ -48,6 +56,15 @@ $api.interceptors.response.use(
     console.error("Error interceptors", error);
 
     if (error.response.status === 401) {
+      if (refreshingToken && originalRequest.url === "/user/refreshToken") {
+        console.error("🚨 Refresh token failed, logging out...");
+        refreshingToken = false;
+        authStore.setToken(null);
+        cookies.remove("role");
+        await router.push("/");
+        return Promise.reject(error);
+      }
+
       if (!refreshingToken) {
         refreshingToken = true;
         try {
@@ -71,7 +88,8 @@ $api.interceptors.response.use(
         } catch (refreshError) {
           refreshingToken = false;
           // Handle refresh token failure here (e.g., redirect to login)
-          cookies.remove("token");
+          // cookies.remove("token");
+          authStore.setToken(null);
           cookies.remove("role");
 
           // Redirect to login page

@@ -7,7 +7,7 @@ const route = useRoute();
 const authStore = useAuthStore();
 
 onMounted(async () => {
-  if (!!(cookies.get("user_role") && cookies.get("token"))) {
+  if (!!(cookies.get("user_role") && authStore.token)) {
     await fetchData();
   }
 });

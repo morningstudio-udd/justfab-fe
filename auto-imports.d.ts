@@ -157,6 +157,7 @@ declare global {
   const onWatcherCleanup: typeof import('vue')['onWatcherCleanup']
   const paginationMeta: typeof import('./src/utils/mixin.js')['paginationMeta']
   const parseJwt: typeof import('./src/utils/helpers.js')['parseJwt']
+  const parseJwtLifetime: typeof import('./src/utils/helpers.js')['parseJwtLifetime']
   const passwordValidator: typeof import('./src/utils/validators.js')['passwordValidator']
   const pausableWatch: typeof import('@vueuse/core')['pausableWatch']
   const playSlotMachine: typeof import('./src/api/game.js')['playSlotMachine']
@@ -574,6 +575,7 @@ declare module 'vue' {
     readonly onUpdated: UnwrapRef<typeof import('vue')['onUpdated']>
     readonly onWatcherCleanup: UnwrapRef<typeof import('vue')['onWatcherCleanup']>
     readonly parseJwt: UnwrapRef<typeof import('./src/utils/helpers.js')['parseJwt']>
+    readonly parseJwtLifetime: UnwrapRef<typeof import('./src/utils/helpers.js')['parseJwtLifetime']>
     readonly passwordValidator: UnwrapRef<typeof import('./src/utils/validators.js')['passwordValidator']>
     readonly pausableWatch: UnwrapRef<typeof import('@vueuse/core')['pausableWatch']>
     readonly playSlotMachine: UnwrapRef<typeof import('./src/api/game.js')['playSlotMachine']>

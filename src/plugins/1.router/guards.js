@@ -20,7 +20,7 @@ export const setupGuards = (router) => {
      * Check if user is logged in by checking if token & user data exists in local storage
      * Feel free to update this logic to suit your needs
      */
-    const isLoggedIn = !!(cookies.get("user_role") && cookies.get("token"));
+    const isLoggedIn = !!(cookies.get("user_role") && authStore.token);
     console.log("isLoggedIn", isLoggedIn);
 
     /*
@@ -34,12 +34,14 @@ export const setupGuards = (router) => {
     }
 
     if (to.meta.requiresAuth && !isLoggedIn) {
-      return { name: "404", query: { redirect: to.fullPath } };
+      // return { name: "404", query: { redirect: to.fullPath } };
+      return "/";
     }
 
     if (!canNavigate(to) && to.matched.length) {
       /* eslint-disable indent */
-      return isLoggedIn ? { name: "404" } : "/";
+      // return isLoggedIn ? { name: "404" } : "/";
+      return "/";
       // : {
       // name: "/",
       // query: {

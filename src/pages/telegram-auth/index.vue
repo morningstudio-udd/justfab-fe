@@ -40,7 +40,9 @@ onMounted(async () => {
     const data = await authTelegram(initData);
 
     if (data.token) {
-      authStore.token = data.token;
+      const expiresIn = import.meta.env.VITE_JWT_LIFETIME || "24h";
+      const expirationTime = Date.now() + parseJwtLifetime(expiresIn);
+      authStore.setToken(data.token, expirationTime);
       await fetchData();
     }
   } catch (e) {
@@ -61,7 +63,7 @@ const fetchData = async () => {
     console.error(error);
 
     userStore.userData = null;
-    userStore.token = null;
+    authStore.setToken(null);
 
     router.push("/");
   }

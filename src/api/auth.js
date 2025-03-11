@@ -4,28 +4,33 @@ import { store } from "@store";
 import { $ability } from "@/plugins/casl";
 import { getApiPath } from "@/utils/helpers";
 
-// const authStore = useAuthStore(store);
+const authStore = useAuthStore(store);
 
 const API = {
   user: {
     auth: "/user/auth",
+    refreshToken: "/user/refreshToken",
   },
 };
 
 export const refreshToken = async () => {
   try {
-    // authStore.token = null;
-    $ability.update("GUEST");
-    cookies.remove("token");
-    cookies.remove("role");
-    return "";
+    const res = await $api.post(API.user.refreshToken);
+    const expiresIn = import.meta.env.VITE_JWT_LIFETIME || "24h";
+
+    const expirationTime = Date.now() + parseJwtLifetime(expiresIn);
+    authStore.setToken(res.data.token, expirationTime);
+
+    return res.data;
   } catch (error) {
     // authStore.token = null;
-    $ability.update("GUEST");
-    cookies.remove("token");
-    cookies.remove("role");
+    // $ability.update("GUEST");
+    // cookies.remove("token");
+    // authStore.setToken(null);
+    // cookies.remove("role");
     console.log(error);
-    throw error.response.data || error;
+
+    throw error;
   }
 };
 

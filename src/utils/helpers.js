@@ -112,6 +112,27 @@ export const parseJwt = (token) => {
   };
 };
 
+export const parseJwtLifetime = (lifetime) => {
+  const match = lifetime.match(/^(\d+)([smhd])$/);
+  if (!match) return 60 * 1000;
+
+  const value = parseInt(match[1], 10);
+  const unit = match[2];
+
+  switch (unit) {
+    case "s":
+      return value * 1000;
+    case "m":
+      return value * 60 * 1000;
+    case "h":
+      return value * 60 * 60 * 1000;
+    case "d":
+      return value * 24 * 60 * 60 * 1000;
+    default:
+      return 60 * 1000;
+  }
+};
+
 export const stringToSlug = (str) => {
   return str
     .normalize("NFD") // Normalize to decompose accented characters

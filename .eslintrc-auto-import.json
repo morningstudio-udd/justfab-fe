@@ -422,6 +422,7 @@
     "handleNormalClickAnimation": true,
     "removeClassAfter": true,
     "useMixin": true,
-    "authTelegram": true
+    "authTelegram": true,
+    "parseJwtLifetime": true
   }
 }

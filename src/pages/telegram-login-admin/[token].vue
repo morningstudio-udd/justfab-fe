@@ -26,7 +26,9 @@ onUnmounted(() => {
 
 onMounted(async () => {
   if (route.params.token) {
-    authStore.token = route.params.token;
+    const expiresIn = import.meta.env.VITE_JWT_LIFETIME || "24h";
+    const expirationTime = Date.now() + parseJwtLifetime(expiresIn);
+    authStore.setToken(route.params.token, expirationTime);
     await fetchData();
   } else {
     router.push("/");
@@ -52,7 +54,7 @@ const fetchData = async () => {
     // });
 
     userStore.userData = null;
-    userStore.token = null;
+    authStore.setToken(null);
 
     router.push("/");
   }

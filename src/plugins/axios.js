@@ -53,8 +53,6 @@ $api.interceptors.response.use(
   async function (error) {
     const originalRequest = error.config;
 
-    console.error("Error interceptors", error);
-
     if (error.response.status === 401) {
       if (refreshingToken && originalRequest.url === "/user/refreshToken") {
         console.error("🚨 Refresh token failed, logging out...");

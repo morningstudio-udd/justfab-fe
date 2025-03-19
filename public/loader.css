@@ -21,11 +21,12 @@ html {
 
 .loading {
   position: relative;
-  box-sizing: border-box;
-  border: 3px solid transparent;
-  border-radius: 50%;
-  block-size: 55px;
-  inline-size: 55px;
+  width: auto;
+  height: 100vh;
+  max-width: 100%;
+  max-height: 1920px;
+  aspect-ratio: 9/16;
+  background-size: cover;
 }
 
 .loading .effect-1,

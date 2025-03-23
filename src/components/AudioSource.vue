@@ -72,7 +72,7 @@ onMounted(() => {
   document.addEventListener(
     "click",
     () => {
-      if (audioContext.value.state === "suspended") {
+      if (audioContext.value?.state === "suspended") {
         audioContext.value.resume();
       }
       refAudio.value.play().catch((error) => {

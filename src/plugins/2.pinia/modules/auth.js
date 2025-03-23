@@ -17,8 +17,8 @@ export const useAuthStore = defineStore("auth", () => {
     () =>
       !!(
         cookies.get("user_role") &&
-        cookies.get("token") &&
-        Object.keys(userStore.userData)?.length
+        Object.keys(userStore.userData)?.length &&
+        token.value
       )
   );
 

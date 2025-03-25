@@ -1,5 +1,12 @@
 const devVerticalNav = [
   {
+    title: "Users",
+    isLink: true,
+    to: "/dashboard/users",
+    icon: "material-symbols-light:home-outline",
+  },
+
+  {
     title: "Items",
     isLink: true,
     to: "/dashboard/items",

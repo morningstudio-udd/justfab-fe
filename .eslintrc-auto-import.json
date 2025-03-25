@@ -423,6 +423,8 @@
     "removeClassAfter": true,
     "useMixin": true,
     "authTelegram": true,
-    "parseJwtLifetime": true
+    "parseJwtLifetime": true,
+    "getAllUsers": true,
+    "getReferralTree": true
   }
 }

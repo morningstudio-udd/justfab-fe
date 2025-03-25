@@ -48,6 +48,12 @@ const API = {
     delete: "/taskGroup/:id",
     deleteTask: "/taskGroup/task/:taskId",
   },
+  user: {
+    all: "/user/all",
+  },
+  refferal: {
+    tree: "/referral/tree/:userId",
+  },
 };
 
 export const uploadAsset = async (file) => {
@@ -413,6 +419,31 @@ export const deleteTaskGroup = async (id) => {
   try {
     const url = getApiPath(API.taskGroup.delete, { id: id });
     const res = await $api.delete(url);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
+  }
+};
+
+export const getAllUsers = async (payload) => {
+  try {
+    const res = await $api.get(API.user.all, {
+      params: payload,
+    });
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response.data || error;
+  }
+};
+
+export const getReferralTree = async (userId) => {
+  try {
+    const url = getApiPath(API.refferal.tree, { userId: userId });
+    const res = await $api.get(url);
 
     return res.data;
   } catch (error) {

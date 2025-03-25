@@ -85,6 +85,7 @@ declare global {
   const getAllSkills: typeof import('./src/api/admin.js')['getAllSkills']
   const getAllTaskGroups: typeof import('./src/api/admin.js')['getAllTaskGroups']
   const getAllTasks: typeof import('./src/api/admin.js')['getAllTasks']
+  const getAllUsers: typeof import('./src/api/admin.js')['getAllUsers']
   const getApiPath: typeof import('./src/utils/helpers.js')['getApiPath']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
@@ -98,6 +99,7 @@ declare global {
   const getLoginURL: typeof import('./src/utils/FPClient.js')['getLoginURL']
   const getRecruitedUsers: typeof import('./src/api/user.js')['getRecruitedUsers']
   const getReferralLink: typeof import('./src/api/user.js')['getReferralLink']
+  const getReferralTree: typeof import('./src/api/admin.js')['getReferralTree']
   const getSkill: typeof import('./src/api/game.js')['getSkill']
   const getSkillById: typeof import('./src/api/admin.js')['getSkillById']
   const getSlotMachineConfig: typeof import('./src/api/game.js')['getSlotMachineConfig']
@@ -506,6 +508,7 @@ declare module 'vue' {
     readonly getAllSkills: UnwrapRef<typeof import('./src/api/admin.js')['getAllSkills']>
     readonly getAllTaskGroups: UnwrapRef<typeof import('./src/api/admin.js')['getAllTaskGroups']>
     readonly getAllTasks: UnwrapRef<typeof import('./src/api/admin.js')['getAllTasks']>
+    readonly getAllUsers: UnwrapRef<typeof import('./src/api/admin.js')['getAllUsers']>
     readonly getApiPath: UnwrapRef<typeof import('./src/utils/helpers.js')['getApiPath']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
@@ -519,6 +522,7 @@ declare module 'vue' {
     readonly getLoginURL: UnwrapRef<typeof import('./src/utils/FPClient.js')['getLoginURL']>
     readonly getRecruitedUsers: UnwrapRef<typeof import('./src/api/user.js')['getRecruitedUsers']>
     readonly getReferralLink: UnwrapRef<typeof import('./src/api/user.js')['getReferralLink']>
+    readonly getReferralTree: UnwrapRef<typeof import('./src/api/admin.js')['getReferralTree']>
     readonly getSkillById: UnwrapRef<typeof import('./src/api/admin.js')['getSkillById']>
     readonly getSlotMachineConfig: UnwrapRef<typeof import('./src/api/game.js')['getSlotMachineConfig']>
     readonly getTask: UnwrapRef<typeof import('./src/api/admin.js')['getTask']>

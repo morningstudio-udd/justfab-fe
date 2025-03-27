@@ -10,6 +10,16 @@ onMounted(async () => {
   if (!!(cookies.get("user_role") && authStore.token)) {
     await fetchData();
   }
+
+  // window.addEventListener("error", (e) => {
+  //   if (e.message?.includes("ERR_FAILED")) {
+  //     location.reload();
+  //   }
+  // });
+
+  // window.addEventListener("unhandledrejection", (e) => {
+  //   location.reload();
+  // });
 });
 
 const fetchData = async () => {

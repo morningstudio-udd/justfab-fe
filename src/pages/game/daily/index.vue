@@ -57,7 +57,6 @@ const currentIndex = computed(() => {
 
 const canClaimIndexs = computed(() => {
   return streakRewards.value.reduce((acc, item) => {
-    console.log("item", item, acc);
     if (!acc.includes(item.level)) {
       acc.push(item.level);
     }

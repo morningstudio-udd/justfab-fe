@@ -8,19 +8,19 @@ const slotMachineLoaded = ref(false);
 const props = defineProps({
   jackpot: {
     type: Number,
-    default: 100000
+    default: 100000,
   },
   energy: {
     type: Number,
-    default: 0
+    default: 0,
   },
   claimEnergy: {
     type: Number,
-    default: 0
+    default: 0,
   },
   claimEnergyAt: {
     type: Date,
-    default: new Date()
+    default: new Date(),
   },
   jackpotRewards: {
     type: Array,
@@ -30,8 +30,8 @@ const props = defineProps({
   },
   volume: {
     type: Number,
-    default: 1
-  }
+    default: 1,
+  },
 });
 
 let inDuty = false;
@@ -100,25 +100,27 @@ let isRolling = false;
 
 const drainEnergyBottle = () => {
   if (slotMachine.value != null) {
-    if(drainEnergyInterval != null) {
+    if (drainEnergyInterval != null) {
       clearInterval(drainEnergyInterval);
       drainEnergyInterval = null;
     }
     drainEnergyInterval = setInterval(() => {
-      if(_energy > 0) {
+      if (_energy > 0) {
         _energy -= 1;
-      }else{
+      } else {
         clearInterval(drainEnergyInterval);
         drainEnergyInterval = null;
       }
       slotMachine.value.LabelClaimEnergy.string = `${_energy}/50`;
       slotMachine.value.ProgressEnergy.value = _energy / 50;
-    }, 50)
+    }, 50);
   }
-}
+};
 
 const onIframeLoaded = () => {
-  if(refIframe.value.src == "") return;
+  if (!refIframe.value) return;
+
+  if (refIframe.value.src == "") return;
   iframeContent.value = refIframe.value.contentWindow;
   iframeContent.value.SlotMachine = {};
   iframeContent.value.SlotMachine.onload = (sm) => {
@@ -144,27 +146,30 @@ const onIframeLoaded = () => {
 };
 
 const updateEnergyBottle = () => {
-  if(drainEnergyInterval != null) return;
+  if (drainEnergyInterval != null) return;
   let now = new Date();
   let minutes = Math.floor((now - props.claimEnergyAt) / 60000);
   let seconds = Math.floor((now - props.claimEnergyAt) / 1000) % 60;
-  if(minutes > 50) {
+  if (minutes > 50) {
     minutes = 50;
     slotMachine.value.LabelCountdownEnergy.string = "--:--";
-  }else{
-    slotMachine.value.LabelCountdownEnergy.string = `00:${seconds < 10 ? "0" : ""}${seconds}`;
+  } else {
+    slotMachine.value.LabelCountdownEnergy.string = `00:${
+      seconds < 10 ? "0" : ""
+    }${seconds}`;
   }
   _energy = minutes;
-  slotMachine.value.LabelClaimEnergy.string = `${minutes < 10?"0":""}${minutes}/50`;
+  slotMachine.value.LabelClaimEnergy.string = `${
+    minutes < 10 ? "0" : ""
+  }${minutes}/50`;
   slotMachine.value.ProgressEnergy.value = minutes / 50;
-  
-}
+};
 
-const XS = [1, 2, 3, 5, 10]
+const XS = [1, 2, 3, 5, 10];
 const onButtonBetXClick = () => {
   let id = XS.indexOf(currentX.value);
-  id ++;
-  if(id >= XS.length) id = 0;
+  id++;
+  if (id >= XS.length) id = 0;
   currentX.value = XS[id];
   slotMachine.value.LabelBetX.string = `BET X${currentX.value}`;
 };
@@ -181,7 +186,7 @@ const onButtonCloseClick = () => {
 const onButtonRoolClick = () => {
   console.log("button click", props.disabled);
   if (props.disabled) return;
-  emit("rollClick", {betX: currentX.value});
+  emit("rollClick", { betX: currentX.value });
 };
 
 let playScripts = [];
@@ -189,7 +194,7 @@ let currentStep = 0;
 let currentScript = null;
 let turns = 0;
 
-const roll = async (scripts) => { 
+const roll = async (scripts) => {
   currentStep = 0;
   playScripts = scripts;
   turns = 1;
@@ -199,30 +204,30 @@ const roll = async (scripts) => {
 };
 
 const rollScriptStep = async (step) => {
-  if(step > playScripts.length - 1) {
+  if (step > playScripts.length - 1) {
     emit("allScriptCompleted");
     return;
   }
   setVolume(props.volume);
   currentStep = step;
   currentScript = playScripts[currentStep];
-  if(currentScript.type == 'slotMachine') {
+  if (currentScript.type == "slotMachine") {
     setJackpotVisible(false);
     slotMachine.value.roll(currentScript.reelSymbols);
-    if(turns > 1) {
+    if (turns > 1) {
       //await waitForSeconds(0.25);
       slotMachine.value.LabelTurn.show(`bonus turn ${turns}`);
     }
     turns--;
     await waitForSeconds(1.75);
-    for(const r of currentScript.rewards) {
-      if(r.type == "SPIN") {
+    for (const r of currentScript.rewards) {
+      if (r.type == "SPIN") {
         turns += r.value;
-        slotMachine.value.LabelValue.show(`+${r.value} turns`)
+        slotMachine.value.LabelValue.show(`+${r.value} turns`);
       }
     }
     emit("scriptCompleted", currentScript);
-  }else{
+  } else {
     setJackpotVisible(true);
     setButtonCloseVisible(false);
     rollJackpot(currentScript.rewards[0].description);
@@ -231,14 +236,14 @@ const rollScriptStep = async (step) => {
     isRolling = false;
     emit("scriptCompleted", currentScript);
   }
-}
+};
 
 const rollNextStep = async () => {
   // if(currentStep >= playScripts.length - 1) {
   //   return;
   // }
   await rollScriptStep(currentStep + 1);
-}
+};
 
 const setJackpotVisible = (v) => {
   slotMachine.value.Jackpot.node.active = v;
@@ -258,7 +263,7 @@ const rollJackpot = (prize) => {
 
 const setVolume = (v) => {
   slotMachine.value.setVolume(v);
-}
+};
 
 const waitForSeconds = async (s) => {
   return new Promise((resolve) => {
@@ -270,31 +275,37 @@ const waitForSeconds = async (s) => {
 
 const flyEnergy = (n) => {
   slotMachine.value.flyEnergy(n);
-}
+};
 
 const showGoldEffect = () => {
   slotMachine.value.GoldParticle.resetSystem();
-}
+};
 const showTokenEffect = () => {
   slotMachine.value.TokenParticle.resetSystem();
-}
+};
 const showFoodEffect = () => {
   slotMachine.value.FoodParticle.resetSystem();
-}
+};
 const showValue = (v) => {
   slotMachine.value.LabelValue.show(v);
-}
+};
 
 onMounted(async () => {
   await waitForSeconds(0.25);
   slotMachineUrl.value = import.meta.env.VITE_SLOT_MACHINE_URL;
 });
 
-onUnmounted(async() => {
+onUnmounted(async () => {
   //slotMachineUrl.value = "";
-})
+});
 
-const emit = defineEmits(["rollClick", "scriptCompleted", "allScriptCompleted", "claimEnergyClick", "loaded"]);
+const emit = defineEmits([
+  "rollClick",
+  "scriptCompleted",
+  "allScriptCompleted",
+  "claimEnergyClick",
+  "loaded",
+]);
 defineExpose({
   roll,
   rollNextStep,
@@ -307,16 +318,20 @@ defineExpose({
   showGoldEffect,
   showTokenEffect,
   showFoodEffect,
-  showValue
+  showValue,
 });
 </script>
 
 <template>
-  <div class="tw-w-full tw-h-full tw-border-none" v-if="!slotMachineLoaded">
-    booting slot machine...
+  <div
+    class="tw-w-full tw-h-full tw-flex tw-justify-center tw-items-center"
+    v-if="!slotMachineLoaded"
+  >
+    Booting slot machine...
   </div>
   <iframe
-    class="tw-w-full tw-h-full tw-border-none" v-show="slotMachineLoaded"
+    class="tw-w-full tw-h-full tw-border-none"
+    v-show="slotMachineLoaded"
     :src="slotMachineUrl"
     ref="refIframe"
     allowtransparency="true"

@@ -34,8 +34,6 @@ export const getUserInfo = async () => {
 
       $ability.update(USER_ABILITY_RULES[res.data.role] || "GUEST");
 
-      console.log("done", $ability);
-
       // cookies.set("user_role", res.data.role, {
       //   path: "/",
       //   maxAge: 60 * 60 * 24, // 24 hours

@@ -75,7 +75,7 @@ onMounted(() => {
       if (audioContext.value?.state === "suspended") {
         audioContext.value.resume();
       }
-      refAudio.value.play().catch((error) => {
+      refAudio.value?.play().catch((error) => {
         console.error("Error playing audio:", error);
       });
     },

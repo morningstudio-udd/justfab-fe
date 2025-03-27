@@ -90,7 +90,7 @@ const onRollClick = async (betX) => {
     userStore.userData.energy = user.energy;
     currentRewards.value = rewards;
 
-    await refSlotMachine.value.roll(playScripts);
+    await refSlotMachine.value?.roll(playScripts);
   } catch (error) {
     enable.value = true;
     console.log("error", error);
@@ -159,6 +159,7 @@ const onClaimEnergyClick = async (e) => {
       class="tw-absolute tw-top-0 tw-left-0 tw-right-0"
       :style="{ bottom: bottomValue }"
     >
+      <!-- <keep-alive> -->
       <slot-machine
         ref="refSlotMachine"
         :energy="energy"
@@ -172,6 +173,7 @@ const onClaimEnergyClick = async (e) => {
         @allScriptCompleted="onAllScriptCompleted"
         @claimEnergyClick="onClaimEnergyClick"
       ></slot-machine>
+      <!-- </keep-alive> -->
     </div>
   </div>
 </template>

@@ -1,10 +1,10 @@
 <script setup>
-const slotMachineUrl = import.meta.env.VITE_SLOT_MACHINE_URL;
+const slotMachineUrl = ref("");
 
 const refIframe = ref();
 const iframeContent = ref();
 const slotMachine = ref();
-
+const slotMachineLoaded = ref(false);
 const props = defineProps({
   jackpot: {
     type: Number,
@@ -118,6 +118,7 @@ const drainEnergyBottle = () => {
 }
 
 const onIframeLoaded = () => {
+  if(refIframe.value.src == "") return;
   iframeContent.value = refIframe.value.contentWindow;
   iframeContent.value.SlotMachine = {};
   iframeContent.value.SlotMachine.onload = (sm) => {
@@ -138,6 +139,7 @@ const onIframeLoaded = () => {
     updateEnergyBottle();
     setTimeout(() => setVolume(props.volume), 50);
     emit("loaded", sm);
+    slotMachineLoaded.value = true;
   };
 };
 
@@ -283,6 +285,15 @@ const showValue = (v) => {
   slotMachine.value.LabelValue.show(v);
 }
 
+onMounted(async () => {
+  await waitForSeconds(0.25);
+  slotMachineUrl.value = import.meta.env.VITE_SLOT_MACHINE_URL;
+});
+
+onUnmounted(async() => {
+  //slotMachineUrl.value = "";
+})
+
 const emit = defineEmits(["rollClick", "scriptCompleted", "allScriptCompleted", "claimEnergyClick", "loaded"]);
 defineExpose({
   roll,
@@ -301,8 +312,11 @@ defineExpose({
 </script>
 
 <template>
+  <div class="tw-w-full tw-h-full tw-border-none" v-if="!slotMachineLoaded">
+    booting slot machine...
+  </div>
   <iframe
-    class="tw-w-full tw-h-full tw-border-none"
+    class="tw-w-full tw-h-full tw-border-none" v-show="slotMachineLoaded"
     :src="slotMachineUrl"
     ref="refIframe"
     allowtransparency="true"

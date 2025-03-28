@@ -9,7 +9,6 @@ import { useAbility } from "@casl/vue";
 export const updateAbility = async (role) => {
   try {
     const vm = getCurrentInstance();
-    console.log("vm", vm);
     if (!vm) return false;
 
     const ability = vm.appContext.config.globalProperties.$ability;
@@ -23,7 +22,6 @@ export const updateAbility = async (role) => {
 
     const rules = await Promise.resolve(USER_ABILITY_RULES[role] || []);
     ability.update(rules);
-    console.log("Updated ability rules:", ability.rules);
     return true;
   } catch (error) {
     console.error("Failed to update ability rules:", error);
@@ -67,14 +65,6 @@ export const canViewNavMenuGroup = (item) => {
 };
 export const canNavigate = (to) => {
   const ability = useAbility();
-
-  console.log("ability", ability.rules);
-  console.log("to", to.matched);
-  console.log(
-    to.matched.some((route) =>
-      ability.can(route.meta.action, route.meta.subject)
-    )
-  );
 
   return to.matched.some((route) =>
     ability.can(route.meta.action, route.meta.subject)

@@ -56,9 +56,12 @@ onMounted(async () => {
   //   resizeObserver.observe(gameContentRef.value);
   // }
 
-  if (gameContentRef.value) {
-    observe(gameContentRef.value, handleResize);
-  }
+  nextTick(() => {
+    if (gameContentRef.value) {
+      observe(gameContentRef.value, handleResize);
+    }
+    window.addEventListener("resize", onResizeWindow);
+  });
 
   try {
     const p1 = getUserInfo();
@@ -75,6 +78,16 @@ onMounted(async () => {
   emitter.on("reset-rewards-state", resetRewardsState);
 });
 
+const onResizeWindow = () => {
+  if (gameContentRef.value) {
+    observe(gameContentRef.value, handleResize);
+  }
+};
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", onResizeWindow);
+});
+
 onUnmounted(() => {
   emitter.off("reset-rewards-state");
 });
@@ -82,7 +95,6 @@ onUnmounted(() => {
 const onRollClick = async (betX) => {
   if (!enable.value) return;
   try {
-    console.log("enable", enable.value);
     enable.value = false;
 
     const { playScripts, rewards, user } = await playSlotMachine({ betX });
@@ -99,12 +111,10 @@ const onRollClick = async (betX) => {
 };
 
 const onScriptCompleted = async (script) => {
-  console.log("complete", script);
   await processRewards(script.rewards);
 };
 
 const onAllScriptCompleted = async () => {
-  console.log("all complete");
   enable.value = true;
 };
 

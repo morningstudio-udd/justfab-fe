@@ -25,7 +25,6 @@ onUnmounted(() => {
 });
 
 onMounted(async () => {
-  console.log(route.params.token);
   if (route.params.token) {
     const expiresIn = import.meta.env.VITE_JWT_LIFETIME || "24h";
     const expirationTime = Date.now() + parseJwtLifetime(expiresIn);

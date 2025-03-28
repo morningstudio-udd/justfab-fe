@@ -13,16 +13,20 @@ const settingDialogRef = ref(null);
 const gameContentRef = ref(null);
 const parentDivWidth = ref(0);
 
-const { observe } = useMixin(); // Tái sử dụng observe từ mixin
+const { observe } = useMixin();
 
 const handleResize = (newWidth) => {
   parentDivWidth.value = newWidth;
 };
 
 onMounted(() => {
-  if (gameContentRef.value) {
-    observe(gameContentRef.value, handleResize);
-  }
+  nextTick(() => {
+    if (gameContentRef.value) {
+      observe(gameContentRef.value, handleResize);
+    }
+    window.addEventListener("resize", onResizeWindow);
+  });
+
   // if (gameContentRef.value) {
   //   resizeObserver = new ResizeObserver((entries) => {
   //     for (let entry of entries) {
@@ -32,6 +36,16 @@ onMounted(() => {
 
   //   resizeObserver.observe(gameContentRef.value);
   // }
+});
+
+const onResizeWindow = () => {
+  if (gameContentRef.value) {
+    observe(gameContentRef.value, handleResize);
+  }
+};
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", onResizeWindow);
 });
 
 onUnmounted(() => {});

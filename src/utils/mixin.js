@@ -19,15 +19,16 @@ export function useMixin() {
             height: 0,
           };
 
-          // Chỉ cập nhật nếu sai lệch vượt ngưỡng threshold
           if (
             Math.abs(newWidth - lastSize.width) > threshold ||
             Math.abs(newHeight - lastSize.height) > threshold
           ) {
             lastSizes.set(entry.target, { width: newWidth, height: newHeight });
-            callback(newWidth, newHeight); // 🔥 Truyền cả chiều rộng và chiều cao
+            callback(newWidth, newHeight);
           }
         }
+
+        resizeObserver.disconnect();
       });
     });
 

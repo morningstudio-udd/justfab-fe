@@ -22,6 +22,8 @@ onMounted(async () => {
   // });
 });
 
+onMounted(() => {});
+
 const fetchData = async () => {
   try {
     preLoading.value = true;

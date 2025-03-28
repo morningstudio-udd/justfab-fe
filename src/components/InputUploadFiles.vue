@@ -33,8 +33,6 @@ const onFileChanged = async (e) => {
   await nextTick();
 
   e.target.value = "";
-
-  console.log("modelValue", modelValue.value);
 };
 
 const onLoadFile = async () => {

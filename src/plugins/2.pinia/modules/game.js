@@ -29,7 +29,6 @@ export const useGameStore = defineStore("game", () => {
   const setResponsiveFontPercentage = (parent, percent) => {
     if (!parent) return;
     parentWidth.value = parent.offsetWidth;
-    console.log("Parent width: ", parentWidth.value);
 
     return parentWidth.value * (percent / 100);
   };
@@ -43,7 +42,6 @@ export const useGameStore = defineStore("game", () => {
   };
 
   const handleRewards = (rewards, rewardsType = "slot-machine") => {
-    console.log("Rewards: ", rewards, rewardsType);
     for (const reward of rewards) {
       switch (reward.type) {
         case REWARD_TYPES.JACKPOT:
@@ -51,7 +49,6 @@ export const useGameStore = defineStore("game", () => {
         case REWARD_TYPES.SPIN:
           break;
         case REWARD_TYPES.TOKEN:
-          console.log("Reward: ", REWARD_TYPES.TOKEN);
           // userStore.userData.token += reward.value;
           if (rewardsType === "slot-machine") {
             userStore.userData.token += reward.value;
@@ -60,7 +57,6 @@ export const useGameStore = defineStore("game", () => {
           }
           break;
         case REWARD_TYPES.GOLD:
-          console.log("Reward: ", REWARD_TYPES.GOLD);
           // userStore.userData.gold += reward.value;
           if (rewardsType === "slot-machine") {
             userStore.userData.gold += reward.value;
@@ -81,7 +77,6 @@ export const useGameStore = defineStore("game", () => {
   };
 
   const openResultDialog = (item, rewardsType = "slot-machine") => {
-    console.log("Item, ", item);
     arrayResultItemDialogRef.value.push({
       id: item._id,
       item,

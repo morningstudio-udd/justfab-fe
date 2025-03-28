@@ -88,7 +88,6 @@ watch(
   () => props.volume,
   (v) => {
     if (slotMachine.value != null) {
-      console.log("set volume", v);
       slotMachine.value.setVolume(v);
     }
   }
@@ -184,7 +183,6 @@ const onButtonCloseClick = () => {
 };
 
 const onButtonRoolClick = () => {
-  console.log("button click", props.disabled);
   if (props.disabled) return;
   emit("rollClick", { betX: currentX.value });
 };

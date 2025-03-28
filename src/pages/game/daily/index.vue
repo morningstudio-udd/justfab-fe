@@ -94,7 +94,6 @@ onMounted(async () => {
   emitter.on("onClaimeDailySuccess", () => getDaily());
 
   document.addEventListener("visibilitychange", async () => {
-    console.log("currentTask.value", currentTask.value);
     if (document.visibilityState === "visible") {
       if (currentTask.value && Object.keys(currentTask.value).length) {
         await getSeftTasks();
@@ -139,8 +138,6 @@ const getTaskGroup = async () => {
 const getSeftTasks = async () => {
   try {
     const tasksResponse = await getUserTasks();
-
-    console.log("tasksResponse", tasksResponse);
 
     userTasks.value = tasksResponse.task;
 
@@ -189,8 +186,6 @@ const doTask = async (task) => {
       case TASK_TYPES.LINK: {
         currentTask.value = task;
 
-        console.log("Task:", currentTask.value);
-
         if (openLink.isAvailable()) {
           openLink(task.target, {
             tryInstantView: true,
@@ -227,8 +222,6 @@ const doTask = async (task) => {
 };
 
 const handleDailyCheckIn = ($event, level) => {
-  console.log("handleDailyCheckIn");
-
   toggleClass(
     $event,
     "tw-animate-jump tw-animate-once tw-animate-ease-linear tw-animate-duration-[1000ms]",

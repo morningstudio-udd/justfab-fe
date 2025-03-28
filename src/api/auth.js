@@ -45,7 +45,7 @@ export const authTelegram = async (payload) => {
         useAuthToken: false,
       }
     );
-    console.log(res);
+
     return res.data;
   } catch (error) {
     console.error(error);

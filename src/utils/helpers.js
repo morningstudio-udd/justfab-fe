@@ -195,7 +195,6 @@ export const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
  * @param {*} target
  */
 export const selectAllText = (target) => {
-  console.log(target);
   nextTick(() => {
     const textareaElement = target;
     if (textareaElement) {

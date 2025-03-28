@@ -42,7 +42,6 @@ const openDialog = () => {
 };
 
 const onSave = (item) => {
-  console.log("item dialog save");
   emit("onSave", item);
 };
 

@@ -36,7 +36,6 @@ onMounted(async () => {
   try {
     const initData = decodeURIComponent(hashes.tgWebAppData);
 
-    console.log({ initData });
     const data = await authTelegram(initData);
 
     if (data.token) {

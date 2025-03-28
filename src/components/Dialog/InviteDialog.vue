@@ -41,7 +41,6 @@ const submitShareInvite = async ($event) => {
   handleNormalClickAnimation($event);
 
   if (shareURL.isAvailable()) {
-    console.log("share telegram");
     shareURL(
       inviteLink.value,
       "Yo, welcome to the world of Fabs! We’re about to go on some crazy ride, where we’ll probably try to save this whole damn thing. Or not, we’ll see what happens.You’re a key part of this madness. Join the Fabs crew, help out your empire and contribute to some good times, which we are all trying to bring back. There’s food, laughs, and all that, or at least there will be when we fix things up.Hit that “Play Now” button and let’s get this show on the road!"
@@ -55,7 +54,6 @@ const submitShareInvite = async ($event) => {
           text: "Yo, welcome to the world of Fabs! We’re about to go on some crazy ride, where we’ll probably try to save this whole damn thing. Or not, we’ll see what happens.You’re a key part of this madness. Join the Fabs crew, help out your empire and contribute to some good times, which we are all trying to bring back. There’s food, laughs, and all that, or at least there will be when we fix things up.Hit that “Play Now” button and let’s get this show on the road!",
           url: inviteLink.value,
         });
-        console.log("Sharing successful.");
       } catch (error) {
         console.error("Error while sharing:", error);
       }

@@ -81,10 +81,10 @@ const hasPoolPercentage = computed(() => {
   );
 });
 
-watch([itemsContainerWidth, itemsContainerHeight], ([newWidth, newHeight]) => {
-  console.log("Updated itemsContainerHeight:", newHeight);
-  console.log("Updated itemsContainerWidth:", newWidth);
-});
+// watch([itemsContainerWidth, itemsContainerHeight], ([newWidth, newHeight]) => {
+//   console.log("Updated itemsContainerHeight:", newHeight);
+//   console.log("Updated itemsContainerWidth:", newWidth);
+// });
 
 // const updateSize = (entries) => {
 //   requestAnimationFrame(() => {
@@ -129,9 +129,15 @@ onMounted(async () => {
   //   resizeObserver = new ResizeObserver(updateSize);
   //   resizeObserver.observe(itemsContainerRef.value);
   // }
-  if (itemsContainerRef.value) {
-    observe(itemsContainerRef.value, handleResize);
-  }
+  // if (itemsContainerRef.value) {
+  //   observe(itemsContainerRef.value, handleResize);
+  // }
+  nextTick(() => {
+    if (itemsContainerRef.value) {
+      observe(itemsContainerRef.value, handleResize);
+    }
+    window.addEventListener("resize", onResizeWindow);
+  });
 
   const p1 = getInventory();
 
@@ -140,6 +146,16 @@ onMounted(async () => {
   const p3 = getUnclaim();
 
   await Promise.all([p1, p2, p3]);
+});
+
+const onResizeWindow = () => {
+  if (itemsContainerRef.value) {
+    observe(itemsContainerRef.value, handleResize);
+  }
+};
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", onResizeWindow);
 });
 
 // onUnmounted(() => {

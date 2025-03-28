@@ -50,9 +50,13 @@ onMounted(() => {
 
   gameStore.gameContainer = gameContainerRef.value;
   gameStore.baseFontSize = gameStore.setResponsiveFont();
-  if (gameContainerRef.value) {
-    observe(gameContainerRef.value, handleResize);
-  }
+
+  nextTick(() => {
+    if (gameContainerRef.value) {
+      observe(gameContainerRef.value, handleResize);
+    }
+    window.addEventListener("resize", onResizeWindow);
+  });
   // if (gameContainerRef.value) {
   //   resizeObserver = new ResizeObserver((entries) => {
   //     for (let entry of entries) {
@@ -65,6 +69,16 @@ onMounted(() => {
   // }
 
   gameStore.setLoading(false);
+});
+
+const onResizeWindow = () => {
+  if (gameContainerRef.value) {
+    observe(gameContainerRef.value, handleResize);
+  }
+};
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", onResizeWindow);
 });
 
 onUnmounted(() => {

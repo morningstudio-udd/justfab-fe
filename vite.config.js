@@ -11,6 +11,7 @@ import {
   VueRouterAutoImports,
   getPascalCaseRouteName,
 } from "unplugin-vue-router";
+import compression from "vite-plugin-compression";
 
 // import { Vuetify3Resolver } from "unplugin-vue-components/resolvers";
 
@@ -108,6 +109,8 @@ export default defineConfig(({ mode }) => {
           ),
         ],
       }),
+
+      compression({ algorithm: "brotliCompress" }),
     ],
 
     css: {
@@ -121,8 +124,10 @@ export default defineConfig(({ mode }) => {
     build: {
       chunkSizeWarningLimit: 5000,
       // target: 'esnext',
-      minify: mode === "staging" ? false : "esbuild",
-      sourcemap: mode === "staging",
+      // minify: mode === "staging" ? false : "esbuild",
+      // sourcemap: mode === "staging",
+      minify: "esbuild",
+      sourcemap: true,
       rollupOptions: {
         onwarn(warning, warn) {
           if (warning.code === "ANNOTATION") return;
@@ -136,6 +141,9 @@ export default defineConfig(({ mode }) => {
           plugins: [],
         },
       },
+
+      cssCodeSplit: true,
+      brotliSize: true,
     },
 
     define: {

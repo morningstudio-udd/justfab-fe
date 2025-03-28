@@ -73,16 +73,20 @@ const claimedLevels = computed(() => {
 });
 
 let resizeObserver;
-const { observe } = useMixin(); // Lấy hàm observe từ mixin
+const { observe } = useMixin();
 
 const handleResize = (newWidth) => {
   parentDivWidth.value = newWidth;
 };
 
 onMounted(async () => {
-  if (gameContentRef.value) {
-    observe(gameContentRef.value, handleResize);
-  }
+  nextTick(() => {
+    if (gameContentRef.value) {
+      observe(gameContentRef.value, handleResize);
+    }
+    window.addEventListener("resize", onResizeWindow);
+  });
+
   // if (gameContentRef.value) {
   //   resizeObserver = new ResizeObserver((entries) => {
   //     for (let entry of entries) {
@@ -98,6 +102,16 @@ onMounted(async () => {
   emitter.on("onClaimeReferralSuccess", () => getRecruited());
 });
 
+const onResizeWindow = () => {
+  if (gameContentRef.value) {
+    observe(gameContentRef.value, handleResize);
+  }
+};
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", onResizeWindow);
+});
+
 const submitInvite = ($event) => {
   handleNormalClickAnimation($event);
   inviteDialogRef.value.openDialog();
@@ -108,19 +122,10 @@ const submitClaimInvited = (level) => {
     .filter((item) => item.level === level)
     .map((item) => item.reward);
 
-  console.log("submitClaimInvited", rewards);
-
   gameStore.handleRewards(rewards, notClaimed.value[0].reason);
 
   // claimInviteDialogRef.value.openDialog();
 };
-
-onBeforeUnmount(() => {
-  // if (resizeObserver && gameContentRef.value) {
-  //   resizeObserver.unobserve(gameContentRef.value);
-  //   resizeObserver.disconnect();
-  // }
-});
 
 const getRecruited = async () => {
   try {
@@ -132,8 +137,6 @@ const getRecruited = async () => {
       const rw = notClaimed.value
         .filter((item) => !specialLevels.some((sp) => sp.count === item.level))
         .map((item) => item.reward);
-
-      console.log("rw", rw);
 
       if (rw.length > 0) {
         gameStore.handleRewards(rw, notClaimed.value[0].reason);

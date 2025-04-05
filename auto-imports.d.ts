@@ -96,6 +96,7 @@ declare global {
   const getItem: typeof import('./src/api/admin.js')['getItem']
   const getJackpot: typeof import('./src/api/game.js')['getJackpot']
   const getJackpotRewards: typeof import('./src/api/game.js')['getJackpotRewards']
+  const getKapy: typeof import('./src/api/user.js')['getKapy']
   const getLoginURL: typeof import('./src/utils/FPClient.js')['getLoginURL']
   const getRecruitedUsers: typeof import('./src/api/user.js')['getRecruitedUsers']
   const getReferralLink: typeof import('./src/api/user.js')['getReferralLink']
@@ -192,6 +193,7 @@ declare global {
   const resolveUnref: typeof import('@vueuse/core')['resolveUnref']
   const selectAllText: typeof import('./src/utils/helpers.js')['selectAllText']
   const setActivePinia: typeof import('pinia')['setActivePinia']
+  const setEquipments: typeof import('./src/api/user.js')['setEquipments']
   const setJackpot: typeof import('./src/api/game.js')['setJackpot']
   const setMapStoreSuffix: typeof import('pinia')['setMapStoreSuffix']
   const setSlotMachineConfig: typeof import('./src/api/game.js')['setSlotMachineConfig']
@@ -519,6 +521,7 @@ declare module 'vue' {
     readonly getItem: UnwrapRef<typeof import('./src/api/admin.js')['getItem']>
     readonly getJackpot: UnwrapRef<typeof import('./src/api/game.js')['getJackpot']>
     readonly getJackpotRewards: UnwrapRef<typeof import('./src/api/game.js')['getJackpotRewards']>
+    readonly getKapy: UnwrapRef<typeof import('./src/api/user.js')['getKapy']>
     readonly getLoginURL: UnwrapRef<typeof import('./src/utils/FPClient.js')['getLoginURL']>
     readonly getRecruitedUsers: UnwrapRef<typeof import('./src/api/user.js')['getRecruitedUsers']>
     readonly getReferralLink: UnwrapRef<typeof import('./src/api/user.js')['getReferralLink']>
@@ -611,6 +614,7 @@ declare module 'vue' {
     readonly resolveUnref: UnwrapRef<typeof import('@vueuse/core')['resolveUnref']>
     readonly selectAllText: UnwrapRef<typeof import('./src/utils/helpers.js')['selectAllText']>
     readonly setActivePinia: UnwrapRef<typeof import('pinia')['setActivePinia']>
+    readonly setEquipments: UnwrapRef<typeof import('./src/api/user.js')['setEquipments']>
     readonly setJackpot: UnwrapRef<typeof import('./src/api/game.js')['setJackpot']>
     readonly setMapStoreSuffix: UnwrapRef<typeof import('pinia')['setMapStoreSuffix']>
     readonly setSlotMachineConfig: UnwrapRef<typeof import('./src/api/game.js')['setSlotMachineConfig']>

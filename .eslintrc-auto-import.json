@@ -425,6 +425,8 @@
     "authTelegram": true,
     "parseJwtLifetime": true,
     "getAllUsers": true,
-    "getReferralTree": true
+    "getReferralTree": true,
+    "getKapy": true,
+    "setEquipments": true
   }
 }

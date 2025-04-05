@@ -3,7 +3,6 @@ import { cookies } from "@/plugins/useCookies";
 import { store } from "@store";
 import { updateAbility } from "@plugins/casl/casl";
 import { $ability } from "@/plugins/casl";
-import { ref } from "vue";
 
 const authStore = useAuthStore(store);
 const userStore = useUserStore(store);
@@ -18,6 +17,10 @@ const API = {
   },
   task: {
     seft: "/task/userTasks",
+  },
+  kapy: {
+    equip: "/kapy/setEquipments",
+    get: "/kapy",
   },
 };
 
@@ -78,6 +81,30 @@ export const getRecruitedUsers = async () => {
 export const getUserTasks = async () => {
   try {
     const res = await $api.get(API.task.seft);
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response?.data || error;
+  }
+};
+
+export const setEquipments = async (data) => {
+  try {
+    const res = await $api.post(API.kapy.equip, {
+      equipmentIds: data,
+    });
+
+    return res.data;
+  } catch (error) {
+    console.error(error);
+    throw error.response?.data || error;
+  }
+};
+
+export const getKapy = async () => {
+  try {
+    const res = await $api.get(API.kapy.get);
 
     return res.data;
   } catch (error) {

@@ -34,6 +34,7 @@ definePage({
 
 let resizeObserver = null;
 
+const { observe } = useMixin();
 const route = useRoute();
 const userStore = useUserStore();
 const adminStore = useAdminStore();
@@ -53,6 +54,8 @@ const unclaimRewards = ref([]);
 // const itemsContainerPaddingX = ref(0);
 // const itemsContainerPaddingY = ref(0);
 const lastHeight = ref(0);
+const selectedItem = ref();
+const currentEquipments = ref();
 
 const userInventory = computed(() => inventoryData.value?.items);
 const fontSizeBase = computed(() => gameStore.baseFontSize);
@@ -80,49 +83,50 @@ const hasPoolPercentage = computed(() => {
     (reward) => reward.reward.type === REWARD_TYPES.POOL_PERCENTAGE
   );
 });
+const weaponSlots = computed(() => {
+  if (!userInventory.value || !currentEquipments.value) return [];
 
-// watch([itemsContainerWidth, itemsContainerHeight], ([newWidth, newHeight]) => {
-//   console.log("Updated itemsContainerHeight:", newHeight);
-//   console.log("Updated itemsContainerWidth:", newWidth);
-// });
+  return userInventory.value.filter(
+    (item) =>
+      currentEquipments.value.some((eq) => eq._id === item._id) &&
+      item.item.category === ITEM_CATEGORIES.WEAPON
+  );
+});
+const weaponSlot1 = computed(() => weaponSlots.value[0] || null);
+const weaponSlot2 = computed(() => weaponSlots.value[1] || null);
+const petSlots = computed(() => {
+  if (!userInventory.value || !currentEquipments.value) return [];
 
-// const updateSize = (entries) => {
-//   requestAnimationFrame(() => {
-//     for (let entry of entries) {
-//       const newWidth = Math.round(entry.contentRect.width);
-//       const newHeight = Math.round(entry.contentRect.height);
+  return userInventory.value.filter(
+    (item) =>
+      currentEquipments.value.some((eq) => eq._id === item._id) &&
+      item.item.category === ITEM_CATEGORIES.PET
+  );
+});
+const petSlot1 = computed(() => petSlots.value[0] || null);
+const petSlot2 = computed(() => petSlots.value[1] || null);
+const armorSlots = computed(() => {
+  if (!userInventory.value || !currentEquipments.value) return [];
 
-//       if (
-//         newWidth !== itemsContainerWidth.value ||
-//         Math.abs(newHeight - lastHeight.value) > 5
-//       ) {
-//         itemsContainerWidth.value = newWidth;
-//         itemsContainerHeight.value = newHeight;
-//         lastHeight.value = newHeight;
+  return (
+    userInventory.value.find(
+      (item) =>
+        currentEquipments.value.some((eq) => eq._id === item._id) &&
+        item.item.category === ITEM_CATEGORIES.ARMOR
+    ) || null
+  );
+});
+const accessorySlot = computed(() => {
+  if (!userInventory.value || !currentEquipments.value) return null;
 
-//         nextTick(() => {
-//           console.log(
-//             "Updated itemsContainerHeight:",
-//             itemsContainerHeight.value
-//           );
-//         });
-//       }
-//     }
-//   });
-// };
-
-const { observe } = useMixin();
-
-const handleResize = (newWidth, newHeight) => {
-  if (
-    newWidth !== itemsContainerWidth.value ||
-    Math.abs(newHeight - lastHeight.value) > 5
-  ) {
-    itemsContainerWidth.value = newWidth;
-    itemsContainerHeight.value = newHeight;
-    lastHeight.value = newHeight;
-  }
-};
+  return (
+    userInventory.value.find(
+      (item) =>
+        currentEquipments.value.some((eq) => eq._id === item._id) &&
+        item.item.category === ITEM_CATEGORIES.ACCESSORY
+    ) || null
+  );
+});
 
 onMounted(async () => {
   // if (itemsContainerRef.value) {
@@ -145,8 +149,21 @@ onMounted(async () => {
 
   const p3 = getUnclaim();
 
-  await Promise.all([p1, p2, p3]);
+  const p4 = getKapyDetails();
+
+  await Promise.all([p1, p2, p3, p4]);
 });
+
+const handleResize = (newWidth, newHeight) => {
+  if (
+    newWidth !== itemsContainerWidth.value ||
+    Math.abs(newHeight - lastHeight.value) > 5
+  ) {
+    itemsContainerWidth.value = newWidth;
+    itemsContainerHeight.value = newHeight;
+    lastHeight.value = newHeight;
+  }
+};
 
 const onResizeWindow = () => {
   if (itemsContainerRef.value) {
@@ -189,6 +206,50 @@ const submitByQuality = () => {
 const submitMerge = () => {
   console.log("submitMerge");
 };
+
+const handleSelectItem = (item) => {
+  if (selectedItem.value?._id === item._id) {
+    selectedItem.value = null;
+    return;
+  }
+
+  selectedItem.value = item;
+};
+
+const getKapyDetails = async () => {
+  try {
+    const { equipments } = await getKapy();
+    currentEquipments.value = equipments;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const equipItem = async (typeItem) => {
+  try {
+    console.log("equipItem", typeItem);
+
+    if (
+      !selectedItem.value ||
+      selectedItem.value === "food" ||
+      selectedItem.value?.item.category !== typeItem
+    )
+      return;
+
+    const equipments = Array.from(
+      new Set([
+        ...currentEquipments.value.map((eq) => eq._id),
+        selectedItem.value._id,
+      ])
+    );
+    const response = await setEquipments(equipments);
+    if (response) {
+      getKapyDetails();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
 </script>
 
 <template>
@@ -203,9 +264,24 @@ const submitMerge = () => {
           class="tw-h-full tw-grid tw-grid-cols-4 tw-grid-rows-3 tw-gap-x-[4%] tw-gap-y-[6%]"
         >
           <div
-            class="tw-aspect-square tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center roll-in-left"
-            :style="{ backgroundImage: `url(${slot1})` }"
-          ></div>
+            class="slot-item roll-in-left"
+            :class="{
+              highlight:
+                selectedItem?.item?.category === ITEM_CATEGORIES.WEAPON,
+            }"
+            :style="{
+              backgroundImage: weaponSlot1
+                ? `url(${ITEM_RARITIES[weaponSlot1.rarity].background})`
+                : `url(${slot1})`,
+            }"
+            @click="equipItem(ITEM_CATEGORIES.WEAPON)"
+          >
+            <img
+              v-if="weaponSlot1"
+              :src="srcAsset(weaponSlot1?.item?.photoUrl)"
+              class="!tw-max-w-[80%] tw-w-full tw-h-auto"
+            />
+          </div>
           <div class="tw-col-span-2 tw-row-span-3">
             <div
               class="tw-aspect-[274/91] tw-w-3/4 tw-mx-auto tw-mt-[4%] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center tw-pl-[20%] tw-text-white"
@@ -220,25 +296,97 @@ const submitMerge = () => {
             ></div>
           </div>
           <div
-            class="tw-aspect-square tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center roll-in-right"
-            :style="{ backgroundImage: `url(${slot2})` }"
-          ></div>
+            class="slot-item roll-in-right"
+            :class="{
+              highlight:
+                selectedItem?.item?.category === ITEM_CATEGORIES.WEAPON,
+            }"
+            :style="{
+              backgroundImage: weaponSlot2
+                ? `url(${ITEM_RARITIES[weaponSlot2.rarity]?.background})`
+                : `url(${slot2})`,
+            }"
+            @click="equipItem(ITEM_CATEGORIES.WEAPON)"
+          >
+            <img
+              v-if="weaponSlot2"
+              :src="srcAsset(weaponSlot2?.item?.photoUrl)"
+              class="!tw-max-w-[80%] tw-w-full tw-h-auto"
+            />
+          </div>
           <div
-            class="tw-aspect-square tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center roll-in-left"
-            :style="{ backgroundImage: `url(${slot3})` }"
-          ></div>
+            class="slot-item roll-in-left"
+            :class="{
+              highlight: selectedItem?.item?.category === ITEM_CATEGORIES.ARMOR,
+            }"
+            :style="{
+              backgroundImage: armorSlots
+                ? `url(${ITEM_RARITIES[armorSlots.rarity]?.background})`
+                : `url(${slot3})`,
+            }"
+            @click="equipItem(ITEM_CATEGORIES.ARMOR)"
+          >
+            <v-img
+              v-if="armorSlots"
+              :src="srcAsset(armorSlots?.item?.photoUrl)"
+              class="!tw-max-w-[80%] tw-w-full tw-h-auto"
+            />
+          </div>
           <div
-            class="tw-aspect-square tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center roll-in-right"
-            :style="{ backgroundImage: `url(${slot4})` }"
-          ></div>
+            class="slot-item roll-in-right"
+            :class="{
+              highlight:
+                selectedItem?.item?.category === ITEM_CATEGORIES.ACCESSORY,
+            }"
+            :style="{
+              backgroundImage: accessorySlot
+                ? `url(${ITEM_RARITIES[accessorySlot.rarity]?.background})`
+                : `url(${slot4})`,
+            }"
+            @click="equipItem(ITEM_CATEGORIES.ACCESSORY)"
+          >
+            <v-img
+              v-if="accessorySlot"
+              :src="srcAsset(accessorySlot?.item?.photoUrl)"
+              class="!tw-max-w-[80%] tw-w-full tw-h-auto"
+            />
+          </div>
           <div
-            class="tw-aspect-square tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center roll-in-left"
-            :style="{ backgroundImage: `url(${slot5})` }"
-          ></div>
+            class="slot-item roll-in-left"
+            :class="{
+              highlight: selectedItem?.item?.category === ITEM_CATEGORIES.PET,
+            }"
+            :style="{
+              backgroundImage: petSlot1
+                ? `url(${ITEM_RARITIES[petSlot1.rarity]?.background})`
+                : `url(${slot5})`,
+            }"
+            @click="equipItem(ITEM_CATEGORIES.PET)"
+          >
+            <v-img
+              v-if="petSlot1"
+              :src="srcAsset(petSlot1?.item?.photoUrl)"
+              class="!tw-max-w-[80%] tw-w-full tw-h-auto"
+            />
+          </div>
           <div
-            class="tw-aspect-square tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center roll-in-right"
-            :style="{ backgroundImage: `url(${slot6})` }"
-          ></div>
+            class="slot-item roll-in-right"
+            :class="{
+              highlight: selectedItem?.item?.category === ITEM_CATEGORIES.PET,
+            }"
+            :style="{
+              backgroundImage: petSlot2
+                ? `url(${ITEM_RARITIES[petSlot2.rarity]?.background})`
+                : `url(${slot6})`,
+            }"
+            @click="equipItem(ITEM_CATEGORIES.PET)"
+          >
+            <v-img
+              v-if="petSlot2"
+              :src="srcAsset(petSlot2?.item?.photoUrl)"
+              class="!tw-max-w-[80%] tw-w-full tw-h-auto"
+            />
+          </div>
         </div>
       </div>
 
@@ -332,6 +480,7 @@ const submitMerge = () => {
         <div
           class="tw-aspect-[178/178] tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
           :style="{ backgroundImage: `url(${bgSlot})` }"
+          @click.stop="selectedItem = 'food'"
         >
           <v-img :src="food" class="!tw-max-w-[60%] tw-w-full tw-h-auto" />
 
@@ -408,9 +557,13 @@ const submitMerge = () => {
           v-for="item in userInventory"
           :key="item._id"
           class="tw-aspect-[178/178] tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
+          :class="{
+            'pulsate-fwd-infinite': selectedItem?._id === item._id,
+          }"
           :style="{
             backgroundImage: `url(${ITEM_RARITIES[item?.rarity].background})`,
           }"
+          @click.stop="handleSelectItem(item)"
         >
           <v-img
             :src="srcAsset(item.item?.photoUrl)"
@@ -489,5 +642,13 @@ const submitMerge = () => {
     @apply tw-h-full;
     box-shadow: inset 0 0 0 clamp(1.5px, 1.5vw, 2px) #12a6d4;
   }
+}
+
+.slot-item {
+  @apply tw-aspect-square tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center;
+}
+
+.highlight {
+  filter: drop-shadow(0 0 10px #ffefbf);
 }
 </style>

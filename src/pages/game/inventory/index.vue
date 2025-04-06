@@ -225,27 +225,105 @@ const getKapyDetails = async () => {
   }
 };
 
-const equipItem = async (typeItem) => {
-  try {
-    console.log("equipItem", typeItem);
+// const equipItem = async (typeItem, slot) => {
+//   try {
+//     console.log("equipItem", typeItem);
 
+//     if (
+//       !selectedItem.value ||
+//       selectedItem.value === "food" ||
+//       selectedItem.value?.item.category !== typeItem
+//     )
+//       return;
+
+//     if (selectedItem.value?.item.category === ITEM_CATEGORIES.PET) {
+//       if (slot === 1) {
+//         currentEquipments.value.find(
+//           (eq) => eq._id === petSlot1.value?._id
+//         )._id = selectedItem.value._id;
+//       } else {
+//         currentEquipments.value.find(
+//           (eq) => eq._id === petSlot2.value?._id
+//         )._id = selectedItem.value._id;
+//       }
+//     } else if (selectedItem.value?.item.category === ITEM_CATEGORIES.WEAPON) {
+//       if (slot === 1) {
+//         currentEquipments.value.find(
+//           (eq) => eq._id === weaponSlot1.value?._id
+//         )._id = selectedItem.value._id;
+//       } else {
+//         currentEquipments.value.find(
+//           (eq) => eq._id === weaponSlot2.value?._id
+//         )._id = selectedItem.value._id;
+//       }
+//     } else if (selectedItem.value?.item.category === ITEM_CATEGORIES.ARMOR) {
+//       currentEquipments.value.find(
+//         (eq) => eq._id === armorSlots.value?._id
+//       )._id = selectedItem.value._id;
+//     } else if (
+//       selectedItem.value?.item.category === ITEM_CATEGORIES.ACCESSORY
+//     ) {
+//       currentEquipments.value.find(
+//         (eq) => eq._id === accessorySlot.value?._id
+//       )._id = selectedItem.value._id;
+//     }
+
+//     const equipments = currentEquipments.value.map((eq) => eq._id);
+//     const response = await setEquipments(equipments);
+//     if (response) {
+//       getKapyDetails();
+//     }
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
+const equipItem = async (typeItem, slot) => {
+  try {
     if (
       !selectedItem.value ||
       selectedItem.value === "food" ||
-      selectedItem.value?.item.category !== typeItem
+      selectedItem.value?.item.category !== typeItem ||
+      currentEquipments.value.some((eq) => eq._id === selectedItem.value._id)
     )
       return;
 
-    const equipments = Array.from(
-      new Set([
-        ...currentEquipments.value.map((eq) => eq._id),
-        selectedItem.value._id,
-      ])
-    );
-    const response = await setEquipments(equipments);
-    if (response) {
-      getKapyDetails();
+    const selected = selectedItem.value;
+    const category = selected.item.category;
+
+    let currentSlotItem = null;
+
+    if (category === ITEM_CATEGORIES.PET) {
+      currentSlotItem = slot === 1 ? petSlot1.value : petSlot2.value;
+    } else if (category === ITEM_CATEGORIES.WEAPON) {
+      currentSlotItem = slot === 1 ? weaponSlot1.value : weaponSlot2.value;
+    } else if (category === ITEM_CATEGORIES.ARMOR) {
+      currentSlotItem = armorSlots.value;
+    } else if (category === ITEM_CATEGORIES.ACCESSORY) {
+      currentSlotItem = accessorySlot.value;
     }
+
+    if (currentSlotItem?._id === selected._id) return;
+
+    if (currentSlotItem) {
+      const index = currentEquipments.value.findIndex(
+        (eq) => eq._id === currentSlotItem._id
+      );
+      if (index !== -1) {
+        currentEquipments.value[index]._id = selected._id;
+      } else {
+        currentEquipments.value.push({
+          _id: selected._id,
+          item: selected.item,
+        });
+      }
+    } else {
+      // slot rỗng → thêm vào
+      currentEquipments.value.push({ _id: selected._id, item: selected.item });
+    }
+
+    const equipments = currentEquipments.value.map((eq) => eq._id);
+    const response = await setEquipments(equipments);
+    if (response) getKapyDetails();
   } catch (error) {
     console.error(error);
   }
@@ -274,7 +352,7 @@ const equipItem = async (typeItem) => {
                 ? `url(${ITEM_RARITIES[weaponSlot1.rarity].background})`
                 : `url(${slot1})`,
             }"
-            @click="equipItem(ITEM_CATEGORIES.WEAPON)"
+            @click="equipItem(ITEM_CATEGORIES.WEAPON, 1)"
           >
             <img
               v-if="weaponSlot1"
@@ -306,7 +384,7 @@ const equipItem = async (typeItem) => {
                 ? `url(${ITEM_RARITIES[weaponSlot2.rarity]?.background})`
                 : `url(${slot2})`,
             }"
-            @click="equipItem(ITEM_CATEGORIES.WEAPON)"
+            @click="equipItem(ITEM_CATEGORIES.WEAPON, 2)"
           >
             <img
               v-if="weaponSlot2"
@@ -361,7 +439,7 @@ const equipItem = async (typeItem) => {
                 ? `url(${ITEM_RARITIES[petSlot1.rarity]?.background})`
                 : `url(${slot5})`,
             }"
-            @click="equipItem(ITEM_CATEGORIES.PET)"
+            @click="equipItem(ITEM_CATEGORIES.PET, 1)"
           >
             <v-img
               v-if="petSlot1"
@@ -379,7 +457,7 @@ const equipItem = async (typeItem) => {
                 ? `url(${ITEM_RARITIES[petSlot2.rarity]?.background})`
                 : `url(${slot6})`,
             }"
-            @click="equipItem(ITEM_CATEGORIES.PET)"
+            @click="equipItem(ITEM_CATEGORIES.PET, 2)"
           >
             <v-img
               v-if="petSlot2"

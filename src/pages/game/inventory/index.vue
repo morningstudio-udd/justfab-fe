@@ -19,6 +19,8 @@ import slot6 from "@images/game/slot-6.png";
 import food from "@images/game/food.svg";
 import voucher from "@images/game/voucher.png";
 import rarityMythic from "@images/game/rarity-mythic.png";
+import overlaySlotInventoryEquiped from "@images/game/overlay-slot-inventory-equiped.png";
+import overlaySlotInventorySelecting from "@images/game/overlay-slot-inventory-selecting.png";
 
 definePage({
   meta: {
@@ -317,6 +319,11 @@ const equipItem = async (typeItem, slot) => {
     console.error(error);
   }
 };
+
+const isEquipped = (itemId) => {
+  if (!currentEquipments.value) return false;
+  return currentEquipments.value.some((eq) => eq._id === itemId);
+};
 </script>
 
 <template>
@@ -351,6 +358,12 @@ const equipItem = async (typeItem, slot) => {
               :src="srcAsset(weaponSlot1?.item?.photoUrl)"
               class="!tw-max-w-[80%] tw-w-full tw-h-auto"
             />
+
+            <img
+              v-if="selectedItem?.item?.category === ITEM_CATEGORIES.WEAPON"
+              :src="overlaySlotInventorySelecting"
+              class="tw-absolute tw-w-full tw-h-auto"
+            />
           </div>
           <div class="tw-col-span-2 tw-row-span-3">
             <div
@@ -383,6 +396,12 @@ const equipItem = async (typeItem, slot) => {
               :src="srcAsset(weaponSlot2?.item?.photoUrl)"
               class="!tw-max-w-[80%] tw-w-full tw-h-auto"
             />
+
+            <img
+              v-if="selectedItem?.item?.category === ITEM_CATEGORIES.WEAPON"
+              :src="overlaySlotInventorySelecting"
+              class="tw-absolute tw-w-full tw-h-auto"
+            />
           </div>
           <div
             class="slot-item roll-in-left"
@@ -400,6 +419,12 @@ const equipItem = async (typeItem, slot) => {
               v-if="armorSlots"
               :src="srcAsset(armorSlots?.item?.photoUrl)"
               class="!tw-max-w-[80%] tw-w-full tw-h-auto"
+            />
+
+            <img
+              v-if="selectedItem?.item?.category === ITEM_CATEGORIES.ARMOR"
+              :src="overlaySlotInventorySelecting"
+              class="tw-absolute tw-w-full tw-h-auto"
             />
           </div>
           <div
@@ -420,6 +445,12 @@ const equipItem = async (typeItem, slot) => {
               :src="srcAsset(accessorySlot?.item?.photoUrl)"
               class="!tw-max-w-[80%] tw-w-full tw-h-auto"
             />
+
+            <img
+              v-if="selectedItem?.item?.category === ITEM_CATEGORIES.ACCESSORY"
+              :src="overlaySlotInventorySelecting"
+              class="tw-absolute tw-w-full tw-h-auto"
+            />
           </div>
           <div
             class="slot-item roll-in-left"
@@ -438,6 +469,12 @@ const equipItem = async (typeItem, slot) => {
               :src="srcAsset(petSlot1?.item?.photoUrl)"
               class="!tw-max-w-[80%] tw-w-full tw-h-auto"
             />
+
+            <img
+              v-if="selectedItem?.item?.category === ITEM_CATEGORIES.PET"
+              :src="overlaySlotInventorySelecting"
+              class="tw-absolute tw-w-full tw-h-auto"
+            />
           </div>
           <div
             class="slot-item roll-in-right"
@@ -455,6 +492,12 @@ const equipItem = async (typeItem, slot) => {
               v-if="petSlot2"
               :src="srcAsset(petSlot2?.item?.photoUrl)"
               class="!tw-max-w-[80%] tw-w-full tw-h-auto"
+            />
+
+            <img
+              v-if="selectedItem?.item?.category === ITEM_CATEGORIES.PET"
+              :src="overlaySlotInventorySelecting"
+              class="tw-absolute tw-w-full tw-h-auto"
             />
           </div>
         </div>
@@ -634,9 +677,6 @@ const equipItem = async (typeItem, slot) => {
             <div
               v-bind="props"
               class="tw-aspect-[178/178] tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
-              :class="{
-                'pulsate-fwd-infinite': selectedItem?._id === item._id,
-              }"
               :style="{
                 backgroundImage: `url(${
                   ITEM_RARITIES[item?.rarity].background
@@ -647,6 +687,18 @@ const equipItem = async (typeItem, slot) => {
               <v-img
                 :src="srcAsset(item.item?.photoUrl)"
                 class="!tw-max-w-[75%] tw-w-full tw-h-auto"
+              />
+
+              <img
+                v-if="isEquipped(item._id)"
+                :src="overlaySlotInventoryEquiped"
+                class="tw-absolute tw-w-full tw-h-auto"
+              />
+
+              <img
+                v-if="selectedItem?._id === item._id"
+                :src="overlaySlotInventorySelecting"
+                class="tw-absolute tw-w-full tw-h-auto"
               />
             </div>
           </template>

@@ -1,8 +1,6 @@
 <script setup>
-import gbGame from "@images/game/bg-game-2.png";
 import gameBgInventory from "@images/game/bg-game-inventory.png";
 import bgBar1 from "@images/game/bar-1.png";
-import btnAddInventory from "@images/game/btn-add-inventory.png";
 import bgSlot from "@images/game/bg-slot-inventory.png";
 import btnByQuality from "@images/game/btn-by-quality.png";
 import btnMerge from "@images/game/btn-merge.png";
@@ -11,7 +9,6 @@ import hpIndex from "@images/game/hp-index.png";
 import defenseIndex from "@images/game/defense-index.png";
 import attackIndex from "@images/game/attack-index.png";
 import btnFeed from "@images/game/btn-feed.png";
-import bgLayer1 from "@images/game/bg-layer-1.png";
 import bgRibbon from "@images/game/bg-ribbon.png";
 import slot1 from "@images/game/slot-1.png";
 import slot2 from "@images/game/slot-2.png";
@@ -32,13 +29,8 @@ definePage({
   },
 });
 
-let resizeObserver = null;
-
 const { observe } = useMixin();
-const route = useRoute();
 const userStore = useUserStore();
-const adminStore = useAdminStore();
-const authStore = useAuthStore();
 const gameStore = useGameStore();
 
 const inventoryData = ref();
@@ -56,6 +48,8 @@ const unclaimRewards = ref([]);
 const lastHeight = ref(0);
 const selectedItem = ref();
 const currentEquipments = ref();
+const gameContainerRef = ref();
+const statsKapy = ref();
 
 const userInventory = computed(() => inventoryData.value?.items);
 const fontSizeBase = computed(() => gameStore.baseFontSize);
@@ -127,15 +121,9 @@ const accessorySlot = computed(() => {
     ) || null
   );
 });
+const tooltipAttachTarget = computed(() => gameContainerRef.value || undefined);
 
 onMounted(async () => {
-  // if (itemsContainerRef.value) {
-  //   resizeObserver = new ResizeObserver(updateSize);
-  //   resizeObserver.observe(itemsContainerRef.value);
-  // }
-  // if (itemsContainerRef.value) {
-  //   observe(itemsContainerRef.value, handleResize);
-  // }
   nextTick(() => {
     if (itemsContainerRef.value) {
       observe(itemsContainerRef.value, handleResize);
@@ -218,8 +206,9 @@ const handleSelectItem = (item) => {
 
 const getKapyDetails = async () => {
   try {
-    const { equipments } = await getKapy();
+    const { equipments, stats } = await getKapy();
     currentEquipments.value = equipments;
+    statsKapy.value = stats;
   } catch (error) {
     console.error(error);
   }
@@ -331,10 +320,13 @@ const equipItem = async (typeItem, slot) => {
 </script>
 
 <template>
-  <div class="game-content tw-flex-grow tw-flex tw-flex-col">
+  <div
+    class="game-content tw-flex-grow tw-flex tw-flex-col tw-relative tw-overflow-hidden"
+    ref="gameContainerRef"
+  >
     <!-- <div class="tw-flex tw-flex-col tw-h-full"> -->
     <div
-      class="tw-aspect-[1080/932] tw-w-ful tw-flex tw-flex-col tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative"
+      class="tw-aspect-[1080/932] tw-w-full tw-flex tw-flex-col tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative"
       :style="{ backgroundImage: `url(${gameBgInventory})` }"
     >
       <div class="tw-w-full tw-flex-grow tw-items-start tw-px-[12%] tw-pt-[1%]">
@@ -494,22 +486,22 @@ const equipItem = async (typeItem, slot) => {
         class="tw-w-full tw-aspect-[1080/100] tw-flex tw-justify-center tw-items-center"
       >
         <div
-          class="tw-aspect-[282/116] tw-w-[26%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md disable-element tw-flex tw-justify-center tw-items-center tw-pt-[2%] tw-pl-[2%]"
+          class="tw-aspect-[282/116] tw-w-[26%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md tw-flex tw-justify-center tw-items-center tw-pt-[1.5%] tw-pl-[2%]"
           :style="{ backgroundImage: `url(${hpIndex})` }"
         >
-          ???
+          {{ formatNumber(statsKapy?.hp) || 0 }}
         </div>
         <div
-          class="tw-aspect-[282/116] tw-w-[26%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md disable-element tw-flex tw-justify-center tw-items-center tw-pt-[2%] tw-pl-[2%]"
+          class="tw-aspect-[282/116] tw-w-[26%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md tw-flex tw-justify-center tw-items-center tw-pt-[1%] tw-pl-[3%]"
           :style="{ backgroundImage: `url(${defenseIndex})` }"
         >
-          ???
+          {{ formatNumber(statsKapy?.defense) || 0 }}
         </div>
         <div
-          class="tw-aspect-[284/116] tw-w-[26%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md disable-element tw-flex tw-justify-center tw-items-center tw-pt-[2%] tw-pl-[2%]"
+          class="tw-aspect-[284/116] tw-w-[26%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md tw-flex tw-justify-center tw-items-center tw-pt-[1%] tw-pl-[2%]"
           :style="{ backgroundImage: `url(${attackIndex})` }"
         >
-          ???
+          {{ formatNumber(statsKapy?.attack) || 0 }}
         </div>
       </div>
 
@@ -544,10 +536,6 @@ const equipItem = async (typeItem, slot) => {
         'padding-right': `${itemsContainerPaddingX}px`,
       }"
     >
-      <!-- <div
-      ref="itemsContainerRef"
-      class="tw-bg-[#23212e] tw-aspect-[1080/420] tw-flex-auto tw-w-full tw-max-w-screen tw-box-border tw-overflow-y-scroll tw-px-[5%]"
-    > -->
       <div
         class="tw-grid tw-grid-cols-4"
         :style="{
@@ -630,24 +618,67 @@ const equipItem = async (typeItem, slot) => {
           </svg>
         </div>
 
-        <div
+        <v-tooltip
           v-if="userInventory && userInventory.length"
           v-for="item in userInventory"
           :key="item._id"
-          class="tw-aspect-[178/178] tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
-          :class="{
-            'pulsate-fwd-infinite': selectedItem?._id === item._id,
-          }"
-          :style="{
-            backgroundImage: `url(${ITEM_RARITIES[item?.rarity].background})`,
-          }"
-          @click.stop="handleSelectItem(item)"
+          :model-value="selectedItem?._id === item._id"
+          :open-on-hover="false"
+          :open-on-click="true"
+          :attach="gameContainerRef"
+          contained
+          location="top"
+          location-strategy="connected"
         >
-          <v-img
-            :src="srcAsset(item.item?.photoUrl)"
-            class="!tw-max-w-[75%] tw-w-full tw-h-auto"
-          />
-        </div>
+          <template #activator="{ props }">
+            <div
+              v-bind="props"
+              class="tw-aspect-[178/178] tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center"
+              :class="{
+                'pulsate-fwd-infinite': selectedItem?._id === item._id,
+              }"
+              :style="{
+                backgroundImage: `url(${
+                  ITEM_RARITIES[item?.rarity].background
+                })`,
+              }"
+              @click.stop="handleSelectItem(item)"
+            >
+              <v-img
+                :src="srcAsset(item.item?.photoUrl)"
+                class="!tw-max-w-[75%] tw-w-full tw-h-auto"
+              />
+            </div>
+          </template>
+
+          <div>
+            <div
+              :style="{
+                fontSize: `${fontSizeBase * 0.9}px`,
+              }"
+            >
+              {{ item.item.name }} - Level {{ item.level }}
+            </div>
+            <div
+              :style="{
+                fontSize: `${fontSizeBase * 0.7}px`,
+              }"
+            >
+              {{ item.rarity }} {{ item.item.category }}
+            </div>
+            <div
+              class="tw-grid tw-grid-cols-2"
+              :style="{
+                fontSize: `${fontSizeBase * 0.7}px`,
+              }"
+            >
+              <div>HP: {{ item.currentStats.hp }}</div>
+              <div>ATK: {{ item.currentStats.attack }}</div>
+              <div>DEF: {{ item.currentStats.defense }}</div>
+              <div>LUK: {{ item.currentStats.luck }}</div>
+            </div>
+          </div>
+        </v-tooltip>
 
         <div class="tw-col-span-full tw-h-[0.1vh]"></div>
       </div>

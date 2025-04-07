@@ -427,6 +427,7 @@
     "getAllUsers": true,
     "getReferralTree": true,
     "getKapy": true,
-    "setEquipments": true
+    "setEquipments": true,
+    "formatNumber": true
   }
 }

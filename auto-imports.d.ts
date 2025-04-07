@@ -73,6 +73,7 @@ declare global {
   const emailValidator: typeof import('./src/utils/validators.js')['emailValidator']
   const extendRef: typeof import('@vueuse/core')['extendRef']
   const fetchFPToken: typeof import('./src/api/fp.js')['fetchFPToken']
+  const formatNumber: typeof import('./src/utils/helpers.js')['formatNumber']
   const futureverseAuth: typeof import('./src/utils/futureverseAuth.js')['default']
   const gameNav: typeof import('./src/navigations/game.js')['gameNav']
   const generateCodeChallenge: typeof import('./src/utils/FPClient.js')['generateCodeChallenge']
@@ -499,6 +500,7 @@ declare module 'vue' {
     readonly emailValidator: UnwrapRef<typeof import('./src/utils/validators.js')['emailValidator']>
     readonly extendRef: UnwrapRef<typeof import('@vueuse/core')['extendRef']>
     readonly fetchFPToken: UnwrapRef<typeof import('./src/api/fp.js')['fetchFPToken']>
+    readonly formatNumber: UnwrapRef<typeof import('./src/utils/helpers.js')['formatNumber']>
     readonly gameNav: UnwrapRef<typeof import('./src/navigations/game.js')['gameNav']>
     readonly generateCodeChallenge: UnwrapRef<typeof import('./src/utils/FPClient.js')['generateCodeChallenge']>
     readonly generateCodeVerifier: UnwrapRef<typeof import('./src/utils/FPClient.js')['generateCodeVerifier']>

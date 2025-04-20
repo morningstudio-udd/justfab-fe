@@ -383,7 +383,9 @@ const getTabClass = (group) => {
                 Daily Rewards
               </div>
 
-              <div class="tw-overflow-x-auto tw-flex tw-gap-[2%] daily-rewards tw-relative">
+              <div
+                class="tw-overflow-x-auto tw-flex tw-gap-[2%] daily-rewards tw-relative"
+              >
                 <div
                   v-for="n in 30"
                   class="tw-w-1/5 tw-flex-none tw-relative"
@@ -437,7 +439,9 @@ const getTabClass = (group) => {
                   </div>
 
                   <div class="icon-checked-in" v-if="claimedDailyReward(n)">
-                    <v-img :src="completedDailyReward" />
+                    <div class="tw-w-1/2 tw-h-auto tw-aspect-square">
+                      <v-img :src="completedDailyReward" cover />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -525,34 +529,6 @@ const getTabClass = (group) => {
                 Friends
               </div>
 
-              <!-- <div
-                class="tw-flex-none tw-grid tw-grid-cols-2 tw-gap-[4%] tw-px-[1.5%] tw-mb-[4%]"
-              >
-                <v-btn
-                  class="btn-invite"
-                  :style="{
-                    fontSize: `${fontSizeBase * 1.8}px !important`,
-                  }"
-                  color="#FAE1AE"
-                  flat
-                  @click.stop="submitCopyInvite"
-                >
-                  Copy
-                </v-btn>
-
-                <v-btn
-                  class="btn-invite"
-                  :style="{
-                    fontSize: `${fontSizeBase * 1.8}px !important`,
-                  }"
-                  color="#FAE1AE"
-                  flat
-                  @click.stop="submitShareInvite"
-                >
-                  Share
-                </v-btn>
-              </div> -->
-
               <div class="tw-flex-none tw-px-[1.5%] tw-mb-[4%]">
                 <invite-buttons />
               </div>
@@ -586,7 +562,7 @@ const getTabClass = (group) => {
 
 <style lang="postcss" scoped>
 .icon-checked-in {
-  @apply tw-aspect-[77/82] tw-w-full tw-absolute tw-z-[1] tw-left-0 tw-bottom-1;
+  @apply tw-w-[90%] tw-h-[92%] tw-absolute tw-z-[1] tw-left-[5%] tw-top-[6%] tw-bg-black/50 tw-rounded-[1em] tw-flex tw-justify-center tw-items-center;
 }
 
 .daily-gift {

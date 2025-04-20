@@ -20,6 +20,7 @@ declare module 'vue' {
     FusionDialog: typeof import('./src/components/Dialog/FusionDialog.vue')['default']
     I18n: typeof import('./src/components/I18n.vue')['default']
     InputUploadFiles: typeof import('./src/components/InputUploadFiles.vue')['default']
+    InviteButtons: typeof import('./src/views/Missions/InviteButtons.vue')['default']
     InviteDialog: typeof import('./src/components/Dialog/InviteDialog.vue')['default']
     ItemBlock: typeof import('./src/components/ItemBlock.vue')['default']
     ItemDialog: typeof import('./src/components/Dialog/ItemDialog.vue')['default']

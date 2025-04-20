@@ -1,7 +1,7 @@
 <script setup>
 import bgTask from "@images/game/bg-task.png";
 import energy from "@images/game/energy.svg";
-import gold from "@images/game/gold.png";
+import gold from "@images/game/gold-2.png";
 
 const props = defineProps({
   task: Object,
@@ -54,12 +54,11 @@ const taskRewardIcon = (rewardsType = REWARD_TYPES.GOLD) => {
         fontSize: `${fontSizeBase}px !important`,
       }"
     >
-      <v-img
-        :src="taskRewardIcon(task.reward.type)"
-        width="auto"
-        height="100%"
-        class="!tw-aspect-square !tw-w-auto !tw-h-full !tw-flex-none"
-      />
+      <div
+        class="!tw-aspect-square !tw-w-auto !tw-h-[60%] tw-flex-none tw-flex tw-justify-center tw-items-center tw-mr-[1%]"
+      >
+        <v-img :src="taskRewardIcon(task.reward.type)" cover />
+      </div>
       <div class="tw-flex-auto">x {{ task.reward.value }}</div>
     </div>
   </div>

@@ -19,7 +19,7 @@ const props = defineProps({
   </IconBtn>
 </template>
 
-<style scoped>
+<style lang="postcss" scoped>
 .v-dialog-close-btn {
   position: absolute;
   z-index: 1;

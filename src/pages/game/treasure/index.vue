@@ -74,7 +74,7 @@ const submitOpenSettingDialog = () => {
     >
       <v-img
         :src="treasureLight"
-        class="!tw-absolute tw-top-0 tw-left-0 tw-w-full tw-h-ful"
+        class="!tw-absolute tw-top-0 tw-left-0 tw-w-full tw-h-full rotate-center-infinite"
       />
       <div
         class="tw-absolute tw-top-0 tw-left-0 tw-w-full tw-h-full tw-flex tw-flex-col tw-items-center tw-justify-between tw-bg-cover tw-bg-top tw-bg-no-repeat"

@@ -2,6 +2,7 @@
 import modeGolden from "@images/game/mode-golden.png";
 import modePk from "@images/game/mode-pk.png";
 import modeMonster from "@images/game/mode-monster.png";
+import { ref } from "vue";
 
 definePage({
   meta: {
@@ -16,6 +17,8 @@ let resizeObserver;
 const settingDialogRef = ref(null);
 const gameContentRef = ref(null);
 const parentDivWidth = ref(0);
+const comingSoon = ref(false);
+const comingSoonOverlayRef = ref(null);
 
 const { observe } = useMixin();
 
@@ -67,18 +70,29 @@ const submitOpenSettingDialog = () => {
     <div
       class="tw-w-full tw-h-full tw-flex tw-flex-col tw-items-center tw-justify-between tw-gap-4 tw-px-[8%] tw-py-[10%]"
     >
-      <div class="tw-aspect-[586/287] tw-max-w-full tw-max-h-full tw-h-full">
+      <div
+        class="tw-aspect-[586/287] tw-max-w-full tw-max-h-full tw-h-full"
+        @click="comingSoonOverlayRef.openOverlay"
+      >
         <v-img :src="modePk" cover />
       </div>
 
-      <div class="tw-aspect-[586/287] tw-max-w-full tw-max-h-full tw-h-full">
+      <div
+        class="tw-aspect-[586/287] tw-max-w-full tw-max-h-full tw-h-full"
+        @click="comingSoonOverlayRef.openOverlay"
+      >
         <v-img :src="modeMonster" cover />
       </div>
 
-      <div class="tw-aspect-[586/287] tw-max-w-full tw-max-h-full tw-h-full">
+      <div
+        class="tw-aspect-[586/287] tw-max-w-full tw-max-h-full tw-h-full"
+        @click="comingSoonOverlayRef.openOverlay"
+      >
         <v-img :src="modeGolden" cover />
       </div>
     </div>
+
+    <ComingSoonOverlay ref="comingSoonOverlayRef" />
   </div>
 </template>
 

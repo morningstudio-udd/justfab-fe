@@ -13,6 +13,7 @@ declare module 'vue' {
     AudioSource: typeof import('./src/components/AudioSource.vue')['default']
     BottomBar: typeof import('./src/components/Game/BottomBar.vue')['default']
     ClaimInviteDialog: typeof import('./src/components/Dialog/ClaimInviteDialog.vue')['default']
+    ComingSoonOverlay: typeof import('./src/components/ComingSoonOverlay.vue')['default']
     ConfirmDialog: typeof import('./src/components/Dialog/ConfirmDialog.vue')['default']
     ConnectWalletBtn: typeof import('./src/components/Button/ConnectWalletBtn.vue')['default']
     DialogCloseBtn: typeof import('./src/components/DialogCloseBtn.vue')['default']

@@ -57,10 +57,10 @@ let checkTask = null;
 const fontSizeBase = computed(() => gameStore.baseFontSize);
 
 const currentIndex = computed(() => {
-  if (!currentStreak.value) {
-    return;
-  }
-  return currentStreak.value % 7;
+  // if (!currentStreak.value) {
+  //   return;
+  // }
+  return currentStreak.value;
 });
 
 const canClaimIndexs = computed(() => {
@@ -287,6 +287,8 @@ const handleDailyCheckIn = ($event, level) => {
 // };
 
 const canClaimDailyReward = (index) => {
+  console.log("canClaimDailyReward", canClaimIndexs.value);
+  return canClaimIndexs.value.includes(index);
   // if (currentStreak.value === 0 && index === 1) {
   //   return true;
   // }
@@ -381,10 +383,10 @@ const getTabClass = (group) => {
                 Daily Rewards
               </div>
 
-              <div class="tw-overflow-x-auto tw-flex tw-gap-[2%] daily-rewards">
+              <div class="tw-overflow-x-auto tw-flex tw-gap-[2%] daily-rewards tw-relative">
                 <div
                   v-for="n in 30"
-                  class="tw-w-1/5 tw-flex-none"
+                  class="tw-w-1/5 tw-flex-none tw-relative"
                   :class="{
                     'checked-in': claimedDailyReward(n),
                     'tw-cursor-pointer': canClaimDailyReward(n),
@@ -434,7 +436,7 @@ const getTabClass = (group) => {
                     </v-img>
                   </div>
 
-                  <div class="icon-checked-in">
+                  <div class="icon-checked-in" v-if="claimedDailyReward(n)">
                     <v-img :src="completedDailyReward" />
                   </div>
                 </div>
@@ -584,7 +586,7 @@ const getTabClass = (group) => {
 
 <style lang="postcss" scoped>
 .icon-checked-in {
-  @apply tw-aspect-[77/82] tw-w-1/2 tw-absolute tw-hidden tw-z-[1];
+  @apply tw-aspect-[77/82] tw-w-full tw-absolute tw-z-[1] tw-left-0 tw-bottom-1;
 }
 
 .daily-gift {

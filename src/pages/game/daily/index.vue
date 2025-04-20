@@ -85,6 +85,10 @@ const justfabMissionTasks = computed(() =>
     (task) => task.group === getGroupIdByName("JustFab Missions")
   )
 );
+const partnerChildGroups = computed(() => {
+  const partner = getGroupIdByName("Partners");
+  return allTaskGroup.value.filter((group) => group.parent === partner);
+});
 
 onMounted(async () => {
   // Telegram.WebApp.ready();
@@ -176,6 +180,11 @@ const getTaskByGroup = (groupId) => {
 
 const getTaskByGroupName = (groupId) => {
   return allTasks.value.filter((task) => task.group === groupId);
+};
+
+const getGroupsInParentGroupByName = (parentName) => {
+  const parentId = getGroupIdByName("JustFab Missions");
+  return allTaskGroup.value.filter((group) => group.parent === parentName);
 };
 
 const isCompleted = (taskId) => {
@@ -312,7 +321,7 @@ const getTabClass = (group) => {
     <div
       class="tw-w-full tw-h-full tw-flex tw-flex-col tw-items-center tw-justify-between tw-px-[4%] tw-py-[5%] tw-bg-cover tw-bg-top tw-bg-no-repeat tw-relative"
     >
-      <div class="tw-w-[90%] tw-h-[13%]">
+      <div class="tw-w-[90%] tw-h-[13%] tw-flex-none">
         <v-tabs
           v-model="currentGroupParent"
           color="primary"
@@ -354,7 +363,7 @@ const getTabClass = (group) => {
         </v-tabs>
       </div>
 
-      <div class="tw-w-full tw-h-full">
+      <div class="tw-w-full tw-h-full tw-flex-1 tw-min-h-0 tw-overflow-hidden">
         <v-tabs-window
           v-model="currentGroupParent"
           class="tw-h-full tw-max-h-full [&>.v-window\_\_container]:tw-h-full [&>.v-window\_\_container]:tw-max-h-full"
@@ -439,40 +448,8 @@ const getTabClass = (group) => {
               </div>
 
               <div
-                class="tw-flex tw-flex-col tw-gap-[2%] tw-overflow-y-auto task-list"
+                class="tw-flex tw-flex-col tw-gap-[2%] tw-overflow-y-auto task-list tw-grow"
               >
-                <!-- <div
-                  v-for="task in justfabMissionTasks"
-                  :style="{ backgroundImage: `url(${bgTask})` }"
-                  class="tw-aspect-[956/242] tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat"
-                  @click="isCompleted(task._id) ? '' : doTask(task)"
-                >
-                  <div
-                    class="tw-w-[80%] tw-h-[70%] tw-ml-auto tw-flex tw-justify-left tw-items-center"
-                    :style="{
-                      fontSize: `${fontSizeBase}px !important`,
-                      '--base-font-size': `${fontSizeBase}px`,
-                    }"
-                  >
-                    {{ task.title }}
-                  </div>
-
-                  <div
-                    class="tw-w-full tw-h-[30%] tw-text-white tw-font-bold tw-flex tw-items-center tw-px-[4%]"
-                    :style="{
-                      fontSize: `${fontSizeBase}px !important`,
-                    }"
-                  >
-                    <v-img
-                      :src="taskRewardIcon(task.reward.type)"
-                      width="auto"
-                      height="100%"
-                      class="!tw-aspect-square !tw-w-auto !tw-h-full !tw-flex-none"
-                    />
-                    <div class="tw-flex-auto">x {{ task.reward.value }}</div>
-                  </div>
-                </div> -->
-
                 <task-block
                   v-for="task in justfabMissionTasks"
                   :task="task"
@@ -483,10 +460,10 @@ const getTabClass = (group) => {
             </div>
           </v-tabs-window-item>
 
-          <v-tabs-window-item value="Partners">
+          <v-tabs-window-item value="Partners" class="tw-h-full">
             <div class="tw-flex tw-flex-col tw-gap-[1%] tw-h-full">
               <div
-                class="tw-text-white"
+                class="tw-text-white tw-flex-none"
                 :style="{
                   fontSize: `${fontSizeBase * 1.5}px`,
                 }"
@@ -494,23 +471,21 @@ const getTabClass = (group) => {
                 Our Partners
               </div>
 
-              <div>
+              <div
+                class="tw-flex tw-flex-col tw-gap-[2%] tw-overflow-y-auto task-list tw-flex-1 tw-min-h-0"
+              >
                 <v-expansion-panels
                   flat
-                  hide-actions
                   multiple
                   bg-color="transparent"
                   v-if="allTasks.length"
                 >
-                  <template v-for="group in currentGroups" :key="group._id">
+                  <template
+                    v-for="group in partnerChildGroups"
+                    :key="group._id"
+                  >
                     <v-expansion-panel class="daily-task">
-                      <v-expansion-panel-title
-                        static
-                        collapse-icon="material-symbols-arrow-drop-down"
-                        expand-icon="material-symbols-arrow-right"
-                        class="task-title"
-                        :style="{ backgroundImage: `url(${inputDailyTask})` }"
-                      >
+                      <v-expansion-panel-title static class="task-title">
                         <div class="child-element">{{ group.name }}</div>
                       </v-expansion-panel-title>
 
@@ -519,29 +494,12 @@ const getTabClass = (group) => {
                           <v-list-item
                             v-for="task in getTaskByGroup(group._id)"
                             :key="task._id"
-                            :title="task.title"
-                            :subtitle="task.description || ''"
-                            @click="isCompleted(task._id) ? '' : doTask(task)"
-                            :style="{
-                              fontSize: `${fontSizeBase}px !important`,
-                              '--base-font-size': `${fontSizeBase}px`,
-                            }"
+                            class="!tw-py-1"
                           >
-                            <div
-                              :style="{
-                                fontSize: `${fontSizeBase * 0.8}px !important`,
-                              }"
-                            >
-                              Reward: {{ task.reward.value }}
-                              {{ task.reward.type }}
-                            </div>
-                            <template #append>
-                              <v-img
-                                :src="iconCheckedIn"
-                                v-if="isCompleted(task._id)"
-                                width="12"
-                              />
-                            </template>
+                            <task-block
+                              :task="task"
+                              @click="isCompleted(task._id) ? '' : doTask(task)"
+                            />
                           </v-list-item>
                         </v-list>
                       </v-expansion-panel-text>
@@ -552,7 +510,20 @@ const getTabClass = (group) => {
             </div>
           </v-tabs-window-item>
 
-          <v-tabs-window-item value="Friends"> Three </v-tabs-window-item>
+          <v-tabs-window-item value="Friends" class="tw-h-full">
+            <div class="tw-flex tw-flex-col tw-gap-[1%] tw-h-full">
+              <div
+                class="tw-text-white"
+                :style="{
+                  fontSize: `${fontSizeBase * 1.5}px`,
+                }"
+              >
+                Friends
+              </div>
+
+              <div class="tw-overflow-x-auto tw-flex tw-gap-[2%]"></div>
+            </div>
+          </v-tabs-window-item>
 
           <v-tabs-window-item value="Connect"> Three </v-tabs-window-item>
         </v-tabs-window>
@@ -598,22 +569,27 @@ const getTabClass = (group) => {
 .daily-task {
   @apply !tw-mt-0 tw-mb-[2%];
   .task-title {
-    @apply tw-bg-transparent tw-bg-cover tw-bg-center tw-bg-no-repeat tw-aspect-[946/114] tw-w-full tw-h-auto !tw-min-h-0 !tw-py-0 !tw-pl-[2%] !tw-pr-0;
+    @apply tw-bg-[#FCF0C6] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-aspect-[573/107] tw-w-full tw-h-auto !tw-min-h-0 !tw-py-0;
     font-size: clamp(0.625rem, 2vh, 2.125rem);
+    border-radius: 0.5em;
+    box-shadow: 0px 12.28px 13.16px -1.75px rgba(0, 0, 0, 0.21);
   }
   .v-expansion-panel-title__icon {
     @apply tw-h-full tw-w-auto tw-aspect-square tw-justify-center tw-items-center;
     i {
-      @apply tw-aspect-square tw-h-[85%] tw-w-auto tw-text-[#8d2e02];
+      @apply tw-aspect-square tw-h-[55%] tw-w-auto tw-text-[#BE5A25];
     }
   }
+  .v-expansion-panel-text__wrapper {
+    @apply !tw-p-0;
+  }
   .task-content {
-    @apply tw-mx-[2%] tw-bg-[#FFF0C3]/60 !tw-border-[0.3vh] !tw-border-t-0 tw-border-solid tw-border-[#8D2E02] tw-rounded-b-[1em];
+    @apply tw-mx-[2%] tw-bg-[#A9A9A9]/60 !tw-border-[0.3vh]  tw-rounded-b-[1em];
     /* border-width: 2%; */
     /* font-size: clamp(0.625rem, 1.5vh, 2.125rem); */
     font-size: var(--base-font-size);
     .task {
-      @apply tw-divide-y;
+      /* @apply tw-divide-y; */
       .v-list-item {
         @apply tw-py-3;
         .v-list-item-title {

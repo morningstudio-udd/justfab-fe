@@ -111,7 +111,7 @@ const onRollClick = async (betX) => {
 };
 
 const onScriptCompleted = async (script) => {
-  await processRewards(script.rewards);
+  await processRewards(script.rewards, script.reelSymbols);
 };
 
 const onAllScriptCompleted = async () => {
@@ -123,19 +123,50 @@ const resetRewardsState = () => {
   currentRewards.value = null;
 };
 
-const processRewards = async (rewards) => {
-  for (const r of rewards) {
-    if (r.type == "GOLD") {
-      refSlotMachine.value.showGoldEffect();
-      refSlotMachine.value.showValue(`+${r.value}`);
-    }
-    if (r.type == "FOOD") {
-      refSlotMachine.value.showFoodEffect();
-      refSlotMachine.value.showValue(`+${r.value}`);
-    }
-    if (r.type == "TOKEN") {
-      refSlotMachine.value.showTokenEffect();
-      refSlotMachine.value.showValue(`+${r.value}`);
+const processRewards = async (rewards, reelSymbols = []) => {
+  let reelSymbolsStr = reelSymbols.join("");
+  let GIFEffectId = -1;
+  console.log(reelSymbolsStr)
+  if(reelSymbolsStr.includes("XXX") || reelSymbolsStr.includes("OO")) {
+    GIFEffectId = 0;
+  }
+
+  if(reelSymbolsStr.includes("XXXX")) {
+    GIFEffectId = 1;
+  }
+
+  if(reelSymbolsStr.includes("OOO") || reelSymbolsStr.includes("JJ")) {
+    GIFEffectId = 2;
+  }
+
+  if(reelSymbolsStr.includes("OOOO")) {
+    GIFEffectId = 3;
+  }
+
+  if(reelSymbolsStr.includes("JJJ")) {
+    GIFEffectId = 4;
+  }
+
+  if(reelSymbolsStr.includes("JJJJ")) {
+    GIFEffectId = 5;
+  }
+
+  if(GIFEffectId > -1) {
+    await refSlotMachine.value.showGIFEffect(GIFEffectId);
+  }else {
+    for (const r of rewards) {
+      if (r.type == "GOLD") {
+        refSlotMachine.value.showGoldEffect();
+        refSlotMachine.value.showValue(`+${r.value}`);
+      }
+      if (r.type == "FOOD") {
+        refSlotMachine.value.showFoodEffect();
+        refSlotMachine.value.showValue(`+${r.value}`);
+      }
+      if (r.type == "TOKEN") {
+        refSlotMachine.value.showTokenEffect();
+        refSlotMachine.value.showValue(`+${r.value}`);
+      }
     }
   }
 

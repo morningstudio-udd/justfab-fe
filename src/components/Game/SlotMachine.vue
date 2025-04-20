@@ -36,6 +36,7 @@ const props = defineProps({
 
 let inDuty = false;
 const currentX = ref(1);
+const GIFEffects = ref([]);
 
 watch(
   () => props.claimEnergyAt,
@@ -284,6 +285,12 @@ const showTokenEffect = () => {
 const showFoodEffect = () => {
   slotMachine.value.FoodParticle.resetSystem();
 };
+const showGIFEffect = async (id) => {
+  GIFEffects.value = [false, false, false, false, false, false];
+  GIFEffects.value[id] = true;
+  await waitForSeconds(3);
+  GIFEffects.value = [false, false, false, false, false, false];
+};
 const showValue = (v) => {
   slotMachine.value.LabelValue.show(v);
 };
@@ -317,6 +324,7 @@ defineExpose({
   showTokenEffect,
   showFoodEffect,
   showValue,
+  showGIFEffect
 });
 </script>
 
@@ -335,4 +343,10 @@ defineExpose({
     allowtransparency="true"
     @load="onIframeLoaded"
   />
+  <img src="@/assets/images/game/reward-effects/1.BIGWIN.gif" class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0" v-if="GIFEffects[0]" />
+  <img src="@/assets/images/game/reward-effects/2.MEGA_WIN.gif" class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0" v-if="GIFEffects[1]" />
+  <img src="@/assets/images/game/reward-effects/3.GIGA_WIN.gif" class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0" v-if="GIFEffects[2]" />
+  <img src="@/assets/images/game/reward-effects/4.FABULOUS_WIN.gif" class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0" v-if="GIFEffects[3]" />
+  <img src="@/assets/images/game/reward-effects/5.LEGENDARY.gif" class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0" v-if="GIFEffects[4]" />
+  <img src="@/assets/images/game/reward-effects/6 JACKPOT.gif" class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0" v-if="GIFEffects[5]" />
 </template>

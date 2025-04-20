@@ -28,6 +28,7 @@ declare module 'vue' {
     LoadingGame: typeof import('./src/components/LoadingGame.vue')['default']
     LoadingOverlay: typeof import('./src/components/LoadingOverlay.vue')['default']
     NewGameButton: typeof import('./src/components/NewGameButton.vue')['default']
+    ReferredUsers: typeof import('./src/views/Missions/ReferredUsers.vue')['default']
     ResultItemDialog: typeof import('./src/components/Dialog/ResultItemDialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

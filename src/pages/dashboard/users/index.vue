@@ -1,5 +1,5 @@
 <script setup>
-import { debounce } from "lodash";
+import debounce from "lodash.debounce";
 
 definePage({
   meta: {

@@ -36,6 +36,7 @@ declare module 'vue' {
     SkillForm: typeof import('./src/components/Form/SkillForm.vue')['default']
     SlotMachine: typeof import('./src/components/Game/SlotMachine.vue')['default']
     SnackbarMessage: typeof import('./src/components/SnackbarMessage.vue')['default']
+    TaskBlock: typeof import('./src/components/TaskBlock.vue')['default']
     TaskDialog: typeof import('./src/components/Dialog/TaskDialog.vue')['default']
     TaskForm: typeof import('./src/components/Form/TaskForm.vue')['default']
     TaskGroupDialog: typeof import('./src/components/Dialog/TaskGroupDialog.vue')['default']

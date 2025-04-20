@@ -15,17 +15,12 @@ import gift7 from "@images/game/gift-7.png";
 import dailyReward from "@images/game/daily-reward.png";
 import bgBoxTask from "@images/game/bg-box-task.png";
 import iconCheckedIn from "@images/game/icon-checked-in.png";
-import dailyMission from "@images/game/daily-mission.png";
-import partnersMission from "@images/game/partners-mission.png";
-import friendsMission from "@images/game/friends-mission.png";
-import connectMission from "@images/game/connect-mission.png";
-import dailyReward2 from "@images/game/daily-reward-2.png";
-import completedDailyReward from "@images/game/completed-daily-reward.png";
-
 import { openLink, openTelegramLink } from "@telegram-apps/sdk";
 // import { openLink, openPopup, openTelegramLink } from "@telegram-apps/sdk-vue";
 import moment from "moment";
 import { emitter } from "@plugins/mitt";
+import { delay } from "@/utils/helpers";
+import { nextTick } from "vue";
 
 definePage({
   meta: {
@@ -48,7 +43,6 @@ const currentTask = ref();
 const currentStreak = ref(0);
 // const lastClaimedAt = ref(null);
 const streakRewards = ref([]);
-const dailyRewardRef = ref(null);
 
 let checkTask = null;
 
@@ -80,11 +74,6 @@ const currentGroups = computed(() => {
     (group) => group.parent === currentGroupParent.value
   );
 });
-const justfabMissionTasks = computed(() =>
-  allTasks.value?.filter(
-    (task) => task.group === getGroupIdByName("JustFab Missions")
-  )
-);
 
 onMounted(async () => {
   // Telegram.WebApp.ready();
@@ -101,8 +90,6 @@ onMounted(async () => {
   if (groupsParent.value.length) {
     currentGroupParent.value = groupsParent.value[0]._id;
   }
-
-  currentGroupParent.value = "JustFab";
 
   emitter.on("onClaimeDailySuccess", () => getDaily());
 
@@ -164,17 +151,7 @@ const getSeftTasks = async () => {
   }
 };
 
-const getGroupIdByName = (name) => {
-  const group = allTaskGroup.value.find((g) => g.name === name);
-
-  return group?._id;
-};
-
 const getTaskByGroup = (groupId) => {
-  return allTasks.value.filter((task) => task.group === groupId);
-};
-
-const getTaskByGroupName = (groupId) => {
   return allTasks.value.filter((task) => task.group === groupId);
 };
 
@@ -297,265 +274,310 @@ const claimedDailyReward = (index) => {
 // const isYesterday = (lastClaimedAt) => {
 //   return moment(lastClaimedAt).isSame(moment().subtract(1, "day"), "day");
 // };
-
-const getTabClass = (group) => {
-  const base = "group-tab";
-  const isActive =
-    currentGroupParent.value === group ? "active-tab" : "normal-tab";
-
-  return `${base} ${isActive}`;
-};
 </script>
 
 <template>
   <div class="game-content tw-flex-auto tw-overflow-hidden">
-    <div
-      class="tw-w-full tw-h-full tw-flex tw-flex-col tw-items-center tw-justify-between tw-px-[4%] tw-py-[5%] tw-bg-cover tw-bg-top tw-bg-no-repeat tw-relative"
-    >
-      <div class="tw-w-[90%] tw-h-[13%]">
-        <v-tabs
-          v-model="currentGroupParent"
-          color="primary"
-          grow
-          class=""
-          height="100%"
+    <div class="tw-flex tw-flex-col tw-h-full">
+      <!-- <div class="-tw-mt-[2.4%]"> -->
+      <div class="tw-aspect-[687/136] tw-w-[63.6%] tw-mx-auto">
+        <v-img :src="dailyReward" />
+      </div>
+      <!-- </div> -->
+
+      <div
+        class="rewards-container tw-w-full tw-aspect-[1080/580] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-grid tw-grid-cols-7 tw-grid-rows-2 tw-pl-[8.5%] tw-pr-[9.2%] tw-py-[2.5%] tw-gap-x-[4%] tw-gap-y-[8%] slide-in-elliptic-top-fwd"
+        :style="{ backgroundImage: `url(${bgGifts})` }"
+      >
+        <div
+          class="tw-col-span-5 tw-row-span-1 tw-grid tw-grid-cols-3 tw-grid-rows-1 tw-gap-[5%]"
         >
-          <v-tab
-            value="JustFab"
-            :class="getTabClass('JustFab')"
-            :ripple="false"
+          <div
+            class="daily-gift"
+            :class="{
+              'checked-in': claimedDailyReward(1),
+              'tw-cursor-pointer': canClaimDailyReward(1),
+              'disable-element':
+                !canClaimDailyReward(1) && !claimedDailyReward(1),
+            }"
+            @click="
+              canClaimDailyReward(1) ? handleDailyCheckIn($event, 1) : null
+            "
           >
-            <v-img :src="dailyMission" cover class="tw-w-[20%]" />
-          </v-tab>
+            <div class="tw-aspect-[99/102] tw-w-1/2">
+              <v-img :src="gift1" />
+            </div>
 
-          <v-tab
-            value="Partners"
-            :class="getTabClass('Partners')"
-            :ripple="false"
-          >
-            <v-img :src="partnersMission" cover class="tw-w-[20%]" />
-          </v-tab>
+            <div class="icon-checked-in">
+              <v-img :src="iconCheckedIn" />
+            </div>
+          </div>
 
-          <v-tab
-            value="Friends"
-            :class="getTabClass('Friends')"
-            :ripple="false"
+          <div
+            class="daily-gift"
+            :class="{
+              'checked-in': claimedDailyReward(2),
+              'tw-cursor-pointer': canClaimDailyReward(2),
+              'disable-element':
+                !canClaimDailyReward(2) && !claimedDailyReward(2),
+            }"
+            @click="
+              canClaimDailyReward(2) ? handleDailyCheckIn($event, 2) : null
+            "
           >
-            <v-img :src="friendsMission" cover class="tw-w-[20%]" />
-          </v-tab>
+            <div class="tw-aspect-[99/102] tw-w-1/2">
+              <v-img :src="gift2" />
+            </div>
 
-          <v-tab
-            value="Connect"
-            :class="getTabClass('Connect')"
-            :ripple="false"
+            <div class="icon-checked-in">
+              <v-img :src="iconCheckedIn" />
+            </div>
+          </div>
+
+          <div
+            class="daily-gift"
+            :class="{
+              'checked-in': claimedDailyReward(3),
+              'tw-cursor-pointer': canClaimDailyReward(3),
+              'disable-element':
+                !canClaimDailyReward(3) && !claimedDailyReward(3),
+            }"
+            @click="
+              canClaimDailyReward(3) ? handleDailyCheckIn($event, 3) : null
+            "
           >
-            <v-img :src="connectMission" cover class="tw-w-[20%]" />
-          </v-tab>
-        </v-tabs>
+            <div class="tw-aspect-[99/102] tw-w-1/2">
+              <v-img :src="gift3" />
+            </div>
+
+            <div class="icon-checked-in">
+              <v-img :src="iconCheckedIn" />
+            </div>
+          </div>
+        </div>
+
+        <div class="reward tw-row-span-2 tw-col-span-2">
+          <div
+            class="special-gift"
+            :class="{
+              'checked-in': claimedDailyReward(7),
+              'tw-cursor-pointer': canClaimDailyReward(7),
+              'disable-element':
+                !canClaimDailyReward(7) && !claimedDailyReward(7),
+            }"
+            @click="
+              canClaimDailyReward(7) ? handleDailyCheckIn($event, 7) : null
+            "
+          >
+            <div class="tw-aspect-[169/176] tw-w-3/4">
+              <v-img :src="gift7" />
+            </div>
+
+            <div class="icon-checked-in">
+              <v-img :src="iconCheckedIn" />
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="tw-col-span-5 tw-row-span-1 tw-grid tw-grid-cols-3 tw-grid-rows-1 tw-gap-[5%]"
+        >
+          <div
+            class="daily-gift"
+            :class="{
+              'checked-in': claimedDailyReward(4),
+              'tw-cursor-pointer': canClaimDailyReward(4),
+              'disable-element':
+                !canClaimDailyReward(4) && !claimedDailyReward(4),
+            }"
+            @click="
+              canClaimDailyReward(4) ? handleDailyCheckIn($event, 4) : null
+            "
+          >
+            <div class="tw-aspect-[99/102] tw-w-1/2">
+              <v-img :src="gift4" />
+            </div>
+
+            <div class="icon-checked-in">
+              <v-img :src="iconCheckedIn" />
+            </div>
+          </div>
+
+          <div
+            class="daily-gift"
+            :class="{
+              'checked-in': claimedDailyReward(5),
+              'tw-cursor-pointer': canClaimDailyReward(5),
+              'disable-element':
+                !canClaimDailyReward(5) && !claimedDailyReward(5),
+            }"
+            @click="
+              canClaimDailyReward(5) ? handleDailyCheckIn($event, 5) : null
+            "
+          >
+            <div class="tw-aspect-[99/102] tw-w-1/2">
+              <v-img :src="gift5" />
+            </div>
+
+            <div class="icon-checked-in">
+              <v-img :src="iconCheckedIn" />
+            </div>
+          </div>
+
+          <div
+            class="daily-gift"
+            :class="{
+              'checked-in': claimedDailyReward(6),
+              'tw-cursor-pointer': canClaimDailyReward(6),
+              'disable-element':
+                !canClaimDailyReward(6) && !claimedDailyReward(6),
+            }"
+            @click="
+              canClaimDailyReward(6) ? handleDailyCheckIn($event, 6) : null
+            "
+          >
+            <div class="tw-aspect-[99/102] tw-w-1/2">
+              <v-img :src="gift6" />
+            </div>
+
+            <div class="icon-checked-in">
+              <v-img :src="iconCheckedIn" />
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="tw-w-full tw-h-full">
-        <v-tabs-window
-          v-model="currentGroupParent"
-          class="tw-h-full tw-max-h-full [&>.v-window\_\_container]:tw-h-full [&>.v-window\_\_container]:tw-max-h-full"
+      <div
+        class="tw-flex-auto tw-flex tw-flex-col tw-overflow-hidden tw-bg-[#c26828] tw-bg-[100%_auto] tw-bg-top tw-bg-no-repeat"
+        :style="{ backgroundImage: `url(${bgBoxTask})` }"
+      >
+        <div
+          class="tw-w-full tw-flex-col tw-aspect-[1080/157] tw-flex tw-justify-center tw-items-center tw-px-[8%]"
         >
-          <v-tabs-window-item value="JustFab" class="tw-h-full">
-            <div class="tw-flex tw-flex-col tw-gap-[1%] tw-h-full">
-              <div
-                class="tw-text-white"
-                :style="{
-                  fontSize: `${fontSizeBase * 1.5}px`,
-                }"
+          <!-- <div class="tw-px-[8%] tw-w-full tw-h-full"> -->
+          <!-- <div
+            class="tw-w-full tw-h-full tw-flex tw-justify-between tw-items-center"
+          > -->
+          <v-item-group
+            class="tasks-root"
+            selected-class="heartbeat-infinite"
+            v-model="currentGroupParent"
+            mandatory
+          >
+            <v-item
+              v-slot="{ isSelected, selectedClass, toggle }"
+              v-for="group in groupsParent"
+              :key="group._id"
+              :value="group._id"
+            >
+              <v-btn
+                color="transparent"
+                flat
+                :ripple="false"
+                class="btn-segment"
+                :class="selectedClass"
+                @click="toggle"
               >
-                Daily Rewards
-              </div>
-
-              <div class="tw-overflow-x-auto tw-flex tw-gap-[2%] daily-rewards">
-                <div
-                  v-for="n in 30"
-                  class="tw-w-1/5 tw-flex-none"
-                  :class="{
-                    'checked-in': claimedDailyReward(n),
-                    'tw-cursor-pointer': canClaimDailyReward(n),
-                    'disable-element':
-                      !canClaimDailyReward(n) && !claimedDailyReward(n),
-                  }"
-                  @click="
-                    canClaimDailyReward(n)
-                      ? handleDailyCheckIn($event, n)
-                      : null
-                  "
-                >
-                  <div class="tw-aspect-[115/212]">
-                    <v-img :src="dailyReward2">
-                      <div class="tw-w-full tw-h-[30%] tw-mt-[10%] tw-relative">
-                        <svg
-                          viewBox="0 0 50 50"
-                          xmlns="http://www.w3.org/2000/svg"
-                          class="tw-w-full tw-h-full tw-absolute"
-                          ref="dailyRewardRef"
-                        >
-                          <text
-                            v-if="dailyRewardRef && dailyRewardRef[n - 1]"
-                            x="50%"
-                            y="50%"
-                            dominant-baseline="middle"
-                            text-anchor="middle"
-                            font-family="DynaPuff"
-                            :font-size="`${gameStore.setFontSizeBasedOnViewBox(
-                              dailyRewardRef[0],
-                              40
-                            )}px`"
-                            font-weight="700"
-                            fill="#fff"
-                            stroke="#000000"
-                            stroke-width="2"
-                            paint-order="stroke fill"
-                            text-overflow="ellipsis"
-                            white-space="nowrap"
-                            overflow="hidden"
-                            width="100%"
-                          >
-                            Day {{ n }}
-                          </text>
-                        </svg>
-                      </div>
-                    </v-img>
-                  </div>
-
-                  <div class="icon-checked-in">
-                    <v-img :src="completedDailyReward" />
-                  </div>
+                <div>
+                  {{ group.name }}
                 </div>
-              </div>
-
-              <div
-                class="tw-text-white"
+              </v-btn>
+            </v-item>
+          </v-item-group>
+          <!-- <v-btn
+                color="transparent"
+                flat
+                class="tw-aspect-[220/97] tw-w-[24.2%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden disable-element"
                 :style="{
-                  fontSize: `${fontSizeBase * 1.5}px`,
+                  backgroundImage: `url(${btnFab})`,
                 }"
-              >
-                Just FAB Missions
-              </div>
-
-              <div
-                class="tw-flex tw-flex-col tw-gap-[2%] tw-overflow-y-auto task-list"
-              >
-                <!-- <div
-                  v-for="task in justfabMissionTasks"
-                  :style="{ backgroundImage: `url(${bgTask})` }"
-                  class="tw-aspect-[956/242] tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat"
-                  @click="isCompleted(task._id) ? '' : doTask(task)"
-                >
-                  <div
-                    class="tw-w-[80%] tw-h-[70%] tw-ml-auto tw-flex tw-justify-left tw-items-center"
-                    :style="{
-                      fontSize: `${fontSizeBase}px !important`,
-                      '--base-font-size': `${fontSizeBase}px`,
-                    }"
-                  >
-                    {{ task.title }}
-                  </div>
-
-                  <div
-                    class="tw-w-full tw-h-[30%] tw-text-white tw-font-bold tw-flex tw-items-center tw-px-[4%]"
-                    :style="{
-                      fontSize: `${fontSizeBase}px !important`,
-                    }"
-                  >
-                    <v-img
-                      :src="taskRewardIcon(task.reward.type)"
-                      width="auto"
-                      height="100%"
-                      class="!tw-aspect-square !tw-w-auto !tw-h-full !tw-flex-none"
-                    />
-                    <div class="tw-flex-auto">x {{ task.reward.value }}</div>
-                  </div>
-                </div> -->
-
-                <task-block
-                  v-for="task in justfabMissionTasks"
-                  :task="task"
-                  :key="task._id"
-                  @click="isCompleted(task._id) ? '' : doTask(task)"
-                />
-              </div>
-            </div>
-          </v-tabs-window-item>
-
-          <v-tabs-window-item value="Partners">
-            <div class="tw-flex tw-flex-col tw-gap-[1%] tw-h-full">
-              <div
-                class="tw-text-white"
+                @click="submitFab($event)"
+              ></v-btn> -->
+          <!-- <v-btn
+                color="transparent"
+                flat
+                class="tw-aspect-[220/97] tw-w-[24.2%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden disable-element"
                 :style="{
-                  fontSize: `${fontSizeBase * 1.5}px`,
+                  backgroundImage: `url(${btnFab})`,
                 }"
-              >
-                Our Partners
-              </div>
+                @click="submitFab($event)"
+              ></v-btn>
 
-              <div>
-                <v-expansion-panels
-                  flat
-                  hide-actions
-                  multiple
-                  bg-color="transparent"
-                  v-if="allTasks.length"
+              <v-btn
+                color="transparent"
+                flat
+                class="tw-aspect-[318/97] tw-w-[35.1%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden disable-element"
+                :style="{ backgroundImage: `url(${btnNetwork})` }"
+                @click="submitNetwork"
+              ></v-btn>
+
+              <v-btn
+                color="transparent"
+                flat
+                class="tw-aspect-[220/97] tw-w-[24.2%] !tw-h-auto tw-min-w-0 tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] tw-overflow-hidden disable-element"
+                :style="{ backgroundImage: `url(${btnFriend})` }"
+                @click="submitFriend"
+              ></v-btn> -->
+          <!-- </div> -->
+          <!-- </div> -->
+        </div>
+
+        <div
+          class="tw-h-auto tw-max-h-full tw-overflow-y-scroll tw-px-[7%] tw-py-[5%] tw-flex tw-flex-col tw-gap-[1vh]"
+        >
+          <v-expansion-panels
+            flat
+            hide-actions
+            multiple
+            bg-color="transparent"
+            v-if="allTasks.length"
+          >
+            <template v-for="group in currentGroups" :key="group._id">
+              <v-expansion-panel class="daily-task">
+                <v-expansion-panel-title
+                  static
+                  collapse-icon="material-symbols-arrow-drop-down"
+                  expand-icon="material-symbols-arrow-right"
+                  class="task-title"
+                  :style="{ backgroundImage: `url(${inputDailyTask})` }"
                 >
-                  <template v-for="group in currentGroups" :key="group._id">
-                    <v-expansion-panel class="daily-task">
-                      <v-expansion-panel-title
-                        static
-                        collapse-icon="material-symbols-arrow-drop-down"
-                        expand-icon="material-symbols-arrow-right"
-                        class="task-title"
-                        :style="{ backgroundImage: `url(${inputDailyTask})` }"
+                  <div class="child-element">{{ group.name }}</div>
+                </v-expansion-panel-title>
+
+                <v-expansion-panel-text class="task-content">
+                  <v-list item-props class="task" bg-color="transparent">
+                    <v-list-item
+                      v-for="task in getTaskByGroup(group._id)"
+                      :key="task._id"
+                      :title="task.title"
+                      :subtitle="task.description || ''"
+                      @click="isCompleted(task._id) ? '' : doTask(task)"
+                      :style="{
+                        fontSize: `${fontSizeBase}px !important`,
+                        '--base-font-size': `${fontSizeBase}px`,
+                      }"
+                    >
+                      <div
+                        :style="{
+                          fontSize: `${fontSizeBase * 0.8}px !important`,
+                        }"
                       >
-                        <div class="child-element">{{ group.name }}</div>
-                      </v-expansion-panel-title>
-
-                      <v-expansion-panel-text class="task-content">
-                        <v-list item-props class="task" bg-color="transparent">
-                          <v-list-item
-                            v-for="task in getTaskByGroup(group._id)"
-                            :key="task._id"
-                            :title="task.title"
-                            :subtitle="task.description || ''"
-                            @click="isCompleted(task._id) ? '' : doTask(task)"
-                            :style="{
-                              fontSize: `${fontSizeBase}px !important`,
-                              '--base-font-size': `${fontSizeBase}px`,
-                            }"
-                          >
-                            <div
-                              :style="{
-                                fontSize: `${fontSizeBase * 0.8}px !important`,
-                              }"
-                            >
-                              Reward: {{ task.reward.value }}
-                              {{ task.reward.type }}
-                            </div>
-                            <template #append>
-                              <v-img
-                                :src="iconCheckedIn"
-                                v-if="isCompleted(task._id)"
-                                width="12"
-                              />
-                            </template>
-                          </v-list-item>
-                        </v-list>
-                      </v-expansion-panel-text>
-                    </v-expansion-panel>
-                  </template>
-                </v-expansion-panels>
-              </div>
-            </div>
-          </v-tabs-window-item>
-
-          <v-tabs-window-item value="Friends"> Three </v-tabs-window-item>
-
-          <v-tabs-window-item value="Connect"> Three </v-tabs-window-item>
-        </v-tabs-window>
+                        Reward: {{ task.reward.value }} {{ task.reward.type }}
+                      </div>
+                      <template #append>
+                        <v-img
+                          :src="iconCheckedIn"
+                          v-if="isCompleted(task._id)"
+                          width="12"
+                        />
+                      </template>
+                    </v-list-item>
+                  </v-list>
+                </v-expansion-panel-text>
+              </v-expansion-panel>
+            </template>
+          </v-expansion-panels>
+        </div>
       </div>
     </div>
   </div>
@@ -683,33 +705,6 @@ const getTabClass = (group) => {
   -ms-overflow-style: none;
   &::-webkit-scrollbar {
     display: none;
-  }
-}
-
-.group-tab {
-  @apply !tw-aspect-square;
-  &.normal-tab {
-    .v-btn__content {
-      @apply tw-aspect-square tw-w-[80%] tw-h-[80%];
-    }
-  }
-  &.active-tab {
-    .v-btn__content {
-      @apply tw-aspect-square tw-w-full tw-h-full;
-    }
-  }
-  .v-btn__overlay,
-  .v-tab__slider {
-    @apply !tw-opacity-0 !tw-hidden;
-  }
-}
-
-.daily-rewards,
-.task-list {
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-  scrollbar-width: none;
-  ::-webkit-scrollbar {
-    display: none; /* Safari and Chrome */
   }
 }
 </style>

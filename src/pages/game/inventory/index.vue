@@ -51,7 +51,6 @@ const lastHeight = ref(0);
 const selectedItem = ref();
 const currentEquipments = ref();
 const gameContainerRef = ref();
-const statsKapy = ref();
 
 const userInventory = computed(() => inventoryData.value?.items);
 const fontSizeBase = computed(() => gameStore.baseFontSize);
@@ -208,9 +207,8 @@ const handleSelectItem = (item) => {
 
 const getKapyDetails = async () => {
   try {
-    const { equipments, stats } = await getKapy();
+    const { equipments } = await getKapy();
     currentEquipments.value = equipments;
-    statsKapy.value = stats;
   } catch (error) {
     console.error(error);
   }
@@ -367,10 +365,13 @@ const isEquipped = (itemId) => {
           </div>
           <div class="tw-col-span-2 tw-row-span-3">
             <div
-              class="tw-aspect-[274/91] tw-w-3/4 tw-mx-auto tw-mt-[4%] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center tw-pl-[20%] tw-text-white"
-              :style="{ backgroundImage: `url(${bgRibbon})` }"
+              class="tw-aspect-[274/91] tw-w-3/4 tw-mx-auto tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-justify-center tw-items-center tw-pl-[18%] tw-text-white"
+              :style="{
+                backgroundImage: `url(${bgRibbon})`,
+                fontSize: '17.352px',
+              }"
             >
-              ???
+              <div class="-tw-mt-[2%]">{{ gameStore.combatPower || 0 }}</div>
             </div>
 
             <div
@@ -513,16 +514,16 @@ const isEquipped = (itemId) => {
             class="tw-aspect-[260/64] tw-w-[78%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md tw-mx-auto"
             :style="{ backgroundImage: `url(${bgLayer1})` }"
           ></div>
-        </div>
+        </div> -->
 
-        <div class="tw-text-right">
+        <div class="tw-text-center tw-col-start-2">
           <v-btn
             flat
             color="transparent"
-            class="tw-aspect-[179/100] tw-w-[54%] !tw-h-auto tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%]"
+            class="tw-aspect-[179/100] tw-w-[54%] !tw-h-auto tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] disable-element"
             :style="{ backgroundImage: `url(${btnFeed})` }"
           ></v-btn>
-        </div> -->
+        </div>
       </div>
 
       <div
@@ -530,21 +531,27 @@ const isEquipped = (itemId) => {
       >
         <div
           class="tw-aspect-[282/116] tw-w-[26%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md tw-flex tw-justify-center tw-items-center tw-pt-[1.5%] tw-pl-[2%]"
-          :style="{ backgroundImage: `url(${hpIndex})` }"
+          :style="{ backgroundImage: `url(${hpIndex})`, fontSize: '17.352px' }"
         >
-          {{ formatNumber(statsKapy?.hp) || 0 }}
+          {{ formatNumber(gameStore.statsKapy?.hp) || 0 }}
         </div>
         <div
-          class="tw-aspect-[282/116] tw-w-[26%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md tw-flex tw-justify-center tw-items-center tw-pt-[1%] tw-pl-[3%]"
-          :style="{ backgroundImage: `url(${defenseIndex})` }"
+          class="tw-aspect-[282/116] tw-w-[26%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md tw-flex tw-justify-center tw-items-center tw-pt-[1%] tw-pl-[4%]"
+          :style="{
+            backgroundImage: `url(${defenseIndex})`,
+            fontSize: '17.352px',
+          }"
         >
-          {{ formatNumber(statsKapy?.defense) || 0 }}
+          {{ formatNumber(gameStore.statsKapy?.defense) || 0 }}
         </div>
         <div
           class="tw-aspect-[284/116] tw-w-[26%] tw-bg-contain tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-md tw-flex tw-justify-center tw-items-center tw-pt-[1%] tw-pl-[2%]"
-          :style="{ backgroundImage: `url(${attackIndex})` }"
+          :style="{
+            backgroundImage: `url(${attackIndex})`,
+            fontSize: '17.352px',
+          }"
         >
-          {{ formatNumber(statsKapy?.attack) || 0 }}
+          {{ formatNumber(gameStore.statsKapy?.attack) || 0 }}
         </div>
       </div>
 
@@ -745,7 +752,7 @@ const isEquipped = (itemId) => {
         class="tw-aspect-[326/113] tw-w-[30%] !tw-h-auto tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative tw-rounded-md"
         :style="{ backgroundImage: `url(${btnAddInventory})` }"
       ></v-btn> -->
-      <v-progress-linear
+      <!-- <v-progress-linear
         color="#91F8FD"
         bg-color="#000"
         bg-opacity="0.6"
@@ -782,14 +789,14 @@ const isEquipped = (itemId) => {
             ???
           </text>
         </svg>
-      </v-progress-linear>
+      </v-progress-linear> -->
 
-      <v-btn
+      <!-- <v-btn
         flat
         color="transparent"
         class="tw-aspect-[179/100] tw-w-[19%] !tw-h-auto tw-bg-cover tw-bg-bottom tw-bg-no-repeat tw-relative tw-rounded-[10%] disable-element"
         :style="{ backgroundImage: `url(${btnFeed})` }"
-      ></v-btn>
+      ></v-btn> -->
     </div>
     <!-- </div> -->
   </div>

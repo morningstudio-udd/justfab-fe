@@ -133,10 +133,10 @@ const isSubmenuActive = (submenu) => {
     .nav-item {
       @apply tw-scale-110 tw-z-[1];
       border-left-width: 0.4vh;
-      &::after {
+      /* &::after {
         content: "";
         @apply tw-absolute tw-w-full tw-h-full tw-bg-[#FF6208]/50;
-      }
+      } */
     }
   }
 }

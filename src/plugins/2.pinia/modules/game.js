@@ -12,6 +12,15 @@ export const useGameStore = defineStore("game", () => {
 
   const resultItemDialogRef = ref(null);
   const arrayResultItemDialogRef = ref([]);
+  const statsKapy = ref(null);
+
+  const combatPower = computed(() =>
+    formatNumber(
+      statsKapy.value?.hp * 0.5 +
+        statsKapy.value?.attack * 1.5 +
+        statsKapy.value?.defense * 2
+    )
+  );
 
   const setLoading = (value) => {
     isLoading.value = value;
@@ -91,6 +100,18 @@ export const useGameStore = defineStore("game", () => {
     );
   };
 
+  const getKapyDetails = async () => {
+    try {
+      const { stats } = await getKapy();
+
+      if (stats) {
+        statsKapy.value = stats;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return {
     isLoading,
     baseFontSize,
@@ -98,6 +119,8 @@ export const useGameStore = defineStore("game", () => {
     parentWidth,
     resultItemDialogRef,
     arrayResultItemDialogRef,
+    statsKapy,
+    combatPower,
     setLoading,
     setResponsiveFont,
     setResponsiveFontPercentage,
@@ -105,5 +128,6 @@ export const useGameStore = defineStore("game", () => {
     handleRewards,
     openResultDialog,
     closeDialog,
+    getKapyDetails,
   };
 });

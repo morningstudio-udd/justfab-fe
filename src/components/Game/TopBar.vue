@@ -15,6 +15,10 @@ const expSvgRef = ref(null);
 const updatingGold = ref(false);
 const updatingToken = ref(false);
 
+onMounted(async () => {
+  await gameStore.getKapyDetails();
+});
+
 const displayName = computed(() =>
   truncateString(userStore.userData?.displayName)
 );
@@ -67,9 +71,9 @@ watch(
 </script>
 
 <template>
-  <div class="top-bar tw-flex tw-items-start tw-px-1 tw-pt-1 tw-z-10">
+  <div class="top-bar tw-flex tw-items-start tw-px-[3%] tw-pt-1 tw-z-10">
     <div
-      class="top-icon tw-mr-[1%] tw-w-[41.2%] tw-aspect-[446/218] tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative"
+      class="top-icon tw-mr-[1%] tw-w-[32.96%] tw-aspect-[446/218] tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative"
       :style="{ backgroundImage: `url(${bgAvt})` }"
     >
       <div
@@ -87,10 +91,9 @@ watch(
             dominant-baseline="middle"
             text-anchor="start"
             font-family="DynaPuff"
-            :font-size="`${gameStore.setFontSizeBasedOnViewBox(
-              nameSvgRef,
-              60
-            )}px`"
+            :font-size="`${
+              gameStore.setFontSizeBasedOnViewBox(nameSvgRef, 60) * 1.3
+            }px`"
             font-weight="700"
             padding-left="1%"
             fill="#fff"
@@ -122,24 +125,25 @@ watch(
             dominant-baseline="middle"
             text-anchor="middle"
             font-family="DynaPuff"
-            :font-size="`${gameStore.setFontSizeBasedOnViewBox(
-              expSvgRef,
-              60
-            )}px`"
+            :font-size="`${
+              gameStore.setFontSizeBasedOnViewBox(expSvgRef, 60) * 1.3
+            }px`"
             font-weight="700"
             fill="#fff"
             stroke="#000"
             stroke-width="1.8"
             paint-order="stroke fill"
           >
-            ???
+            {{ gameStore.combatPower || 0 }}
           </text>
         </svg>
       </div>
     </div>
 
+    <v-spacer />
+
     <div
-      class="top-icon tw-mr-[4%] tw-mt-[2%] tw-w-[25%] tw-aspect-[269/104] tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative"
+      class="top-icon tw-mr-[4%] tw-mt-[2%] tw-w-[20%] tw-aspect-[269/104] tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative"
       :style="{ backgroundImage: `url(${bgGold})` }"
     >
       <div
@@ -158,10 +162,9 @@ watch(
             dominant-baseline="middle"
             text-anchor="middle"
             font-family="DynaPuff"
-            :font-size="`${gameStore.setFontSizeBasedOnViewBox(
-              goldSvgRef,
-              60
-            )}px`"
+            :font-size="`${
+              gameStore.setFontSizeBasedOnViewBox(goldSvgRef, 60) * 1.3
+            }px`"
             font-weight="700"
             fill="#fff"
             stroke="#000"
@@ -174,7 +177,7 @@ watch(
       </div>
     </div>
     <div
-      class="top-icon tw-mt-[2%] tw-w-[24.1%] tw-aspect-[261/100] tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative"
+      class="top-icon tw-mt-[2%] tw-w-[19.28%] tw-aspect-[261/100] tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative"
       :style="{ backgroundImage: `url(${bgCoin})` }"
     >
       <div
@@ -193,10 +196,9 @@ watch(
             dominant-baseline="middle"
             text-anchor="middle"
             font-family="DynaPuff"
-            :font-size="`${gameStore.setFontSizeBasedOnViewBox(
-              coinSvgRef,
-              60
-            )}px`"
+            :font-size="`${
+              gameStore.setFontSizeBasedOnViewBox(coinSvgRef, 60) * 1.3
+            }px`"
             font-weight="700"
             fill="#fff"
             stroke="#000"

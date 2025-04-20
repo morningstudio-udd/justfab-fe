@@ -4,41 +4,48 @@ import iconBag from "@images/game/icon-bag.png";
 import iconDaily from "@images/game/icon-daily.png";
 import iconRef from "@images/game/icon-ref.png";
 
+import menuPk from "@images/game/menu-pk.png";
+import menuInventory from "@images/game/menu-inventory.png";
+import menuMission from "@images/game/menu-mission.png";
+import menuSlot from "@images/game/menu-slot.png";
+import menuTreasury from "@images/game/menu-treasury.png";
+
 export const gameNav = [
   {
-    to: "/game/connect-wallet",
-    icon: iconTreasure,
-    class: "tw-aspect-[232/170] tw-w-[19%]",
-    imgClass: "!tw-max-w-[50%]",
+    to: "/game/treasure",
+    icon: menuTreasury,
+    class: "tw-aspect-[209/170] tw-w-[19%]",
+    imgClass: "!tw-max-w-[90%]",
     isLink: true,
-    isLocked: true,
+    // isLocked: true,
   },
   {
     to: "/game/inventory",
-    icon: iconBag,
-    class: "tw-aspect-[209/170] tw-w-[19%]",
-    imgClass: "!tw-max-w-[55%]",
-    isLink: true,
-  },
-  {
-    to: "/game/jackpot",
-    icon: iconJackpot,
-    class: "tw-aspect-[231/170] tw-grow",
+    icon: menuInventory,
+    class: "tw-aspect-[202/170] tw-w-[19%]",
     imgClass: "!tw-max-w-[90%]",
     isLink: true,
   },
   {
-    to: "/game/daily",
-    icon: iconDaily,
-    class: "tw-aspect-[207/170] tw-w-[19%]",
-    imgClass: "!tw-max-w-[40%]",
+    to: "/game/jackpot",
+    icon: menuSlot,
+    class: "tw-aspect-[231/170] tw-grow",
+    imgClass: "!tw-max-w-[70%]",
     isLink: true,
   },
   {
-    to: "/game/menu",
-    icon: iconRef,
-    class: "tw-aspect-[202/170] tw-w-[19%]",
-    imgClass: "!tw-max-w-[50%]",
+    to: "/game/daily",
+    icon: menuMission,
+    class: "tw-aspect-[232/170] tw-w-[19%]",
+    imgClass: "!tw-max-w-[90%]",
+    isLink: true,
+    // isLocked: true,
+  },
+  {
+    to: "/game/pk",
+    icon: menuPk,
+    class: "tw-aspect-[207/170] tw-w-[19%]",
+    imgClass: "!tw-max-w-[90%]",
     isLink: true,
   },
 ];

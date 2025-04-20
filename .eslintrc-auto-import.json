@@ -428,6 +428,8 @@
     "getReferralTree": true,
     "getKapy": true,
     "setEquipments": true,
-    "formatNumber": true
+    "formatNumber": true,
+    "createRef": true,
+    "useCountdown": true
   }
 }

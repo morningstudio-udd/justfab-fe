@@ -13,6 +13,7 @@ export const useGameStore = defineStore("game", () => {
   const resultItemDialogRef = ref(null);
   const arrayResultItemDialogRef = ref([]);
   const statsKapy = ref(null);
+  const equippedKapy = ref(null);
 
   const combatPower = computed(() =>
     formatNumber(
@@ -102,10 +103,14 @@ export const useGameStore = defineStore("game", () => {
 
   const getKapyDetails = async () => {
     try {
-      const { stats } = await getKapy();
+      const { stats, equipments } = await getKapy();
 
       if (stats) {
         statsKapy.value = stats;
+      }
+
+      if (equipments) {
+        equippedKapy.value = equipments;
       }
     } catch (error) {
       console.error(error);
@@ -120,6 +125,7 @@ export const useGameStore = defineStore("game", () => {
     resultItemDialogRef,
     arrayResultItemDialogRef,
     statsKapy,
+    equippedKapy,
     combatPower,
     setLoading,
     setResponsiveFont,

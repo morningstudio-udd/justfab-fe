@@ -51,6 +51,8 @@ const currentStreak = ref(0);
 // const lastClaimedAt = ref(null);
 const streakRewards = ref([]);
 const dailyRewardRef = ref(null);
+const tabsWrapperRef = ref(null);
+const tabsHeight = ref(0);
 
 let checkTask = null;
 
@@ -109,6 +111,15 @@ onMounted(async () => {
   }
 
   currentGroupParent.value = "JustFab";
+
+  await nextTick();
+
+  requestAnimationFrame(() => {
+    if (tabsWrapperRef.value) {
+      tabsHeight.value = tabsWrapperRef.value.offsetHeight;
+      console.log("Tabs height:", tabsHeight.value);
+    }
+  });
 
   emitter.on("onClaimeDailySuccess", () => getDaily());
 
@@ -325,7 +336,7 @@ const getTabClass = (group) => {
     <div
       class="tw-w-full tw-h-full tw-flex tw-flex-col tw-items-center tw-justify-between tw-px-[4%] tw-py-[5%] tw-bg-cover tw-bg-top tw-bg-no-repeat tw-relative"
     >
-      <div class="tw-w-[90%] tw-h-[13%] tw-flex-none">
+      <div ref="tabsWrapperRef" class="tw-w-[90%] tw-h-[13%] tw-flex-none">
         <v-tabs
           v-model="currentGroupParent"
           color="primary"
@@ -335,24 +346,30 @@ const getTabClass = (group) => {
         >
           <v-tab
             value="JustFab"
+            class="group-tab"
             :class="getTabClass('JustFab')"
             :ripple="false"
+            :height="tabsHeight"
           >
             <v-img :src="dailyMission" cover class="tw-w-[20%]" />
           </v-tab>
 
           <v-tab
             value="Partners"
+            class="group-tab"
             :class="getTabClass('Partners')"
             :ripple="false"
+            :height="tabsHeight"
           >
             <v-img :src="partnersMission" cover class="tw-w-[20%]" />
           </v-tab>
 
           <v-tab
             value="Friends"
+            class="group-tab"
             :class="getTabClass('Friends')"
             :ripple="false"
+            :height="tabsHeight"
           >
             <v-img :src="friendsMission" cover class="tw-w-[20%]" />
           </v-tab>
@@ -361,6 +378,7 @@ const getTabClass = (group) => {
             value="Connect"
             :class="getTabClass('Connect')"
             :ripple="false"
+            :height="tabsHeight"
           >
             <v-img :src="connectMission" cover class="tw-w-[20%]" />
           </v-tab>
@@ -462,6 +480,7 @@ const getTabClass = (group) => {
                   v-for="task in justfabMissionTasks"
                   :task="task"
                   :key="task._id"
+                  :isCompleted="isCompleted(task._id)"
                   @click="isCompleted(task._id) ? '' : doTask(task)"
                 />
               </div>
@@ -506,6 +525,7 @@ const getTabClass = (group) => {
                           >
                             <task-block
                               :task="task"
+                              :isCompleted="isCompleted(task._id)"
                               @click="isCompleted(task._id) ? '' : doTask(task)"
                             />
                           </v-list-item>
@@ -536,7 +556,8 @@ const getTabClass = (group) => {
               <div
                 class="tw-flex tw-flex-col tw-gap-[2%] tw-overflow-y-auto task-list tw-flex-1 tw-min-h-0 tw-px-[1%]"
               >
-                <referred-users />
+                <referred-list />
+                <!-- <referred-users /> -->
               </div>
             </div>
           </v-tabs-window-item>
@@ -691,15 +712,17 @@ const getTabClass = (group) => {
 }
 
 .group-tab {
-  @apply !tw-aspect-square;
+  @apply !tw-aspect-square tw-min-h-0;
   &.normal-tab {
     .v-btn__content {
-      @apply tw-aspect-square tw-w-[80%] tw-h-[80%];
+      @apply tw-aspect-square tw-w-[80%] tw-h-[80%] tw-max-h-[80%];
     }
   }
   &.active-tab {
     .v-btn__content {
-      @apply tw-aspect-square tw-w-full tw-h-full;
+      @apply tw-aspect-square tw-w-full tw-max-h-full;
+      height: var(--v-tabs-height);
+      width: var(--v-tabs-height);
     }
   }
   .v-btn__overlay,

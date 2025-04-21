@@ -2,9 +2,11 @@
 import bgTask from "@images/game/bg-task.png";
 import energy from "@images/game/energy.svg";
 import gold from "@images/game/gold-2.png";
+import completedDailyReward from "@images/game/completed-daily-reward.png";
 
 const props = defineProps({
   task: Object,
+  isCompleted: Boolean,
 });
 
 const gameStore = useGameStore();
@@ -36,7 +38,7 @@ const taskRewardIcon = (rewardsType = REWARD_TYPES.GOLD) => {
 <template>
   <div
     :style="{ backgroundImage: `url(${bgTask})` }"
-    class="tw-aspect-[956/242] tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat"
+    class="tw-aspect-[956/242] tw-w-full tw-bg-cover tw-bg-center tw-bg-no-repeat tw-relative"
   >
     <div
       class="tw-w-[80%] tw-h-[70%] tw-ml-auto tw-flex tw-justify-left tw-items-center"
@@ -61,5 +63,21 @@ const taskRewardIcon = (rewardsType = REWARD_TYPES.GOLD) => {
       </div>
       <div class="tw-flex-auto">x {{ task.reward.value }}</div>
     </div>
+
+    <div
+      v-if="isCompleted"
+      class="task-completed tw-absolute tw-left-0 tw-top-0 tw-w-full tw-h-full tw-flex tw-justify-center tw-items-center"
+    >
+      <div class="tw-h-1/2 tw-w-auto tw-aspect-square">
+        <v-img :src="completedDailyReward" cover />
+      </div>
+    </div>
   </div>
 </template>
+
+<style lang="postcss" scoped>
+.task-completed {
+  @apply tw-bg-black/50 tw-rounded-[1em];
+  z-index: 1;
+}
+</style>

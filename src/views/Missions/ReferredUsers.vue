@@ -1,5 +1,6 @@
 <script setup>
 import bgReferred from "@images/game/bg-referred.png";
+
 const userStore = useUserStore();
 
 const referred = ref([]);
@@ -25,3 +26,10 @@ onMounted(async () => {
     </div>
   </div>
 </template>
+
+<style lang="postcss" scoped>
+.task-completed {
+  @apply tw-bg-black/50 tw-rounded-[1em];
+  z-index: 1;
+}
+</style>

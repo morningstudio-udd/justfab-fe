@@ -2,6 +2,10 @@
 import bgCoin from "@images/game/bg-coin.png";
 import bgGold from "@images/game/bg-gold.png";
 import bgAvt from "@images/game/bg-avt.png";
+import defaultAvatart from "@images/game/default-avatar.png";
+import bgUserState from "@images/game/bg-user-state.png";
+import gold from "@images/game/gold-2.png";
+import coin from "@images/game/coin-2.png";
 
 const userStore = useUserStore();
 const gameStore = useGameStore();
@@ -73,6 +77,87 @@ watch(
 <template>
   <div class="top-bar tw-flex tw-items-start tw-px-[3%] tw-pt-1 tw-z-10">
     <div
+      class="top-icon tw-mr-[1%] tw-w-[35%] tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-items-center"
+    >
+      <div class="tw-w-[45%] tw-z-[1]">
+        <v-avatar class="!tw-w-full !tw-h-auto tw-aspect-square">
+          <v-img
+            :src="userStore.userData?.avatar || defaultAvatart"
+            cover
+            class="tw-aspect-[1/1] tw-w-full tw-h-full"
+          />
+        </v-avatar>
+      </div>
+      <div
+        class="!tw-h-[35%] !tw-w-auto tw-aspect-[147/36] tw-absolute tw-left-[35%] tw-bottom-[22%]"
+      >
+        <v-img :src="bgUserState" cover />
+      </div>
+
+      <div
+        class="username tw-font-bold tw-text-white tw-absolute tw-top-[16%] -tw-translate-y-[16%] tw-left-0 tw-r tw-ml-[50%] tw-line-clamp-1 tw-overflow-hidden tw-text-ellipsis"
+      >
+        <svg
+          viewBox="0 0 70 20"
+          xmlns="http://www.w3.org/2000/svg"
+          class="tw-w-full tw-h-full"
+          ref="nameSvgRef"
+        >
+          <text
+            x="1%"
+            y="50%"
+            dominant-baseline="middle"
+            text-anchor="start"
+            font-family="DynaPuff"
+            :font-size="`${
+              gameStore.setFontSizeBasedOnViewBox(nameSvgRef, 60) * 1.5
+            }px`"
+            font-weight="700"
+            padding-left="1%"
+            fill="#fff"
+            stroke="#000"
+            stroke-width="1.8"
+            paint-order="stroke fill"
+            text-overflow="ellipsis"
+            white-space="nowrap"
+            overflow="hidden"
+            width="100%"
+          >
+            {{ displayName }}
+          </text>
+        </svg>
+      </div>
+
+      <div
+        class="tw-font-bold tw-text-white tw-absolute tw-top-[66%] -tw-translate-y-[66%] tw-left-0 tw-right-0 tw-text-center tw-ml-[45%] tw-flex tw-justify-center tw-items-center"
+      >
+        <svg
+          viewBox="0 0 68 18"
+          xmlns="http://www.w3.org/2000/svg"
+          class="tw-w-full tw-h-full"
+          ref="expSvgRef"
+        >
+          <text
+            x="50%"
+            y="50%"
+            dominant-baseline="middle"
+            text-anchor="middle"
+            font-family="DynaPuff"
+            :font-size="`${
+              gameStore.setFontSizeBasedOnViewBox(expSvgRef, 60) * 1.6
+            }px`"
+            font-weight="700"
+            fill="#fff"
+            stroke="#000"
+            stroke-width="1.8"
+            paint-order="stroke fill"
+          >
+            {{ gameStore.combatPower || 0 }}
+          </text>
+        </svg>
+      </div>
+    </div>
+    <!-- <div
       class="top-icon tw-mr-[1%] tw-w-[32.96%] tw-aspect-[446/218] tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative"
       :style="{ backgroundImage: `url(${bgAvt})` }"
     >
@@ -138,11 +223,55 @@ watch(
           </text>
         </svg>
       </div>
-    </div>
+    </div> -->
 
     <v-spacer />
 
     <div
+      class="top-icon tw-mr-[4%] tw-mt-[2%] tw-w-[20%] tw-aspect-[269/104] tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-items-center"
+    >
+      <div class="tw-aspect-[408/440] tw-w-[30%] tw-z-[1]">
+        <v-img :src="gold" cover />
+      </div>
+
+      <div
+        class="!tw-h-[60%] !tw-w-auto tw-aspect-[147/36] tw-absolute tw-left-[5%] tw-bottom-[22%]"
+      >
+        <v-img :src="bgUserState" cover />
+      </div>
+
+      <div
+        class="tw-font-bold tw-text-white tw-absolute tw-top-[50%] -tw-translate-y-1/2 tw-left-0 tw-right-0 tw-text-center tw-ml-[30%] -tw-mt-[1%] tw-flex tw-justify-center tw-items-center"
+      >
+        <svg
+          viewBox="0 0 68 23"
+          xmlns="http://www.w3.org/2000/svg"
+          class="tw-w-full tw-h-full"
+          :class="{ 'jello-horizontal': updatingGold }"
+          ref="goldSvgRef"
+        >
+          <text
+            x="50%"
+            y="50%"
+            dominant-baseline="middle"
+            text-anchor="middle"
+            font-family="DynaPuff"
+            :font-size="`${
+              gameStore.setFontSizeBasedOnViewBox(goldSvgRef, 60) * 1.6
+            }px`"
+            font-weight="700"
+            fill="#fff"
+            stroke="#000"
+            stroke-width="1.8"
+            paint-order="stroke fill"
+          >
+            {{ formatNumber(currentGold) }}
+          </text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- <div
       class="top-icon tw-mr-[4%] tw-mt-[2%] tw-w-[20%] tw-aspect-[269/104] tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative"
       :style="{ backgroundImage: `url(${bgGold})` }"
     >
@@ -175,8 +304,50 @@ watch(
           </text>
         </svg>
       </div>
-    </div>
+    </div> -->
+
     <div
+      class="top-icon tw-mt-[2%] tw-w-[19.28%] tw-aspect-[261/100] tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-items-center"
+    >
+      <div class="tw-aspect-[104/101] tw-w-[30%] tw-z-[1]">
+        <v-img :src="coin" cover />
+      </div>
+      <div
+        class="!tw-h-[60%] !tw-w-auto tw-aspect-[147/36] tw-absolute tw-left-[5%] tw-bottom-[22%]"
+      >
+        <v-img :src="bgUserState" cover />
+      </div>
+      <div
+        class="tw-font-bold tw-text-white tw-absolute tw-top-[50%] -tw-translate-y-1/2 tw-left-0 tw-right-0 tw-text-center tw-ml-[25%] tw-mt-[1%] tw-flex tw-justify-center tw-items-center"
+      >
+        <svg
+          viewBox="0 0 68 23"
+          xmlns="http://www.w3.org/2000/svg"
+          class="tw-w-full tw-h-full"
+          :class="{ 'jello-horizontal': updatingToken }"
+          ref="coinSvgRef"
+        >
+          <text
+            x="50%"
+            y="50%"
+            dominant-baseline="middle"
+            text-anchor="middle"
+            font-family="DynaPuff"
+            :font-size="`${
+              gameStore.setFontSizeBasedOnViewBox(coinSvgRef, 60) * 1.6
+            }px`"
+            font-weight="700"
+            fill="#fff"
+            stroke="#000"
+            stroke-width="1.8"
+            paint-order="stroke fill"
+          >
+            {{ formatNumber(currentCoin) }}
+          </text>
+        </svg>
+      </div>
+    </div>
+    <!-- <div
       class="top-icon tw-mt-[2%] tw-w-[19.28%] tw-aspect-[261/100] tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative"
       :style="{ backgroundImage: `url(${bgCoin})` }"
     >
@@ -209,6 +380,6 @@ watch(
           </text>
         </svg>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>

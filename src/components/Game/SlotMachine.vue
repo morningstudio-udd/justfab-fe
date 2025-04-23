@@ -1,10 +1,18 @@
 <script setup>
-const slotMachineUrl = ref("");
+import { gsap } from "gsap";
+import { Application, Assets, Spritesheet, Sprite, Container, Text } from "pixi.js";
+import { Reel, SymbolReel, ReelSpinner, JackpotSpinner, EnergyBottle, EnergyBar, Button, RewardParticle, AnimateText } from "@/components/Game/classes/slot-machine.js";
+import jsonSpritesJson from "@/assets/images/game/slot-machine/sprites.json";
+import jsonSpritesPng from "@/assets/images/game/slot-machine/sprites.png";
+import { useLocalStorage } from "@vueuse/core";
 
-const refIframe = ref();
-const iframeContent = ref();
-const slotMachine = ref();
-const slotMachineLoaded = ref(false);
+const refCanvas = ref();
+
+const audioContext = ref(null);
+const gainNode = ref(null);
+const mediaSource = ref(null);
+const soundVolume = ref(useLocalStorage("soundVolume", 100));
+
 const props = defineProps({
   jackpot: {
     type: Number,
@@ -30,55 +38,77 @@ const props = defineProps({
   },
   volume: {
     type: Number,
-    default: 1,
+    default: 100,
   },
 });
 
 let inDuty = false;
 const currentX = ref(1);
+const currentAutoX = ref(1);
 const GIFEffects = ref([]);
+const refRollFx = ref();
+const refEnergyBottle = ref();
+let energyBottle = null;
+let jackpotSpinner = null;
+let reelSpinner = null;
+let betXButton = null;
+let autoXButton = null;
+let spinButton = null;
+let energyBar = null;
+let jackpotText = null;
+let XParticle = null;
+let FParticle = null;
+let IParticle = null;
+let JParticle = null;
+let OParticle = null;
+let animateText1 = null;
+let animateText2 = null;
+
+watch(soundVolume, (newVolume) => {
+  if (gainNode.value) {
+    console.log("change volume", newVolume);
+    gainNode.value.gain.value = newVolume / 100;
+  }
+}, {
+  immediate: true,
+});
 
 watch(
   () => props.claimEnergyAt,
   (v, vo) => {
-    drainEnergyBottle();
+    //drainEnergyBottle();
   }
 );
 
 watch(
   () => props.disabled,
   (v, vo) => {
-    if (slotMachine.value != null) {
-      slotMachine.value.ButtonRoll.interactable = !v;
-    }
+    spinButton.setDisabled(v);
   }
 );
 
 watch(
   () => props.energy,
   (v) => {
-    if (slotMachine.value != null) {
-      slotMachine.value.LabelEnergy.string = v.toString();
-      slotMachine.value.BarEnergy.progress = Math.min(1, v / 100);
-    }
+    energyBar.setEnergy(v);
   }
 );
 
 watch(
   () => props.jackpot,
   (v) => {
-    if (slotMachine.value != null) {
-      slotMachine.value.LabelJackpot.string = v.toLocaleString() + "$";
+    if (jackpotText != null) {
+      jackpotText.text = v.toLocaleString("en-US") + "$";
     }
-  }
+  },
+  { immediate: true }
 );
 
 watch(
   () => props.jackpotRewards,
   (v) => {
-    if (slotMachine.value != null) {
-      slotMachine.value.Jackpot.setPrizes(v);
-    }
+    if(jackpotSpinner == null) return;
+    jackpotSpinner.setJackpotRewards(v);
   },
   {
     deep: true,
@@ -88,81 +118,39 @@ watch(
 watch(
   () => props.volume,
   (v) => {
-    if (slotMachine.value != null) {
-      slotMachine.value.setVolume(v);
-    }
+    setVolume(v);
   }
 );
 
 let _energy = 0;
-let drainEnergyInterval = null;
 let isRolling = false;
+let _drainingEnergy = false;
 
-const drainEnergyBottle = () => {
-  if (slotMachine.value != null) {
-    if (drainEnergyInterval != null) {
-      clearInterval(drainEnergyInterval);
-      drainEnergyInterval = null;
-    }
-    drainEnergyInterval = setInterval(() => {
-      if (_energy > 0) {
-        _energy -= 1;
-      } else {
-        clearInterval(drainEnergyInterval);
-        drainEnergyInterval = null;
-      }
-      slotMachine.value.LabelClaimEnergy.string = `${_energy}/50`;
-      slotMachine.value.ProgressEnergy.value = _energy / 50;
-    }, 50);
-  }
-};
-
-const onIframeLoaded = () => {
-  if (!refIframe.value) return;
-
-  if (refIframe.value.src == "") return;
-  iframeContent.value = refIframe.value.contentWindow;
-  iframeContent.value.SlotMachine = {};
-  iframeContent.value.SlotMachine.onload = (sm) => {
-    slotMachine.value = sm;
-    sm.ButtonRoll.node.off("click");
-    sm.ButtonRoll.node.on("click", onButtonRoolClick);
-    sm.LabelJackpot.string = props.jackpot.toLocaleString("en-US") + "$";
-    sm.LabelEnergy.string = props.energy;
-    sm.BarEnergy.progress = Math.min(1, props.energy / 100);
-    sm.ButtonClose.node.active = false;
-    sm.ButtonClose.node.on("click", onButtonCloseClick);
-    sm.ButtonBetX.node.on("click", onButtonBetXClick);
-    sm.LabelBetX.string = "BET X1";
-    sm.ButtonClaimEnergy.node.on("click", onButtonClaimEnergyClick);
-    sm.Jackpot.setPrizes(props.jackpotRewards);
-    sm.Jackpot.node.active = false;
-    setInterval(updateEnergyBottle, 1000);
-    updateEnergyBottle();
-    setTimeout(() => setVolume(props.volume), 50);
-    emit("loaded", sm);
-    slotMachineLoaded.value = true;
-  };
+const drainEnergyBottle = async () => {
+  if (refEnergyBottle.value == null) return;
+  _drainingEnergy = true;
+  energyBottle.drainEnergy();
+  await waitForSeconds(3);
+  _drainingEnergy = false;
 };
 
 const updateEnergyBottle = () => {
-  if (drainEnergyInterval != null) return;
+  if(_drainingEnergy) return;
+
   let now = new Date();
   let minutes = Math.floor((now - props.claimEnergyAt) / 60000);
   let seconds = Math.floor((now - props.claimEnergyAt) / 1000) % 60;
   if (minutes > 50) {
     minutes = 50;
-    slotMachine.value.LabelCountdownEnergy.string = "--:--";
+    refEnergyBottle.value.setTime();
   } else {
-    slotMachine.value.LabelCountdownEnergy.string = `00:${
-      seconds < 10 ? "0" : ""
-    }${seconds}`;
+    refEnergyBottle.value.setTime(60 - seconds);
   }
-  _energy = minutes;
-  slotMachine.value.LabelClaimEnergy.string = `${
-    minutes < 10 ? "0" : ""
-  }${minutes}/50`;
-  slotMachine.value.ProgressEnergy.value = minutes / 50;
+  // _energy = minutes;
+  // slotMachine.value.LabelClaimEnergy.string = `${
+  //   minutes < 10 ? "0" : ""
+  // }${minutes}/50`;
+  refEnergyBottle.value.setEnergy(minutes);
 };
 
 const XS = [1, 2, 3, 5, 10];
@@ -171,11 +159,21 @@ const onButtonBetXClick = () => {
   id++;
   if (id >= XS.length) id = 0;
   currentX.value = XS[id];
-  slotMachine.value.LabelBetX.string = `BET X${currentX.value}`;
+  betXButton.setText(`BET X${currentX.value}`);
 };
 
-const onButtonClaimEnergyClick = () => {
+const autos = [1, 5];
+const onButtonAutoXClick = () => {
+  let id = autos.indexOf(currentAutoX.value);
+  id++;
+  if (id >= autos.length) id = 0;
+  currentAutoX.value = autos[id];
+  autoXButton.setText(`AUTO X${currentAutoX.value}`);
+};
+
+const onButtonClaimEnergyClick = async () => {
   emit("claimEnergyClick");
+  drainEnergyBottle();
 };
 
 const onButtonCloseClick = () => {
@@ -183,8 +181,17 @@ const onButtonCloseClick = () => {
   setButtonCloseVisible(false);
 };
 
+const onButtonRoolClickAuto = async () => {
+  if (props.disabled) return;
+  if (spins > 0) {
+    spins--;
+    emit("rollClick", { betX: currentX.value });
+  }
+};
+
 const onButtonRoolClick = () => {
   if (props.disabled) return;
+  spins = currentAutoX.value;
   emit("rollClick", { betX: currentX.value });
 };
 
@@ -192,11 +199,13 @@ let playScripts = [];
 let currentStep = 0;
 let currentScript = null;
 let turns = 0;
+let spins = 0;
 
 const roll = async (scripts) => {
   currentStep = 0;
   playScripts = scripts;
   turns = 1;
+  spinButton.setDisabled(true);
   await rollScriptStep(0);
   isRolling = true;
   return;
@@ -204,34 +213,36 @@ const roll = async (scripts) => {
 
 const rollScriptStep = async (step) => {
   if (step > playScripts.length - 1) {
+    spinButton.setDisabled(false);
     emit("allScriptCompleted");
+    if(spins > 1) {
+      await waitForSeconds(0.25);
+      onButtonRoolClickAuto();
+    }
     return;
   }
-  setVolume(props.volume);
   currentStep = step;
   currentScript = playScripts[currentStep];
   if (currentScript.type == "slotMachine") {
-    setJackpotVisible(false);
-    slotMachine.value.roll(currentScript.reelSymbols);
+    jackpotSpinner.close();
+    reelSpinner.roll(currentScript.reelSymbols);
+    refRollFx.value.play();
     if (turns > 1) {
-      //await waitForSeconds(0.25);
-      slotMachine.value.LabelTurn.show(`bonus turn ${turns}`);
+      animateText1.show(`bonus turn ${turns}`);
     }
     turns--;
     await waitForSeconds(1.75);
     for (const r of currentScript.rewards) {
       if (r.type == "SPIN") {
         turns += r.value;
-        slotMachine.value.LabelValue.show(`+${r.value} turns`);
+        animateText2.show(`+${r.value} turns`);
       }
     }
     emit("scriptCompleted", currentScript);
   } else {
-    setJackpotVisible(true);
-    setButtonCloseVisible(false);
+    jackpotSpinner.open();
     rollJackpot(currentScript.rewards[0].description);
     await waitForSeconds(4);
-    setButtonCloseVisible(true);
     isRolling = false;
     emit("scriptCompleted", currentScript);
   }
@@ -244,24 +255,17 @@ const rollNextStep = async () => {
   await rollScriptStep(currentStep + 1);
 };
 
-const setJackpotVisible = (v) => {
-  slotMachine.value.Jackpot.node.active = v;
-};
-
-const setButtonCloseVisible = (v) => {
-  slotMachine.value.ButtonClose.node.active = v;
-};
-
 const setJackpotPrizes = (prizes) => {
-  slotMachine.value.Jackpot.setPrizes(prizes);
+  jackpotSpinner.setJackpotRewards(prizes);
 };
 
 const rollJackpot = (prize) => {
-  slotMachine.value.Jackpot.roll(prize);
+  jackpotSpinner.roll(prize);
 };
 
 const setVolume = (v) => {
-  slotMachine.value.setVolume(v);
+  soundVolume.value = v;
+  localStorage.setItem("soundVolume", v);
 };
 
 const waitForSeconds = async (s) => {
@@ -272,54 +276,310 @@ const waitForSeconds = async (s) => {
   });
 };
 
-const flyEnergy = (n) => {
-  slotMachine.value.flyEnergy(n);
+const showGoldEffect = () => {
+  OParticle.play();
 };
 
-const showGoldEffect = () => {
-  slotMachine.value.GoldParticle.resetSystem();
-};
 const showTokenEffect = () => {
-  slotMachine.value.TokenParticle.resetSystem();
+  XParticle.play();
 };
+
 const showFoodEffect = () => {
-  slotMachine.value.FoodParticle.resetSystem();
+  FParticle.play();
 };
+
 const showGIFEffect = async (id) => {
   GIFEffects.value = [false, false, false, false, false, false];
   GIFEffects.value[id] = true;
   await waitForSeconds(3);
   GIFEffects.value = [false, false, false, false, false, false];
 };
+
 const showValue = (v) => {
-  slotMachine.value.LabelValue.show(v);
+  animateText2.show(v);
 };
 
 onMounted(async () => {
   await waitForSeconds(0.25);
-  slotMachineUrl.value = import.meta.env.VITE_SLOT_MACHINE_URL;
+  await initSlotMachine();
+  initSFX();
+})
+
+const initSlotMachine = async () => {
+  const app = new Application();
+  await app.init({
+    width: 1080,
+    height: 1920,
+    backgroundColor: 0,
+    backgroundAlpha: 0,
+    resolution: 2,
+    autoResize: true,
+    transparent: true,
+    canvas: refCanvas.value,
+    resizeTo: refCanvas.value,
+    antialias: false,
+  });
+
+  const texture = await Assets.load(jsonSpritesPng);
+  const sheet = new Spritesheet(texture, jsonSpritesJson);
+  await sheet.parse();
+
+  const container = new Container();
+  container.x = app.screen.width / 2;
+  container.y = app.screen.height;
+  container.pivot.x = 0;
+  container.pivot.y = 0;
+  container.scale.set(0.4);
+  app.stage.addChild(container);
+
+  const castle = new Sprite(sheet.textures["castle.png"]);
+  castle.anchor.set(0.52, 1);
+  castle.x = 0;
+  castle.y = -360;
+  container.addChild(castle);
+
+  const jackpot = new Sprite(sheet.textures["JackPot.png"]);
+  jackpot.anchor.set(0.5, 1);
+  jackpot.x = 0;
+  jackpot.y = -1150;
+  container.addChild(jackpot);
+
+  jackpotText = new Text({
+    text: "JACKPOT",
+    style: {
+      fontFamily: "Arbutus",
+      fontSize: 64,
+      fill: "#ffffff",
+      align: "center",
+      dropShadow: {
+        color: '#000000',
+        blur: 0,
+        angle: Math.PI * 0.6,
+        distance: 4,
+      },
+    },
+  });
+  jackpotText.anchor.set(0.5, 1);
+  jackpotText.x = 0;
+  jackpotText.y = -1100;
+  container.addChild(jackpotText);
+
+  const cloudBottom = new Sprite(sheet.textures["cloud-bottom.png"]);
+  cloudBottom.anchor.set(0.5, 1);
+  cloudBottom.x = 0;
+  cloudBottom.y = 0;
+  container.addChild(cloudBottom);
+
+  const kapy = new Sprite(sheet.textures["char.png"]);
+  kapy.anchor.set(0.5, 1);
+  kapy.x = -380;
+  kapy.y = -50;
+  container.addChild(kapy);
+
+  reelSpinner = new ReelSpinner({sheet});
+  reelSpinner.x = 308;
+  reelSpinner.y = -625;
+  reelSpinner.zIndex = -1;
+  container.addChild(reelSpinner);
+
+  jackpotSpinner = new JackpotSpinner({sheet, app});
+  jackpotSpinner.x = 308;
+  jackpotSpinner.y = -625;
+  jackpotSpinner.zIndex = 5;
+  jackpotSpinner.closeButton.on("pointerup", () => {
+    jackpotSpinner.close();
+  });
+  container.addChild(jackpotSpinner);
+
+  energyBar = new EnergyBar({sheet, app});
+  energyBar.x = -262;
+  energyBar.y = -536;
+  energyBar.zIndex = 0;
+  container.addChild(energyBar);
+
+  energyBottle = refEnergyBottle.value = new EnergyBottle({sheet, app, bar: energyBar});
+  energyBottle.x = 350;
+  energyBottle.y = -480;
+  energyBottle.zIndex = 2;
+  energyBottle.bottleSprite.interactive = true;
+  energyBottle.bottleSprite.buttonMode = true;
+  energyBottle.bottleSprite.on("pointerup", () => {
+    onButtonClaimEnergyClick();
+  });
+  container.addChild(energyBottle);
+
+  betXButton = new Button({
+    sheet, 
+    normalSprite: "Button X.png",
+    text: "BET X1",});
+  betXButton.x = -130;
+  betXButton.y = -450;
+  betXButton.zIndex = 2;
+  betXButton.on("pointerup", () => {
+    onButtonBetXClick();
+  });
+  container.addChild(betXButton);
+
+  autoXButton = new Button({
+    sheet, 
+    normalSprite: "Button X.png",
+    text: "AUTO X1",});
+  autoXButton.x = 110;
+  autoXButton.y = -450;
+  autoXButton.zIndex = 2;
+  autoXButton.on("pointerup", () => {
+    onButtonAutoXClick();
+  });
+  container.addChild(autoXButton);
+
+  spinButton = new Button({
+    sheet, 
+    normalSprite: "button-spin-normal.png",
+    pressedSprite: "button-spin-pressed.png",
+    disabledSprite: "button-spin-pressed.png",
+    text: "",});
+  spinButton.x = 0;
+  spinButton.y = -240;
+  spinButton.zIndex = 2;
+  spinButton.interactable = true;
+  spinButton.buttonMode = true;
+  spinButton.on("pointerup", () => {
+    onButtonRoolClick();
+  });
+  container.addChild(spinButton);
+
+  XParticle = new RewardParticle({sheet, rewardSprite: "coin.png", app});
+  XParticle.x = 0;
+  XParticle.y = -840;
+  XParticle.zIndex = 2;
+  container.addChild(XParticle);
+
+  FParticle = new RewardParticle({sheet, rewardSprite: "food.png", app});
+  FParticle.x = 0;
+  FParticle.y = -840;
+  FParticle.zIndex = 2;
+  container.addChild(FParticle);
+
+  IParticle = new RewardParticle({sheet, rewardSprite: "sword.png", app});
+  IParticle.x = 0;
+  IParticle.y = -840;
+  IParticle.zIndex = 2;
+  container.addChild(IParticle);
+
+  JParticle = new RewardParticle({sheet, rewardSprite: "kapy.png", app});
+  JParticle.x = 0;
+  JParticle.y = -840;
+  JParticle.zIndex = 2;
+  container.addChild(JParticle);
+
+  OParticle = new RewardParticle({sheet, rewardSprite: "treasure.png", app});
+  OParticle.x = 0;
+  OParticle.y = -840;
+  OParticle.zIndex = 2;
+  container.addChild(OParticle);
+
+  animateText1 = new AnimateText({
+    text: "asdfasdfasdf",
+    style: {
+      fontFamily: "DynaPuff",
+      fontSize: 128,
+      fill: "#ffffff",
+      align: "center",
+      stroke: {
+        color: '#000000',
+        width: 8,
+      },
+    }
+  })
+  animateText1.x = 0;
+  animateText1.y = -1500;
+  animateText1.zIndex = 2;
+  container.addChild(animateText1);
+
+  animateText2 = new AnimateText({
+    text: "asdfasdfasdf",
+    style: {
+      fontFamily: "DynaPuff",
+      fontSize: 128,
+      fill: "#ffff00",
+      align: "center",
+      stroke: {
+        color: '#000000',
+        width: 8,
+      },
+    }
+  })
+  animateText2.x = 0;
+  animateText2.y = -750;
+  animateText2.zIndex = 2;
+  container.addChild(animateText2);
+
+  // ==========
+
+  spinButton.on("click", onButtonRoolClick);
+  jackpotText.text = props.jackpot.toLocaleString("en-US") + "$";
+  energyBar.setEnergy(props.energy);
+  betXButton.on("click", onButtonBetXClick);
+  betXButton.setText("BET X1");
+  jackpotSpinner.setJackpotRewards(props.jackpotRewards);
+  setInterval(updateEnergyBottle, 1000);
+  updateEnergyBottle();
+  emit("loaded");
+};
+
+const initSFX = () => {
+  if (!window.AudioContext) {
+    console.error("Web Audio API is not supported in this browser.");
+    return;
+  }
+
+  if (!audioContext.value) {
+    audioContext.value = new (window.AudioContext ||
+      window.webkitAudioContext)();
+    gainNode.value = audioContext.value.createGain();
+  }
+
+  if (!mediaSource.value && refRollFx.value) {
+    mediaSource.value = audioContext.value.createMediaElementSource(
+      refRollFx.value
+    );
+    mediaSource.value
+      .connect(gainNode.value)
+      .connect(audioContext.value.destination);
+  }
+
+  gainNode.value.gain.value = soundVolume.value / 100;
+};
+
+onBeforeUnmount(() => {
+  if (audioContext.value) {
+    audioContext.value.close();
+    audioContext.value = null;
+    mediaSource.value = null;
+    gainNode.value = null;
+  }
 });
 
 onUnmounted(async () => {
   //slotMachineUrl.value = "";
 });
 
+const toggleSound = () => {
+  console.log(soundVolume.value);
+  setVolume(soundVolume.value === 0 ? 100 : 0);
+};
+
 const emit = defineEmits([
   "rollClick",
   "scriptCompleted",
   "allScriptCompleted",
   "claimEnergyClick",
-  "loaded",
-]);
+  "loaded"]);
 defineExpose({
   roll,
   rollNextStep,
-  setJackpotPrizes,
-  setJackpotVisible,
-  setButtonCloseVisible,
   rollJackpot,
   setVolume,
-  flyEnergy,
   showGoldEffect,
   showTokenEffect,
   showFoodEffect,
@@ -331,22 +591,30 @@ defineExpose({
 <template>
   <div
     class="tw-w-full tw-h-full tw-flex tw-justify-center tw-items-center"
-    v-if="!slotMachineLoaded"
+    v-if="false"
   >
     Booting slot machine...
   </div>
-  <iframe
+
+  <canvas
     class="tw-w-full tw-h-full tw-border-none"
-    v-show="slotMachineLoaded"
-    :src="slotMachineUrl"
-    ref="refIframe"
-    allowtransparency="true"
-    @load="onIframeLoaded"
+    ref="refCanvas"
   />
+
   <img src="@/assets/images/game/reward-effects/1.BIGWIN.gif" class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0" v-if="GIFEffects[0]" />
   <img src="@/assets/images/game/reward-effects/2.MEGA_WIN.gif" class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0" v-if="GIFEffects[1]" />
   <img src="@/assets/images/game/reward-effects/3.GIGA_WIN.gif" class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0" v-if="GIFEffects[2]" />
   <img src="@/assets/images/game/reward-effects/4.FABULOUS_WIN.gif" class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0" v-if="GIFEffects[3]" />
   <img src="@/assets/images/game/reward-effects/5.LEGENDARY.gif" class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0" v-if="GIFEffects[4]" />
   <img src="@/assets/images/game/reward-effects/6 JACKPOT.gif" class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0" v-if="GIFEffects[5]" />
+
+  <audio ref="refRollFx">
+    <source src="@/assets/sounds/roll.mp3" type="audio/mpeg" />
+    Your browser does not support the audio element.
+  </audio>
+
+  <v-btn class="tw-w-[64px] tw-h-[64px] tw-border-none tw-absolute tw-right-3 tw-top-12 tw-z-10" @click="toggleSound()" >
+    <img src="@/assets/images/game/speaker.png" 
+    class="tw-w-[64px] tw-h-[64px] tw-border-none tw-absolute tw-right-3 tw-top-12 tw-z-10" />
+</v-btn>
 </template>

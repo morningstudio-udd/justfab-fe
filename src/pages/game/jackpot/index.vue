@@ -46,16 +46,6 @@ const handleResize = (newWidth) => {
 };
 
 onMounted(async () => {
-  // if (gameContentRef.value) {
-  //   resizeObserver = new ResizeObserver((entries) => {
-  //     for (let entry of entries) {
-  //       parentDivWidth.value = entry.contentRect.width;
-  //     }
-  //   });
-
-  //   resizeObserver.observe(gameContentRef.value);
-  // }
-
   nextTick(() => {
     if (gameContentRef.value) {
       observe(gameContentRef.value, handleResize);
@@ -114,7 +104,7 @@ const onScriptCompleted = async (script) => {
   await processRewards(script.rewards, script.reelSymbols);
 };
 
-const onAllScriptCompleted = async () => {
+const onAllScriptCompleted = () => {
   enable.value = true;
 };
 
@@ -186,8 +176,6 @@ const onClaimEnergyClick = async (e) => {
 
     userStore.userData.claimEnergyAt = newClaimEnergyAt;
     userStore.userData.energy = newEnergy;
-
-    refSlotMachine.value.flyEnergy(newEnergy - oldEnergy);
   } catch (error) {
     console.log("error", error);
   }

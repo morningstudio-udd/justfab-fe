@@ -49,7 +49,7 @@ const unclaimRewards = ref([]);
 // const itemsContainerPaddingY = ref(0);
 const lastHeight = ref(0);
 const selectedItem = ref();
-const currentEquipments = ref();
+// const currentEquipments = ref();
 const gameContainerRef = ref();
 
 const userInventory = computed(() => inventoryData.value?.items);
@@ -79,48 +79,48 @@ const hasPoolPercentage = computed(() => {
   );
 });
 const weaponSlots = computed(() => {
-  if (!userInventory.value || !currentEquipments.value) return [];
+  if (!userInventory.value || !gameStore.equippedKapy) return [];
 
-  return userInventory.value.filter(
-    (item) =>
-      currentEquipments.value.some((eq) => eq._id === item._id) &&
-      item.item.category === ITEM_CATEGORIES.WEAPON
-  );
+  return gameStore.equippedKapy
+    .filter((eq) => {
+      const item = userInventory.value.find((i) => i._id === eq._id);
+      return item && item.item.category === ITEM_CATEGORIES.WEAPON;
+    })
+    .map((eq) => userInventory.value.find((i) => i._id === eq._id));
 });
 const weaponSlot1 = computed(() => weaponSlots.value[0] || null);
 const weaponSlot2 = computed(() => weaponSlots.value[1] || null);
 const petSlots = computed(() => {
-  if (!userInventory.value || !currentEquipments.value) return [];
+  if (!userInventory.value || !gameStore.equippedKapy) return [];
 
-  return userInventory.value.filter(
-    (item) =>
-      currentEquipments.value.some((eq) => eq._id === item._id) &&
-      item.item.category === ITEM_CATEGORIES.PET
-  );
+  return gameStore.equippedKapy
+    .filter((eq) => {
+      const item = userInventory.value.find((i) => i._id === eq._id);
+      return item && item.item.category === ITEM_CATEGORIES.PET;
+    })
+    .map((eq) => userInventory.value.find((i) => i._id === eq._id));
 });
 const petSlot1 = computed(() => petSlots.value[0] || null);
 const petSlot2 = computed(() => petSlots.value[1] || null);
 const armorSlots = computed(() => {
-  if (!userInventory.value || !currentEquipments.value) return [];
+  if (!userInventory.value || !gameStore.equippedKapy) return null;
 
-  return (
-    userInventory.value.find(
-      (item) =>
-        currentEquipments.value.some((eq) => eq._id === item._id) &&
-        item.item.category === ITEM_CATEGORIES.ARMOR
-    ) || null
-  );
+  const eq = gameStore.equippedKapy.find((eq) => {
+    const item = userInventory.value.find((i) => i._id === eq._id);
+    return item && item.item.category === ITEM_CATEGORIES.ARMOR;
+  });
+
+  return eq ? userInventory.value.find((i) => i._id === eq._id) : null;
 });
 const accessorySlot = computed(() => {
-  if (!userInventory.value || !currentEquipments.value) return null;
+  if (!userInventory.value || !gameStore.equippedKapy) return null;
 
-  return (
-    userInventory.value.find(
-      (item) =>
-        currentEquipments.value.some((eq) => eq._id === item._id) &&
-        item.item.category === ITEM_CATEGORIES.ACCESSORY
-    ) || null
-  );
+  const eq = gameStore.equippedKapy.find((eq) => {
+    const item = userInventory.value.find((i) => i._id === eq._id);
+    return item && item.item.category === ITEM_CATEGORIES.ACCESSORY;
+  });
+
+  return eq ? userInventory.value.find((i) => i._id === eq._id) : null;
 });
 const tooltipAttachTarget = computed(() => gameContainerRef.value || undefined);
 
@@ -138,9 +138,7 @@ onMounted(async () => {
 
   const p3 = getUnclaim();
 
-  const p4 = getKapyDetails();
-
-  await Promise.all([p1, p2, p3, p4]);
+  await Promise.all([p1, p2, p3]);
 });
 
 const handleResize = (newWidth, newHeight) => {
@@ -205,74 +203,17 @@ const handleSelectItem = (item) => {
   selectedItem.value = item;
 };
 
-const getKapyDetails = async () => {
-  try {
-    const { equipments } = await getKapy();
-    currentEquipments.value = equipments;
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-// const equipItem = async (typeItem, slot) => {
-//   try {
-//     console.log("equipItem", typeItem);
-
-//     if (
-//       !selectedItem.value ||
-//       selectedItem.value === "food" ||
-//       selectedItem.value?.item.category !== typeItem
-//     )
-//       return;
-
-//     if (selectedItem.value?.item.category === ITEM_CATEGORIES.PET) {
-//       if (slot === 1) {
-//         currentEquipments.value.find(
-//           (eq) => eq._id === petSlot1.value?._id
-//         )._id = selectedItem.value._id;
-//       } else {
-//         currentEquipments.value.find(
-//           (eq) => eq._id === petSlot2.value?._id
-//         )._id = selectedItem.value._id;
-//       }
-//     } else if (selectedItem.value?.item.category === ITEM_CATEGORIES.WEAPON) {
-//       if (slot === 1) {
-//         currentEquipments.value.find(
-//           (eq) => eq._id === weaponSlot1.value?._id
-//         )._id = selectedItem.value._id;
-//       } else {
-//         currentEquipments.value.find(
-//           (eq) => eq._id === weaponSlot2.value?._id
-//         )._id = selectedItem.value._id;
-//       }
-//     } else if (selectedItem.value?.item.category === ITEM_CATEGORIES.ARMOR) {
-//       currentEquipments.value.find(
-//         (eq) => eq._id === armorSlots.value?._id
-//       )._id = selectedItem.value._id;
-//     } else if (
-//       selectedItem.value?.item.category === ITEM_CATEGORIES.ACCESSORY
-//     ) {
-//       currentEquipments.value.find(
-//         (eq) => eq._id === accessorySlot.value?._id
-//       )._id = selectedItem.value._id;
-//     }
-
-//     const equipments = currentEquipments.value.map((eq) => eq._id);
-//     const response = await setEquipments(equipments);
-//     if (response) {
-//       getKapyDetails();
-//     }
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
 const equipItem = async (typeItem, slot) => {
   try {
+    if (!selectedItem.value) {
+      await unequipItem(typeItem, slot);
+      return;
+    }
+
     if (
-      !selectedItem.value ||
       selectedItem.value === "food" ||
       selectedItem.value?.item.category !== typeItem ||
-      currentEquipments.value.some((eq) => eq._id === selectedItem.value._id)
+      gameStore.equippedKapy.some((eq) => eq._id === selectedItem.value._id)
     )
       return;
 
@@ -284,6 +225,7 @@ const equipItem = async (typeItem, slot) => {
     if (category === ITEM_CATEGORIES.PET) {
       currentSlotItem = slot === 1 ? petSlot1.value : petSlot2.value;
     } else if (category === ITEM_CATEGORIES.WEAPON) {
+      console.log("weapon", slot);
       currentSlotItem = slot === 1 ? weaponSlot1.value : weaponSlot2.value;
     } else if (category === ITEM_CATEGORIES.ARMOR) {
       currentSlotItem = armorSlots.value;
@@ -294,33 +236,73 @@ const equipItem = async (typeItem, slot) => {
     if (currentSlotItem?._id === selected._id) return;
 
     if (currentSlotItem) {
-      const index = currentEquipments.value.findIndex(
+      const index = gameStore.equippedKapy.findIndex(
         (eq) => eq._id === currentSlotItem._id
       );
+      console.log("index", index);
       if (index !== -1) {
-        currentEquipments.value[index]._id = selected._id;
+        console.log(
+          "gameStore.equippedKapy[index]._id",
+          gameStore.equippedKapy[index]._id,
+          selected._id
+        );
+        gameStore.equippedKapy[index]._id = selected._id;
       } else {
-        currentEquipments.value.push({
+        gameStore.equippedKapy.push({
           _id: selected._id,
           item: selected.item,
         });
       }
     } else {
-      // slot rỗng → thêm vào
-      currentEquipments.value.push({ _id: selected._id, item: selected.item });
+      gameStore.equippedKapy.push({ _id: selected._id, item: selected.item });
     }
 
-    const equipments = currentEquipments.value.map((eq) => eq._id);
+    const equipments = gameStore.equippedKapy.map((eq) => eq._id);
     const response = await setEquipments(equipments);
-    if (response) getKapyDetails();
+    if (response) {
+      await gameStore.getKapyDetails();
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const unequipItem = async (typeItem, slot) => {
+  try {
+    let currentSlotItem = null;
+
+    if (typeItem === ITEM_CATEGORIES.PET) {
+      currentSlotItem = slot === 1 ? petSlot1.value : petSlot2.value;
+    } else if (typeItem === ITEM_CATEGORIES.WEAPON) {
+      currentSlotItem = slot === 1 ? weaponSlot1.value : weaponSlot2.value;
+    } else if (typeItem === ITEM_CATEGORIES.ARMOR) {
+      currentSlotItem = armorSlots.value;
+    } else if (typeItem === ITEM_CATEGORIES.ACCESSORY) {
+      currentSlotItem = accessorySlot.value;
+    }
+
+    if (!currentSlotItem) return;
+
+    const index = gameStore.equippedKapy.findIndex(
+      (eq) => eq._id === currentSlotItem._id
+    );
+    if (index !== -1) {
+      gameStore.equippedKapy.splice(index, 1);
+
+      const equipments = gameStore.equippedKapy.map((eq) => eq._id);
+      const response = await setEquipments(equipments);
+      if (response) {
+        await gameStore.getKapyDetails();
+      }
+    }
   } catch (error) {
     console.error(error);
   }
 };
 
 const isEquipped = (itemId) => {
-  if (!currentEquipments.value) return false;
-  return currentEquipments.value.some((eq) => eq._id === itemId);
+  if (!gameStore.equippedKapy) return false;
+  return gameStore.equippedKapy.some((eq) => eq._id === itemId);
 };
 </script>
 
@@ -675,6 +657,7 @@ const isEquipped = (itemId) => {
           :model-value="selectedItem?._id === item._id"
           :open-on-hover="false"
           :open-on-click="true"
+          :close-on-content-click="true"
           :attach="gameContainerRef"
           contained
           location="top"

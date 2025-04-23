@@ -24,7 +24,7 @@ onMounted(async () => {
 });
 
 const displayName = computed(() =>
-  truncateString(userStore.userData?.displayName)
+  truncateString(userStore.userData?.displayName, 15)
 );
 
 watch(
@@ -77,9 +77,9 @@ watch(
 <template>
   <div class="top-bar tw-flex tw-items-start tw-px-[3%] tw-pt-1 tw-z-10">
     <div
-      class="top-icon tw-mr-[1%] tw-w-[35%] tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-items-center"
+      class="top-icon tw-mr-[1%] tw-w-[35%] tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-items-center tw-flex-auto"
     >
-      <div class="tw-w-[45%] tw-z-[1]">
+      <div class="tw-w-[30%] tw-z-[1]">
         <v-avatar class="!tw-w-full !tw-h-auto tw-aspect-square">
           <v-img
             :src="userStore.userData?.avatar || defaultAvatart"
@@ -89,31 +89,30 @@ watch(
         </v-avatar>
       </div>
       <div
-        class="!tw-h-[35%] !tw-w-auto tw-aspect-[147/36] tw-absolute tw-left-[35%] tw-bottom-[22%]"
+        class="!tw-h-[35%] !tw-w-auto tw-aspect-[147/36] tw-absolute tw-left-[20%] tw-bottom-[22%]"
       >
         <v-img :src="bgUserState" cover />
       </div>
 
       <div
-        class="username tw-font-bold tw-text-white tw-absolute tw-top-[16%] -tw-translate-y-[16%] tw-left-0 tw-r tw-ml-[50%] tw-line-clamp-1 tw-overflow-hidden tw-text-ellipsis"
+        class="username tw-font-bold tw-text-white tw-absolute tw-top-[16%] -tw-translate-y-[16%] tw-left-0 tw-right-0 tw-ml-[30%] tw-h-[30%] tw-line-clamp-1 tw-overflow-hidden tw-text-ellipsis"
       >
         <svg
-          viewBox="0 0 70 20"
+          viewBox="0 0 100 20"
           xmlns="http://www.w3.org/2000/svg"
           class="tw-w-full tw-h-full"
           ref="nameSvgRef"
         >
           <text
-            x="1%"
-            y="50%"
-            dominant-baseline="middle"
+            x="-25%"
+            y="25%"
+            dominant-baseline="hanging"
             text-anchor="start"
             font-family="DynaPuff"
             :font-size="`${
-              gameStore.setFontSizeBasedOnViewBox(nameSvgRef, 60) * 1.5
+              gameStore.setFontSizeBasedOnViewBox(nameSvgRef, 60) * 1.3
             }px`"
             font-weight="700"
-            padding-left="1%"
             fill="#fff"
             stroke="#000"
             stroke-width="1.8"
@@ -129,7 +128,7 @@ watch(
       </div>
 
       <div
-        class="tw-font-bold tw-text-white tw-absolute tw-top-[66%] -tw-translate-y-[66%] tw-left-0 tw-right-0 tw-text-center tw-ml-[45%] tw-flex tw-justify-center tw-items-center"
+        class="tw-font-bold tw-text-white tw-absolute tw-top-[66%] -tw-translate-y-[66%] tw-left-0 tw-right-0 tw-ml-[30%] tw-text-center tw-flex tw-justify-center tw-items-center tw-w-[30%] tw-h-[35%]"
       >
         <svg
           viewBox="0 0 68 18"
@@ -144,7 +143,7 @@ watch(
             text-anchor="middle"
             font-family="DynaPuff"
             :font-size="`${
-              gameStore.setFontSizeBasedOnViewBox(expSvgRef, 60) * 1.6
+              gameStore.setFontSizeBasedOnViewBox(expSvgRef, 60) * 1.8
             }px`"
             font-weight="700"
             fill="#fff"
@@ -224,8 +223,6 @@ watch(
         </svg>
       </div>
     </div> -->
-
-    <v-spacer />
 
     <div
       class="top-icon tw-mr-[4%] tw-mt-[2%] tw-w-[20%] tw-aspect-[269/104] tw-bg-contain tw-bg-center tw-bg-no-repeat tw-relative tw-flex tw-items-center"

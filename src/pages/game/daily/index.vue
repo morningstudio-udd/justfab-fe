@@ -402,11 +402,11 @@ const getTabClass = (group) => {
               </div>
 
               <div
-                class="tw-overflow-x-auto tw-flex tw-gap-[2%] daily-rewards tw-relative"
+                class="daily-rewards tw-overflow-x-auto tw-flex tw-gap-[2%] tw-relative tw-h-[50%] md:tw-h-[50%]"
               >
                 <div
                   v-for="n in 30"
-                  class="tw-w-1/5 tw-flex-none tw-relative"
+                  class="tw-aspect-[115/212] tw-h-full tw-flex-none tw-relative"
                   :class="{
                     'checked-in': claimedDailyReward(n),
                     'tw-cursor-pointer': canClaimDailyReward(n),
@@ -419,7 +419,7 @@ const getTabClass = (group) => {
                       : null
                   "
                 >
-                  <div class="tw-aspect-[115/212]">
+                  <div class="">
                     <v-img :src="dailyReward2">
                       <div class="tw-w-full tw-h-[30%] tw-mt-[10%] tw-relative">
                         <svg
@@ -583,7 +583,7 @@ const getTabClass = (group) => {
 
 <style lang="postcss" scoped>
 .icon-checked-in {
-  @apply tw-w-[90%] tw-h-[92%] tw-absolute tw-z-[1] tw-left-[5%] tw-top-[6%] tw-bg-black/50 tw-rounded-[1em] tw-flex tw-justify-center tw-items-center;
+  @apply tw-w-[90%] tw-h-[90%] tw-absolute tw-z-[1] tw-left-[5%] tw-top-[6%] tw-bg-black/50 tw-rounded-[0.5em] md:tw-rounded-[1em] tw-flex tw-justify-center tw-items-center;
 }
 
 .daily-gift {

@@ -1,17 +1,35 @@
 <script setup>
-import { gsap } from "gsap";
-import { Application, Assets, Spritesheet, Sprite, Container, Text } from "pixi.js";
-import { Reel, SymbolReel, ReelSpinner, JackpotSpinner, EnergyBottle, EnergyBar, Button, RewardParticle, AnimateText } from "@/components/Game/classes/slot-machine.js";
+import {
+  Application,
+  Assets,
+  Spritesheet,
+  Sprite,
+  Container,
+  Text,
+} from "pixi.js";
+import {
+  Reel,
+  SymbolReel,
+  ReelSpinner,
+  JackpotSpinner,
+  EnergyBottle,
+  EnergyBar,
+  Button,
+  RewardParticle,
+  AnimateText,
+} from "@/components/Game/classes/slot-machine.js";
 import jsonSpritesJson from "@/assets/images/game/slot-machine/sprites.json";
 import jsonSpritesPng from "@/assets/images/game/slot-machine/sprites.png";
 import { useLocalStorage } from "@vueuse/core";
+
+import spearker from "@images/game/speaker.png";
 
 const refCanvas = ref();
 
 const audioContext = ref(null);
 const gainNode = ref(null);
 const mediaSource = ref(null);
-const soundVolume = ref(useLocalStorage("soundVolume", 100));
+const soundVolume = useLocalStorage("soundVolume", 100);
 
 const props = defineProps({
   jackpot: {
@@ -64,14 +82,14 @@ let OParticle = null;
 let animateText1 = null;
 let animateText2 = null;
 
-watch(soundVolume, (newVolume) => {
-  if (gainNode.value) {
-    console.log("change volume", newVolume);
-    gainNode.value.gain.value = newVolume / 100;
-  }
-}, {
-  immediate: true,
-});
+// watch(soundVolume, (newVolume) => {
+//   if (gainNode.value) {
+//     console.log("change volume", newVolume);
+//     gainNode.value.gain.value = newVolume / 100;
+//   }
+// }, {
+//   immediate: true,
+// });
 
 watch(
   () => props.claimEnergyAt,
@@ -107,7 +125,7 @@ watch(
 watch(
   () => props.jackpotRewards,
   (v) => {
-    if(jackpotSpinner == null) return;
+    if (jackpotSpinner == null) return;
     jackpotSpinner.setJackpotRewards(v);
   },
   {
@@ -115,12 +133,12 @@ watch(
   }
 );
 
-watch(
-  () => props.volume,
-  (v) => {
-    setVolume(v);
-  }
-);
+// watch(
+//   () => props.volume,
+//   (v) => {
+//     setVolume(v);
+//   }
+// );
 
 let _energy = 0;
 let isRolling = false;
@@ -135,7 +153,7 @@ const drainEnergyBottle = async () => {
 };
 
 const updateEnergyBottle = () => {
-  if(_drainingEnergy) return;
+  if (_drainingEnergy) return;
 
   let now = new Date();
   let minutes = Math.floor((now - props.claimEnergyAt) / 60000);
@@ -215,7 +233,7 @@ const rollScriptStep = async (step) => {
   if (step > playScripts.length - 1) {
     spinButton.setDisabled(false);
     emit("allScriptCompleted");
-    if(spins > 1) {
+    if (spins > 1) {
       await waitForSeconds(0.25);
       onButtonRoolClickAuto();
     }
@@ -264,8 +282,8 @@ const rollJackpot = (prize) => {
 };
 
 const setVolume = (v) => {
+  console.log("change volume", v);
   soundVolume.value = v;
-  localStorage.setItem("soundVolume", v);
 };
 
 const waitForSeconds = async (s) => {
@@ -302,8 +320,12 @@ const showValue = (v) => {
 onMounted(async () => {
   await waitForSeconds(0.25);
   await initSlotMachine();
-  initSFX();
-})
+  // initSFX();
+
+  if (refRollFx.value) {
+    refRollFx.value.volume = soundVolume.value / 100;
+  }
+});
 
 const initSlotMachine = async () => {
   const app = new Application();
@@ -352,7 +374,7 @@ const initSlotMachine = async () => {
       fill: "#ffffff",
       align: "center",
       dropShadow: {
-        color: '#000000',
+        color: "#000000",
         blur: 0,
         angle: Math.PI * 0.6,
         distance: 4,
@@ -376,13 +398,13 @@ const initSlotMachine = async () => {
   kapy.y = -50;
   container.addChild(kapy);
 
-  reelSpinner = new ReelSpinner({sheet});
+  reelSpinner = new ReelSpinner({ sheet });
   reelSpinner.x = 308;
   reelSpinner.y = -625;
   reelSpinner.zIndex = -1;
   container.addChild(reelSpinner);
 
-  jackpotSpinner = new JackpotSpinner({sheet, app});
+  jackpotSpinner = new JackpotSpinner({ sheet, app });
   jackpotSpinner.x = 308;
   jackpotSpinner.y = -625;
   jackpotSpinner.zIndex = 5;
@@ -391,13 +413,17 @@ const initSlotMachine = async () => {
   });
   container.addChild(jackpotSpinner);
 
-  energyBar = new EnergyBar({sheet, app});
+  energyBar = new EnergyBar({ sheet, app });
   energyBar.x = -262;
   energyBar.y = -536;
   energyBar.zIndex = 0;
   container.addChild(energyBar);
 
-  energyBottle = refEnergyBottle.value = new EnergyBottle({sheet, app, bar: energyBar});
+  energyBottle = refEnergyBottle.value = new EnergyBottle({
+    sheet,
+    app,
+    bar: energyBar,
+  });
   energyBottle.x = 350;
   energyBottle.y = -480;
   energyBottle.zIndex = 2;
@@ -409,9 +435,10 @@ const initSlotMachine = async () => {
   container.addChild(energyBottle);
 
   betXButton = new Button({
-    sheet, 
+    sheet,
     normalSprite: "Button X.png",
-    text: "BET X1",});
+    text: "BET X1",
+  });
   betXButton.x = -130;
   betXButton.y = -450;
   betXButton.zIndex = 2;
@@ -421,9 +448,10 @@ const initSlotMachine = async () => {
   container.addChild(betXButton);
 
   autoXButton = new Button({
-    sheet, 
+    sheet,
     normalSprite: "Button X.png",
-    text: "AUTO X1",});
+    text: "AUTO X1",
+  });
   autoXButton.x = 110;
   autoXButton.y = -450;
   autoXButton.zIndex = 2;
@@ -433,11 +461,12 @@ const initSlotMachine = async () => {
   container.addChild(autoXButton);
 
   spinButton = new Button({
-    sheet, 
+    sheet,
     normalSprite: "button-spin-normal.png",
     pressedSprite: "button-spin-pressed.png",
     disabledSprite: "button-spin-pressed.png",
-    text: "",});
+    text: "",
+  });
   spinButton.x = 0;
   spinButton.y = -240;
   spinButton.zIndex = 2;
@@ -448,31 +477,31 @@ const initSlotMachine = async () => {
   });
   container.addChild(spinButton);
 
-  XParticle = new RewardParticle({sheet, rewardSprite: "coin.png", app});
+  XParticle = new RewardParticle({ sheet, rewardSprite: "coin.png", app });
   XParticle.x = 0;
   XParticle.y = -840;
   XParticle.zIndex = 2;
   container.addChild(XParticle);
 
-  FParticle = new RewardParticle({sheet, rewardSprite: "food.png", app});
+  FParticle = new RewardParticle({ sheet, rewardSprite: "food.png", app });
   FParticle.x = 0;
   FParticle.y = -840;
   FParticle.zIndex = 2;
   container.addChild(FParticle);
 
-  IParticle = new RewardParticle({sheet, rewardSprite: "sword.png", app});
+  IParticle = new RewardParticle({ sheet, rewardSprite: "sword.png", app });
   IParticle.x = 0;
   IParticle.y = -840;
   IParticle.zIndex = 2;
   container.addChild(IParticle);
 
-  JParticle = new RewardParticle({sheet, rewardSprite: "kapy.png", app});
+  JParticle = new RewardParticle({ sheet, rewardSprite: "kapy.png", app });
   JParticle.x = 0;
   JParticle.y = -840;
   JParticle.zIndex = 2;
   container.addChild(JParticle);
 
-  OParticle = new RewardParticle({sheet, rewardSprite: "treasure.png", app});
+  OParticle = new RewardParticle({ sheet, rewardSprite: "treasure.png", app });
   OParticle.x = 0;
   OParticle.y = -840;
   OParticle.zIndex = 2;
@@ -486,11 +515,11 @@ const initSlotMachine = async () => {
       fill: "#ffffff",
       align: "center",
       stroke: {
-        color: '#000000',
+        color: "#000000",
         width: 8,
       },
-    }
-  })
+    },
+  });
   animateText1.x = 0;
   animateText1.y = -1500;
   animateText1.zIndex = 2;
@@ -504,11 +533,11 @@ const initSlotMachine = async () => {
       fill: "#ffff00",
       align: "center",
       stroke: {
-        color: '#000000',
+        color: "#000000",
         width: 8,
       },
-    }
-  })
+    },
+  });
   animateText2.x = 0;
   animateText2.y = -750;
   animateText2.zIndex = 2;
@@ -569,12 +598,19 @@ const toggleSound = () => {
   setVolume(soundVolume.value === 0 ? 100 : 0);
 };
 
+watch(soundVolume, (newVolume) => {
+  if (refRollFx.value) {
+    refRollFx.value.volume = newVolume / 100;
+  }
+});
+
 const emit = defineEmits([
   "rollClick",
   "scriptCompleted",
   "allScriptCompleted",
   "claimEnergyClick",
-  "loaded"]);
+  "loaded",
+]);
 defineExpose({
   roll,
   rollNextStep,
@@ -584,7 +620,7 @@ defineExpose({
   showTokenEffect,
   showFoodEffect,
   showValue,
-  showGIFEffect
+  showGIFEffect,
 });
 </script>
 
@@ -596,25 +632,54 @@ defineExpose({
     Booting slot machine...
   </div>
 
-  <canvas
-    class="tw-w-full tw-h-full tw-border-none"
-    ref="refCanvas"
-  />
+  <canvas class="tw-w-full tw-h-full tw-border-none" ref="refCanvas" />
 
-  <img src="@/assets/images/game/reward-effects/1.BIGWIN.gif" class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0" v-if="GIFEffects[0]" />
-  <img src="@/assets/images/game/reward-effects/2.MEGA_WIN.gif" class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0" v-if="GIFEffects[1]" />
-  <img src="@/assets/images/game/reward-effects/3.GIGA_WIN.gif" class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0" v-if="GIFEffects[2]" />
-  <img src="@/assets/images/game/reward-effects/4.FABULOUS_WIN.gif" class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0" v-if="GIFEffects[3]" />
-  <img src="@/assets/images/game/reward-effects/5.LEGENDARY.gif" class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0" v-if="GIFEffects[4]" />
-  <img src="@/assets/images/game/reward-effects/6 JACKPOT.gif" class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0" v-if="GIFEffects[5]" />
+  <img
+    src="@/assets/images/game/reward-effects/1.BIGWIN.gif"
+    class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0"
+    v-if="GIFEffects[0]"
+  />
+  <img
+    src="@/assets/images/game/reward-effects/2.MEGA_WIN.gif"
+    class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0"
+    v-if="GIFEffects[1]"
+  />
+  <img
+    src="@/assets/images/game/reward-effects/3.GIGA_WIN.gif"
+    class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0"
+    v-if="GIFEffects[2]"
+  />
+  <img
+    src="@/assets/images/game/reward-effects/4.FABULOUS_WIN.gif"
+    class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0"
+    v-if="GIFEffects[3]"
+  />
+  <img
+    src="@/assets/images/game/reward-effects/5.LEGENDARY.gif"
+    class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0"
+    v-if="GIFEffects[4]"
+  />
+  <img
+    src="@/assets/images/game/reward-effects/6 JACKPOT.gif"
+    class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0"
+    v-if="GIFEffects[5]"
+  />
 
   <audio ref="refRollFx">
     <source src="@/assets/sounds/roll.mp3" type="audio/mpeg" />
     Your browser does not support the audio element.
   </audio>
 
-  <v-btn class="tw-w-[64px] tw-h-[64px] tw-border-none tw-absolute tw-right-3 tw-top-12 tw-z-10" @click="toggleSound()" >
-    <img src="@/assets/images/game/speaker.png" 
-    class="tw-w-[64px] tw-h-[64px] tw-border-none tw-absolute tw-right-3 tw-top-12 tw-z-10" />
-</v-btn>
+  <v-btn
+    class="tw-w-[64px] tw-h-[64px] tw-border-none tw-absolute tw-right-3 tw-top-12 tw-z-10 tw-bg-cover tw-bg-center tw-bg-no-repeat"
+    :class="{
+      'tw-opacity-70': soundVolume === 0,
+      'tw-opacity-100': soundVolume > 0,
+    }"
+    @click="toggleSound()"
+    color="transparent"
+    icon
+    :style="{ backgroundImage: `url(${spearker})` }"
+  >
+  </v-btn>
 </template>

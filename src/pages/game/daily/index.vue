@@ -59,13 +59,18 @@ const tabsHeight = ref(0);
 const gameContainerRef = ref();
 const itemsContainerWidth = ref(0);
 const itemsContainerHeight = ref(0);
+const lastHeight = ref(0);
 
 let checkTask = null;
 
 const fontSizeBase = computed(() => gameStore.baseFontSize);
 
 const dailyHeight = computed(() => {
-  console.log("itemsContainerHeight", itemsContainerHeight.value);
+  console.log(
+    "itemsContainerHeight",
+    itemsContainerHeight.value,
+    itemsContainerHeight.value * 0.25
+  );
   return itemsContainerHeight.value * 0.25;
 });
 
@@ -446,6 +451,8 @@ const getTabClass = (group) => {
                 class="daily-rewards tw-overflow-x-auto tw-flex tw-gap-[2%] tw-relative"
                 :style="{
                   height: `${dailyHeight}px`,
+                  maxHeight: `${dailyHeight}px`,
+                  minHeight: `${dailyHeight}px`,
                 }"
               >
                 <div

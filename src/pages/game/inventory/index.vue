@@ -659,6 +659,7 @@ const isEquipped = (itemId) => {
           :open-on-click="true"
           :close-on-content-click="true"
           :attach="gameContainerRef"
+          scroll-strategy="close"
           contained
           location="top"
           location-strategy="connected"

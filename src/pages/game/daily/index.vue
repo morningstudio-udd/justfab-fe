@@ -27,6 +27,7 @@ import { openLink, openTelegramLink } from "@telegram-apps/sdk";
 // import { openLink, openPopup, openTelegramLink } from "@telegram-apps/sdk-vue";
 import moment from "moment";
 import { emitter } from "@plugins/mitt";
+import { computed } from "vue";
 
 definePage({
   meta: {
@@ -36,6 +37,8 @@ definePage({
     action: "read",
   },
 });
+
+const { observe } = useMixin();
 
 const gameStore = useGameStore();
 const userStore = useUserStore();
@@ -53,10 +56,18 @@ const streakRewards = ref([]);
 const dailyRewardRef = ref(null);
 const tabsWrapperRef = ref(null);
 const tabsHeight = ref(0);
+const gameContainerRef = ref();
+const itemsContainerWidth = ref(0);
+const itemsContainerHeight = ref(0);
 
 let checkTask = null;
 
 const fontSizeBase = computed(() => gameStore.baseFontSize);
+
+const dailyHeight = computed(() => {
+  console.log("itemsContainerHeight", itemsContainerHeight.value);
+  return itemsContainerHeight.value * 0.25;
+});
 
 const currentIndex = computed(() => {
   // if (!currentStreak.value) {
@@ -132,7 +143,34 @@ onMounted(async () => {
       }
     }
   });
+
+  if (gameContainerRef.value) {
+    observe(gameContainerRef.value, handleResize);
+  }
+  window.addEventListener("resize", onResizeWindow);
 });
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", onResizeWindow);
+});
+
+const handleResize = (newWidth, newHeight) => {
+  console.log("handleResize", newWidth, newHeight);
+  if (
+    newWidth !== itemsContainerWidth.value ||
+    Math.abs(newHeight - lastHeight.value) > 5
+  ) {
+    itemsContainerWidth.value = newWidth;
+    itemsContainerHeight.value = newHeight;
+    lastHeight.value = newHeight;
+  }
+};
+
+const onResizeWindow = () => {
+  if (gameContainerRef.value) {
+    observe(gameContainerRef.value, handleResize);
+  }
+};
 
 const getDaily = async () => {
   try {
@@ -298,7 +336,7 @@ const handleDailyCheckIn = ($event, level) => {
 // };
 
 const canClaimDailyReward = (index) => {
-  console.log("canClaimDailyReward", canClaimIndexs.value);
+  // console.log("canClaimDailyReward", canClaimIndexs.value);
   return canClaimIndexs.value.includes(index);
   // if (currentStreak.value === 0 && index === 1) {
   //   return true;
@@ -332,7 +370,10 @@ const getTabClass = (group) => {
 </script>
 
 <template>
-  <div class="game-content tw-flex-auto tw-overflow-hidden">
+  <div
+    class="game-content tw-flex-auto tw-overflow-hidden"
+    ref="gameContainerRef"
+  >
     <div
       class="tw-w-full tw-h-full tw-flex tw-flex-col tw-items-center tw-justify-between tw-px-[4%] tw-py-[5%] tw-bg-cover tw-bg-top tw-bg-no-repeat tw-relative"
     >
@@ -402,7 +443,10 @@ const getTabClass = (group) => {
               </div>
 
               <div
-                class="daily-rewards tw-overflow-x-auto tw-flex tw-gap-[2%] tw-relative tw-h-[50%] md:tw-h-[50%]"
+                class="daily-rewards tw-overflow-x-auto tw-flex tw-gap-[2%] tw-relative"
+                :style="{
+                  height: `${dailyHeight}px`,
+                }"
               >
                 <div
                   v-for="n in 30"
@@ -474,7 +518,7 @@ const getTabClass = (group) => {
               </div>
 
               <div
-                class="tw-flex tw-flex-col tw-gap-[2%] tw-overflow-y-auto task-list tw-grow"
+                class="justfab-tasks tw-flex tw-flex-col tw-gap-[2%] tw-overflow-y-auto task-list tw-grow"
               >
                 <task-block
                   v-for="task in justfabMissionTasks"

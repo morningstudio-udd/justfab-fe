@@ -1,6 +1,7 @@
 <script setup>
 import bgReferred from "@images/game/bg-referred.png";
 import completedDailyReward from "@images/game/completed-daily-reward.png";
+import { emitter } from "@plugins/mitt";
 
 const gameStore = useGameStore();
 const userStore = useUserStore();
@@ -54,7 +55,19 @@ onMounted(async () => {
   // const { referredUsers } = await getReferralTree(userStore.userData?._id);
   // referred.value = referredUsers;
   await getRecruited();
+
+  emitter.on("onClaimeReferralSuccess", () => getRecruited());
 });
+
+const submitClaimInvited = (level) => {
+  const rewards = notClaimed.value
+    .filter((item) => item.level === level)
+    .map((item) => item.reward);
+
+  gameStore.handleRewards(rewards, notClaimed.value[0].reason);
+
+  // claimInviteDialogRef.value.openDialog();
+};
 
 const getRecruited = async () => {
   try {
@@ -80,7 +93,7 @@ const getRecruited = async () => {
     <div
       v-for="(level, index) in specialLevels"
       :key="index"
-      class="tw-bg-cover tw-bg-center tw-bg-no-repeat tw-aspect-[608/152] tw-w-full tw-flex tw-items-center tw-text-[#AE613A]"
+      class="tw-bg-cover tw-bg-center tw-bg-no-repeat tw-aspect-[608/152] tw-w-full tw-flex tw-items-center tw-text-[#AE613A] tw-relative"
       :class="{
         'tw-cursor-pointer': canClaimLevels.includes(level.count),
         'disable-element':
@@ -100,7 +113,7 @@ const getRecruited = async () => {
 
       <div
         v-if="claimedLevels.includes(level.count)"
-        class="task-completed tw-absolute tw-left-0 tw-top-0 tw-w-full tw-h-full tw-flex tw-justify-center tw-items-center"
+        class="task-completed tw-absolute tw-left-[.3%] tw-top-0 tw-w-[99.5%] tw-h-[87%] tw-flex tw-justify-center tw-items-center"
       >
         <div class="tw-h-1/2 tw-w-auto tw-aspect-square">
           <v-img :src="completedDailyReward" cover />
@@ -109,3 +122,10 @@ const getRecruited = async () => {
     </div>
   </div>
 </template>
+
+<style lang="postcss" scoped>
+.task-completed {
+  @apply tw-bg-black/50 tw-rounded-[1em];
+  z-index: 1;
+}
+</style>

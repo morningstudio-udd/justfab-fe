@@ -17,6 +17,7 @@ import {
   Button,
   RewardParticle,
   AnimateText,
+  AnimatedGIF
 } from "@/components/Game/classes/slot-machine.js";
 import jsonSpritesJson from "@/assets/images/game/slot-machine/sprites.json";
 import jsonSpritesPng from "@/assets/images/game/slot-machine/sprites.png";
@@ -26,6 +27,7 @@ import spearker from "@images/game/speaker.png";
 
 const refCanvas = ref();
 
+const slotMachineLoaded = ref(false);
 const audioContext = ref(null);
 const gainNode = ref(null);
 const mediaSource = ref(null);
@@ -81,6 +83,7 @@ let JParticle = null;
 let OParticle = null;
 let animateText1 = null;
 let animateText2 = null;
+let gifEffects = null;
 
 // watch(soundVolume, (newVolume) => {
 //   if (gainNode.value) {
@@ -244,6 +247,7 @@ const rollScriptStep = async (step) => {
   if (currentScript.type == "slotMachine") {
     jackpotSpinner.close();
     reelSpinner.roll(currentScript.reelSymbols);
+    refRollFx.value.currentTime = 0;
     refRollFx.value.play();
     if (turns > 1) {
       animateText1.show(`bonus turn ${turns}`);
@@ -307,10 +311,9 @@ const showFoodEffect = () => {
 };
 
 const showGIFEffect = async (id) => {
-  GIFEffects.value = [false, false, false, false, false, false];
-  GIFEffects.value[id] = true;
-  await waitForSeconds(3);
-  GIFEffects.value = [false, false, false, false, false, false];
+  const s = gifEffects[id].play();
+  await waitForSeconds(s / 1000);
+  return;
 };
 
 const showValue = (v) => {
@@ -326,6 +329,13 @@ onMounted(async () => {
     refRollFx.value.volume = soundVolume.value / 100;
   }
 });
+
+import gif1 from "@/assets/images/game/reward-effects/1.BIGWIN.gif";
+import gif2 from "@/assets/images/game/reward-effects/2.MEGA_WIN.gif";
+import gif3 from "@/assets/images/game/reward-effects/3.GIGA_WIN.gif";
+import gif4 from "@/assets/images/game/reward-effects/4.FABULOUS_WIN.gif";
+import gif5 from "@/assets/images/game/reward-effects/5.LEGENDARY.gif";
+import gif6 from "@/assets/images/game/reward-effects/6 JACKPOT.gif";
 
 const initSlotMachine = async () => {
   const app = new Application();
@@ -352,6 +362,7 @@ const initSlotMachine = async () => {
   container.pivot.x = 0;
   container.pivot.y = 0;
   container.scale.set(app.screen.width / 1080);
+  container.visible = false;
   app.stage.addChild(container);
 
   const castle = new Sprite(sheet.textures["castle.png"]);
@@ -426,7 +437,7 @@ const initSlotMachine = async () => {
   });
   energyBottle.x = 350;
   energyBottle.y = -480;
-  energyBottle.zIndex = 2;
+  energyBottle.zIndex = 3;
   energyBottle.bottleSprite.interactive = true;
   energyBottle.bottleSprite.buttonMode = true;
   energyBottle.bottleSprite.on("pointerup", () => {
@@ -486,25 +497,25 @@ const initSlotMachine = async () => {
   FParticle = new RewardParticle({ sheet, rewardSprite: "food.png", app });
   FParticle.x = 0;
   FParticle.y = -840;
-  FParticle.zIndex = 2;
+  FParticle.zIndex = 3.5;
   container.addChild(FParticle);
 
   IParticle = new RewardParticle({ sheet, rewardSprite: "sword.png", app });
   IParticle.x = 0;
   IParticle.y = -840;
-  IParticle.zIndex = 2;
+  IParticle.zIndex = 3.5;
   container.addChild(IParticle);
 
   JParticle = new RewardParticle({ sheet, rewardSprite: "kapy.png", app });
   JParticle.x = 0;
   JParticle.y = -840;
-  JParticle.zIndex = 2;
+  JParticle.zIndex = 3.5;
   container.addChild(JParticle);
 
   OParticle = new RewardParticle({ sheet, rewardSprite: "treasure.png", app });
   OParticle.x = 0;
   OParticle.y = -840;
-  OParticle.zIndex = 2;
+  OParticle.zIndex = 3.5;
   container.addChild(OParticle);
 
   animateText1 = new AnimateText({
@@ -522,7 +533,7 @@ const initSlotMachine = async () => {
   });
   animateText1.x = 0;
   animateText1.y = -1500;
-  animateText1.zIndex = 2;
+  animateText1.zIndex = 4;
   container.addChild(animateText1);
 
   animateText2 = new AnimateText({
@@ -540,10 +551,20 @@ const initSlotMachine = async () => {
   });
   animateText2.x = 0;
   animateText2.y = -750;
-  animateText2.zIndex = 2;
+  animateText2.zIndex = 4;
   container.addChild(animateText2);
 
-  // ==========
+  gifEffects = [];
+  for(let gif of [gif1, gif2, gif3, gif4, gif5, gif6]) {
+    const ge = await AnimatedGIF.load(gif);
+    ge.x = 0;
+    ge.y = -300;
+    ge.width = 1024;
+    ge.height = 1024;
+    ge.zIndex = 3;
+    container.addChild(ge);
+    gifEffects.push(ge);
+  } 
 
   spinButton.on("click", onButtonRoolClick);
   jackpotText.text = props.jackpot.toLocaleString("en-US") + "$";
@@ -554,30 +575,10 @@ const initSlotMachine = async () => {
   setInterval(updateEnergyBottle, 1000);
   updateEnergyBottle();
   emit("loaded");
-};
 
-const initSFX = () => {
-  if (!window.AudioContext) {
-    console.error("Web Audio API is not supported in this browser.");
-    return;
-  }
 
-  if (!audioContext.value) {
-    audioContext.value = new (window.AudioContext ||
-      window.webkitAudioContext)();
-    gainNode.value = audioContext.value.createGain();
-  }
-
-  if (!mediaSource.value && refRollFx.value) {
-    mediaSource.value = audioContext.value.createMediaElementSource(
-      refRollFx.value
-    );
-    mediaSource.value
-      .connect(gainNode.value)
-      .connect(audioContext.value.destination);
-  }
-
-  gainNode.value.gain.value = soundVolume.value / 100;
+  container.visible = true;
+  slotMachineLoaded.value = true;
 };
 
 onBeforeUnmount(() => {
@@ -621,49 +622,19 @@ defineExpose({
   showFoodEffect,
   showValue,
   showGIFEffect,
+  waitForSeconds
 });
 </script>
 
 <template>
   <div
     class="tw-w-full tw-h-full tw-flex tw-justify-center tw-items-center"
-    v-if="false"
+    v-if="!slotMachineLoaded"
   >
     Booting slot machine...
   </div>
 
   <canvas class="tw-w-full tw-h-full tw-border-none" ref="refCanvas" />
-
-  <img
-    src="@/assets/images/game/reward-effects/1.BIGWIN.gif"
-    class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0"
-    v-if="GIFEffects[0]"
-  />
-  <img
-    src="@/assets/images/game/reward-effects/2.MEGA_WIN.gif"
-    class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0"
-    v-if="GIFEffects[1]"
-  />
-  <img
-    src="@/assets/images/game/reward-effects/3.GIGA_WIN.gif"
-    class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0"
-    v-if="GIFEffects[2]"
-  />
-  <img
-    src="@/assets/images/game/reward-effects/4.FABULOUS_WIN.gif"
-    class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0"
-    v-if="GIFEffects[3]"
-  />
-  <img
-    src="@/assets/images/game/reward-effects/5.LEGENDARY.gif"
-    class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0"
-    v-if="GIFEffects[4]"
-  />
-  <img
-    src="@/assets/images/game/reward-effects/6 JACKPOT.gif"
-    class="tw-w-full tw-h-full tw-border-none tw-absolute tw-left-0 tw-top-0"
-    v-if="GIFEffects[5]"
-  />
 
   <audio ref="refRollFx">
     <source src="@/assets/sounds/roll.mp3" type="audio/mpeg" />

@@ -143,21 +143,32 @@ const processRewards = async (rewards, reelSymbols = []) => {
 
   if(GIFEffectId > -1) {
     await refSlotMachine.value.showGIFEffect(GIFEffectId);
-  }else {
-    for (const r of rewards) {
-      if (r.type == "GOLD") {
-        refSlotMachine.value.showGoldEffect();
-        refSlotMachine.value.showValue(`+${r.value}`);
-      }
-      if (r.type == "FOOD") {
-        refSlotMachine.value.showFoodEffect();
-        refSlotMachine.value.showValue(`+${r.value}`);
-      }
-      if (r.type == "TOKEN") {
-        refSlotMachine.value.showTokenEffect();
-        refSlotMachine.value.showValue(`+${r.value}`);
-      }
+  }
+
+  let hasRewardEffect = false;
+  for (const r of rewards) {
+    if (r.type == "GOLD") {
+      refSlotMachine.value.showGoldEffect();
+      refSlotMachine.value.showValue(`+${r.value}`);
+      hasRewardEffect = true;
     }
+    if (r.type == "FOOD") {
+      refSlotMachine.value.showFoodEffect();
+      refSlotMachine.value.showValue(`+${r.value}`);
+      hasRewardEffect = true;
+    }
+    if (r.type == "TOKEN") {
+      refSlotMachine.value.showTokenEffect();
+      refSlotMachine.value.showValue(`+${r.value}`);
+      hasRewardEffect = true;
+    }
+    if (r.type == "SPIN") {
+      hasRewardEffect = true;
+    }
+  }
+
+  if (hasRewardEffect) {
+    await refSlotMachine.value.waitForSeconds(1.5);
   }
 
   gameStore.handleRewards(rewards, "slot-machine");

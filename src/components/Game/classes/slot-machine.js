@@ -1,6 +1,7 @@
 import { all } from "axios";
 import { gsap } from "gsap";
-import { Application, Assets, Spritesheet, Sprite, Container, Text, Graphics, ParticleContainer, Particle, } from "pixi.js";
+import { Application, Assets, Spritesheet, Sprite, Container, Text, Graphics, ParticleContainer, Particle } from "pixi.js";
+import { GifSource, GifSprite } from "pixi.js/gif";
 import { set } from "vue-demi";
 
 class Reel extends Container {
@@ -628,4 +629,36 @@ class AnimateText extends Container {
   }
 }
 
-export { Reel, SymbolReel, ReelSpinner, JackpotSpinner, EnergyBottle, EnergyBar, Button, RewardParticle, AnimateText };
+class AnimatedGIF extends GifSprite {
+  constructor({gifSource}) {
+    super(gifSource);
+    this.zIndex = 1.5;
+    this.loop = false;
+    this.anchor.set(0.5, 1);
+    this.visible = false;
+  }
+
+  play() {
+    super.play();
+    this.visible = true;
+    return this.duration;
+  }
+
+  stop() {
+    super.stop();
+    this.visible = false;
+  }
+  
+  static async load(gifUrl, options = {}) {
+    const source = await Assets.load(gifUrl);
+    const gif = new AnimatedGIF({...options, gifSource: source});
+    return gif;
+  }
+
+  static fromBuffer(gif, options = {}) {
+    const source = GifSource.from(gif);
+    const ag = new AnimatedGIF({...options, gifSource: source});
+    return ag;
+  }
+}
+export { Reel, SymbolReel, ReelSpinner, JackpotSpinner, EnergyBottle, EnergyBar, Button, RewardParticle, AnimateText, AnimatedGIF };

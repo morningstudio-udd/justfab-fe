@@ -266,22 +266,19 @@ const rollScriptStep = async (step) => {
   } else {
     jackpotSpinner.open();
     rollJackpot(currentScript.rewards[0].description);
-    await waitForSeconds(4);
+    await waitForSeconds(2);
     isRolling = false;
     emit("scriptCompleted", currentScript);
   }
 };
 
 const rollNextStep = async () => {
-  // if(currentStep >= playScripts.length - 1) {
-  //   return;
-  // }
   await rollScriptStep(currentStep + 1);
 };
 
-const setJackpotPrizes = (prizes) => {
-  jackpotSpinner.setJackpotRewards(prizes);
-};
+// const setJackpotPrizes = (prizes) => {
+//   jackpotSpinner.setJackpotRewards(prizes);
+// };
 
 const rollJackpot = (prize) => {
   jackpotSpinner.roll(prize);
@@ -323,13 +320,7 @@ const showValue = (v) => {
 };
 
 onMounted(async () => {
-  await waitForSeconds(0.25);
   await initSlotMachine();
-  // initSFX();
-
-  // if (refRollFx.value) {
-  //   refRollFx.value.volume = soundVolume.value / 100;
-  // }
 });
 
 import gif1 from "@/assets/images/game/reward-effects/1.BIGWIN.gif";

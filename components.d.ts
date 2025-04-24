@@ -47,5 +47,6 @@ declare module 'vue' {
     TaskGroupForm: typeof import('./src/components/Form/TaskGroupForm.vue')['default']
     TopBar: typeof import('./src/components/Game/TopBar.vue')['default']
     UserAvatar: typeof import('./src/components/UserAvatar.vue')['default']
+    WelcomeOverlay: typeof import('./src/components/WelcomeOverlay.vue')['default']
   }
 }

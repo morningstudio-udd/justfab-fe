@@ -69,6 +69,8 @@ onMounted(() => {
   // }
 
   gameStore.setLoading(false);
+
+  gameStore.setWelcome(true);
 });
 
 const onResizeWindow = () => {
@@ -154,6 +156,7 @@ const resetRewardsState = () => {
 
     <AudioSource />
     <LoadingGame />
+    <WelcomeOverlay :width="containerWidth" />
 
     <result-item-dialog
       ref="resultItemDialogRef"

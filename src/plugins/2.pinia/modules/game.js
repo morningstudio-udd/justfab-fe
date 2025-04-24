@@ -6,6 +6,7 @@ export const useGameStore = defineStore("game", () => {
   const userStore = useUserStore();
 
   const isLoading = ref(false);
+  const isWelcome = ref(false);
   const baseFontSize = ref(16);
   const gameContainer = ref(null);
   const parentWidth = ref(0);
@@ -25,6 +26,10 @@ export const useGameStore = defineStore("game", () => {
 
   const setLoading = (value) => {
     isLoading.value = value;
+  };
+
+  const setWelcome = (value) => {
+    isWelcome.value = value;
   };
 
   const setResponsiveFont = (parent = gameContainer.value, scale = 0.03) => {
@@ -127,6 +132,7 @@ export const useGameStore = defineStore("game", () => {
     statsKapy,
     equippedKapy,
     combatPower,
+    isWelcome,
     setLoading,
     setResponsiveFont,
     setResponsiveFontPercentage,
@@ -135,5 +141,6 @@ export const useGameStore = defineStore("game", () => {
     openResultDialog,
     closeDialog,
     getKapyDetails,
+    setWelcome,
   };
 });

@@ -351,7 +351,7 @@ const initSlotMachine = async () => {
   container.y = app.screen.height;
   container.pivot.x = 0;
   container.pivot.y = 0;
-  container.scale.set(0.4);
+  container.scale.set(app.screen.width / 1080);
   app.stage.addChild(container);
 
   const castle = new Sprite(sheet.textures["castle.png"]);

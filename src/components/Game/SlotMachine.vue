@@ -69,6 +69,7 @@ const currentAutoX = ref(1);
 const GIFEffects = ref([]);
 const refRollFx = ref();
 const refEnergyBottle = ref();
+let container = null;
 let energyBottle = null;
 let jackpotSpinner = null;
 let reelSpinner = null;
@@ -310,8 +311,11 @@ const showFoodEffect = () => {
 };
 
 const showGIFEffect = async (id) => {
-  const s = gifEffects[id].play();
-  await waitForSeconds(s / 1000);
+  const ge = gifEffects[id];
+  container.addChild(ge);
+  await gifEffects[id].play();
+  console.log("on done gif effect");
+  container.removeChild(gifEffects[id]);
   return;
 };
 
@@ -349,7 +353,7 @@ const initSlotMachine = async () => {
   const sheet = new Spritesheet(texture, jsonSpritesJson);
   await sheet.parse();
 
-  const container = new Container();
+  container = new Container();
   container.x = app.screen.width / 2;
   container.y = app.screen.height;
   container.pivot.x = 0;
@@ -555,7 +559,6 @@ const initSlotMachine = async () => {
     ge.width = 1024;
     ge.height = 1024;
     ge.zIndex = 3;
-    container.addChild(ge);
     gifEffects.push(ge);
   } 
 

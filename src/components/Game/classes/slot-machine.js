@@ -636,17 +636,24 @@ class AnimatedGIF extends GifSprite {
     this.loop = false;
     this.anchor.set(0.5, 1);
     this.visible = false;
+    this.play();
+    this.onComplete = () => {
+      console.log("GIF animation completed");
+      this.visible = false;
+    }
   }
 
   play() {
-    super.play();
     this.visible = true;
-    return this.duration;
+    super.play();
+    return new Promise((resolve) => {
+      this.onComplete = resolve;
+    });
   }
 
   stop() {
     super.stop();
-    this.visible = false;
+    //this.visible = false;
   }
   
   static async load(gifUrl, options = {}) {

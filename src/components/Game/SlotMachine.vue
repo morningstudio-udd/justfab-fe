@@ -17,11 +17,12 @@ import {
   Button,
   RewardParticle,
   AnimateText,
-  AnimatedGIF
+  AnimatedGIF,
 } from "@/components/Game/classes/slot-machine.js";
 import jsonSpritesJson from "@/assets/images/game/slot-machine/sprites.json";
 import jsonSpritesPng from "@/assets/images/game/slot-machine/sprites.png";
 import { useLocalStorage } from "@vueuse/core";
+import { emitter } from "@plugins/mitt";
 
 import spearker from "@images/game/speaker.png";
 
@@ -247,8 +248,9 @@ const rollScriptStep = async (step) => {
   if (currentScript.type == "slotMachine") {
     jackpotSpinner.close();
     reelSpinner.roll(currentScript.reelSymbols);
-    refRollFx.value.currentTime = 0;
-    refRollFx.value.play();
+    // refRollFx.value.currentTime = 0;
+    // refRollFx.value.play();
+    emitter.emit("play:rollFx");
     if (turns > 1) {
       animateText1.show(`bonus turn ${turns}`);
     }
@@ -325,9 +327,9 @@ onMounted(async () => {
   await initSlotMachine();
   // initSFX();
 
-  if (refRollFx.value) {
-    refRollFx.value.volume = soundVolume.value / 100;
-  }
+  // if (refRollFx.value) {
+  //   refRollFx.value.volume = soundVolume.value / 100;
+  // }
 });
 
 import gif1 from "@/assets/images/game/reward-effects/1.BIGWIN.gif";
@@ -576,7 +578,6 @@ const initSlotMachine = async () => {
   updateEnergyBottle();
   emit("loaded");
 
-
   container.visible = true;
   slotMachineLoaded.value = true;
 };
@@ -599,11 +600,11 @@ const toggleSound = () => {
   setVolume(soundVolume.value === 0 ? 100 : 0);
 };
 
-watch(soundVolume, (newVolume) => {
-  if (refRollFx.value) {
-    refRollFx.value.volume = newVolume / 100;
-  }
-});
+// watch(soundVolume, (newVolume) => {
+//   if (refRollFx.value) {
+//     refRollFx.value.volume = newVolume / 100;
+//   }
+// });
 
 const emit = defineEmits([
   "rollClick",
@@ -622,7 +623,7 @@ defineExpose({
   showFoodEffect,
   showValue,
   showGIFEffect,
-  waitForSeconds
+  waitForSeconds,
 });
 </script>
 
@@ -642,15 +643,16 @@ defineExpose({
   </audio>
 
   <v-btn
-    class="tw-w-[64px] tw-h-[64px] tw-border-none tw-absolute tw-right-3 tw-top-12 tw-z-10 tw-bg-cover tw-bg-center tw-bg-no-repeat"
+    class="!tw-w-[31px] !tw-h-[24.5px] tw-border-none tw-absolute tw-right-3 tw-top-14 tw-z-10 tw-bg-contain tw-bg-center tw-bg-no-repeat"
     :class="{
       'tw-opacity-70': soundVolume === 0,
       'tw-opacity-100': soundVolume > 0,
     }"
     @click="toggleSound()"
     color="transparent"
-    icon
     :style="{ backgroundImage: `url(${spearker})` }"
+    flat
+    :ripple="false"
   >
   </v-btn>
 </template>

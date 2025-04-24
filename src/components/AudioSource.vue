@@ -37,14 +37,19 @@ watch(soundVolume, (newVolume) => {
 });
 </script> -->
 <script setup>
-import { ref, onMounted, watch, onBeforeUnmount } from "vue";
+import { emitter } from "@plugins/mitt";
 import { useLocalStorage } from "@vueuse/core";
+import roolMp3 from "@/assets/sounds/roll.mp3";
 
 const refAudio = ref(null);
 const audioContext = ref(null);
 const gainNode = ref(null);
 const mediaSource = ref(null);
 const soundVolume = useLocalStorage("soundVolume", 50);
+
+const rollAudio = new Audio(roolMp3);
+let rollSource;
+let rollBuffer = null;
 
 onMounted(() => {
   if (!window.AudioContext) {
@@ -69,6 +74,9 @@ onMounted(() => {
 
   gainNode.value.gain.value = soundVolume.value / 100;
 
+  rollSource = audioContext.value.createMediaElementSource(rollAudio);
+  rollSource.connect(gainNode.value).connect(audioContext.value.destination);
+
   document.addEventListener(
     "click",
     () => {
@@ -81,6 +89,28 @@ onMounted(() => {
     },
     { once: true }
   );
+
+  emitter.on("play:rollFx", async () => {
+    console.log("🔊 play:rollFx called");
+    console.log("🎚️ soundVolume:", soundVolume.value);
+    console.log("🎧 AudioContext state:", audioContext.value?.state);
+    console.log("🎵 rollAudio.readyState:", rollAudio.readyState);
+    console.log("🔈 gainNode.gain.value:", gainNode.value?.gain.value);
+
+    if (audioContext.value?.state === "suspended") {
+      await audioContext.value.resume();
+      console.log("🔄 AudioContext resumed");
+    }
+
+    try {
+      rollAudio.pause();
+      rollAudio.currentTime = 0;
+      await rollAudio.play();
+      console.log("✅ rollAudio played");
+    } catch (e) {
+      console.warn("❌ rollAudio play error:", e);
+    }
+  });
 });
 
 watch(soundVolume, (newVolume) => {

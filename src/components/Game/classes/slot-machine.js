@@ -462,7 +462,9 @@ class Button extends Container {
     this.text.anchor.set(0, 0.5);
     this.text.x = -96;
     this.text.y = 0;
-
+    if(this.text.width > 144) {
+      this.text.scale.set(144 / this.text.width, 1);
+    }
     this.addChild(this.text);
   }
 

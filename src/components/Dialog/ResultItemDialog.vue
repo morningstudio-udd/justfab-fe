@@ -51,7 +51,15 @@ const closeDialog = (id) => {
 
 const submitClaim = async (item, rewardsType = "slot-machine") => {
   try {
-    if (rewardsType !== "slot-machine" || rewardsType !== "no-claim") {
+    if (rewardsType === "no-claim") {
+      if (item.type === REWARD_TYPES.GOLD) {
+        userStore.userData.gold += item.value;
+      }
+
+      if (rewardsType === "REFERRAL") {
+        emitter.emit("onClaimeReferralSuccess", "");
+      }
+    } else if (rewardsType !== "slot-machine") {
       await claimReward(item._id);
 
       if (item.type === REWARD_TYPES.GOLD) {

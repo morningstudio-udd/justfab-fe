@@ -65,16 +65,20 @@ export const useGameStore = defineStore("game", () => {
           break;
         case REWARD_TYPES.TOKEN:
           // userStore.userData.token += reward.value;
-          if (rewardsType === "slot-machine" || rewardsType === "no-claim") {
+          if (rewardsType === "slot-machine") {
             userStore.userData.token += reward.value;
+          } else if (rewardsType === "no-claim") {
+            openResultDialog(reward, rewardsType);
           } else {
             openResultDialog(reward, rewardsType);
           }
           break;
         case REWARD_TYPES.GOLD:
           // userStore.userData.gold += reward.value;
-          if (rewardsType === "slot-machine" || rewardsType === "no-claim") {
+          if (rewardsType === "slot-machine") {
             userStore.userData.gold += reward.value;
+          } else if (rewardsType === "no-claim") {
+            openResultDialog(reward, rewardsType);
           } else {
             openResultDialog(reward, rewardsType);
           }

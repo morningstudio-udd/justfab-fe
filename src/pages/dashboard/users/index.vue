@@ -159,6 +159,7 @@ watch(search, (val) => {
             <div>
               <span class="tw-font-bold">Reffered Users: </span>
               <span v-if="referralMap.get(item._id)?.referredUsers?.length">
+                ({{ referralMap.get(item._id)?.referredUsers.length }} users)
                 {{
                   referralMap
                     .get(item._id)

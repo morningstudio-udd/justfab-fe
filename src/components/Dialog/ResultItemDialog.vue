@@ -51,7 +51,7 @@ const closeDialog = (id) => {
 
 const submitClaim = async (item, rewardsType = "slot-machine") => {
   try {
-    if (rewardsType !== "slot-machine") {
+    if (rewardsType !== "slot-machine" || rewardsType !== "no-claim") {
       await claimReward(item._id);
 
       if (item.type === REWARD_TYPES.GOLD) {
@@ -70,6 +70,7 @@ const submitClaim = async (item, rewardsType = "slot-machine") => {
     closeDialog(item._id);
   } catch (error) {
     console.error("submitClaim -> error", error);
+    closeDialog(item._id);
   }
 };
 

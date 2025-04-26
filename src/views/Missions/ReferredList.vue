@@ -28,6 +28,7 @@ const parentDivWidth = ref(0);
 const invitedSvgRef = ref(null);
 const recruited = ref(0);
 const notClaimed = ref([]);
+const sumRewards = ref([]);
 
 const referred = ref([]);
 
@@ -71,15 +72,25 @@ const submitClaimInvited = (level) => {
 
 const getRecruited = async () => {
   try {
-    const { onboarded, rewards } = await getRecruitedUsers();
+    const { onboarded, rewards, sumRewards } = await getRecruitedUsers();
     recruited.value = onboarded;
     notClaimed.value = rewards;
+    sumRewards.value = sumRewards;
     if (notClaimed.value.length > 0) {
       const rw = notClaimed.value
         .filter((item) => !specialLevels.some((sp) => sp.count === item.level))
         .map((item) => item.reward);
+
       if (rw.length > 0) {
         gameStore.handleRewards(rw, notClaimed.value[0].reason);
+      }
+    }
+
+    if (sumRewards.value.length > 0) {
+      const rw = sumRewards.value.map((item) => item.reward);
+
+      if (rw.length > 0) {
+        gameStore.handleRewards(rw, "no-claim");
       }
     }
   } catch (error) {

@@ -114,7 +114,7 @@ const resetRewardsState = () => {
 };
 
 const processRewards = async (rewards, reelSymbols = []) => {
-  let reelSymbolsStr = reelSymbols.join("");
+  let reelSymbolsStr = reelSymbols.sort().join("");
   let GIFEffectId = -1;
   console.log(reelSymbolsStr)
   if(reelSymbolsStr.includes("XXX") || reelSymbolsStr.includes("OO")) {

@@ -1,4 +1,4 @@
-import { $api } from "@/plugins/axios";
+import { $apiAuth } from "@/plugins/axios";
 import { cookies } from "@/plugins/useCookies";
 import { store } from "@store";
 import { $ability } from "@/plugins/casl";
@@ -15,7 +15,7 @@ const API = {
 
 export const refreshToken = async () => {
   try {
-    const res = await $api.post(API.user.refreshToken);
+    const res = await $apiAuth.post(API.user.refreshToken);
     const expiresIn = import.meta.env.VITE_JWT_LIFETIME || "24h";
 
     const expirationTime = Date.now() + parseJwtLifetime(expiresIn);
@@ -36,7 +36,7 @@ export const refreshToken = async () => {
 
 export const authTelegram = async (payload) => {
   try {
-    const res = await $api.post(
+    const res = await $apiAuth.post(
       API.user.auth,
       {
         initData: payload,

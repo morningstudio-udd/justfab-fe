@@ -1,4 +1,4 @@
-import { $api } from "@/plugins/axios";
+import { $apiGame } from "@/plugins/axios";
 import { cookies } from "@/plugins/useCookies";
 import { store } from "@store";
 import { updateAbility } from "@plugins/casl/casl";
@@ -26,7 +26,7 @@ const API = {
 
 export const getUserInfo = async () => {
   try {
-    const res = await $api.get(API.user.info);
+    const res = await $apiGame.get(API.user.info);
 
     if (res.status === 200 && res.data) {
       userStore.userData = res.data;
@@ -54,7 +54,7 @@ export const getUserInfo = async () => {
 
 export const getReferralLink = async () => {
   try {
-    const res = await $api.get(API.referral.refLink);
+    const res = await $apiGame.get(API.referral.refLink);
 
     if (res.status === 200 && res.data) {
       userStore.setRefLink(res.data.referralLink);
@@ -69,7 +69,7 @@ export const getReferralLink = async () => {
 
 export const getRecruitedUsers = async () => {
   try {
-    const res = await $api.get(API.referral.recruited);
+    const res = await $apiGame.get(API.referral.recruited);
 
     return res.data;
   } catch (error) {
@@ -80,7 +80,7 @@ export const getRecruitedUsers = async () => {
 
 export const getUserTasks = async () => {
   try {
-    const res = await $api.get(API.task.seft);
+    const res = await $apiGame.get(API.task.seft);
 
     return res.data;
   } catch (error) {
@@ -91,7 +91,7 @@ export const getUserTasks = async () => {
 
 export const setEquipments = async (data) => {
   try {
-    const res = await $api.post(API.kapy.equip, {
+    const res = await $apiGame.post(API.kapy.equip, {
       equipmentIds: data,
     });
 
@@ -104,7 +104,7 @@ export const setEquipments = async (data) => {
 
 export const getKapy = async () => {
   try {
-    const res = await $api.get(API.kapy.get);
+    const res = await $apiGame.get(API.kapy.get);
 
     return res.data;
   } catch (error) {

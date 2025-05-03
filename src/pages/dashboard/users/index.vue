@@ -21,6 +21,7 @@ const total = ref(0);
 const referralMap = reactive(new Map());
 const search = ref("");
 const loading = ref(false);
+const referredCount = ref(0);
 
 // headers
 const headers = [
@@ -72,6 +73,7 @@ const onExpandClick = async (item, isExpanded, toggleExpand) => {
     try {
       const data = await getReferralTree(userId);
       referralMap.set(userId, data);
+      referredCount.value = data.referredCount;
     } catch (err) {
       console.error("Failed to load details", err);
       return;
@@ -159,7 +161,7 @@ watch(search, (val) => {
             <div>
               <span class="tw-font-bold">Reffered Users: </span>
               <span v-if="referralMap.get(item._id)?.referredUsers?.length">
-                ({{ referralMap.get(item._id)?.referredUsers.length }} users)
+                ({{ referredCount || 0 }} users)
                 {{
                   referralMap
                     .get(item._id)

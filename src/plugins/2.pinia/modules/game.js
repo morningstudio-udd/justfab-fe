@@ -78,6 +78,7 @@ export const useGameStore = defineStore("game", () => {
           if (rewardsType === "slot-machine") {
             userStore.userData.gold += reward.value;
           } else if (rewardsType === "no-claim") {
+            console.log("no-claim", reward, rewardsType);
             openResultDialog(reward, rewardsType);
           } else {
             openResultDialog(reward, rewardsType);

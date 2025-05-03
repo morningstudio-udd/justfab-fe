@@ -1,4 +1,4 @@
-import { $api } from "@/plugins/axios";
+import { $apiGame } from "@/plugins/axios";
 
 const API = {
   inventory: {
@@ -31,7 +31,7 @@ const API = {
 export const getUserInventory = async (userId) => {
   try {
     const url = getApiPath(API.inventory.user, { userId: userId });
-    const res = await $api.get(url);
+    const res = await $apiGame.get(url);
 
     return res.data;
   } catch (error) {
@@ -43,7 +43,7 @@ export const getUserInventory = async (userId) => {
 export const addItemToInventory = async (userId, payload) => {
   try {
     const url = getApiPath(API.inventory.add, { userId: userId });
-    const res = await $api.post(url, payload);
+    const res = await $apiGame.post(url, payload);
 
     return res.data;
   } catch (error) {
@@ -55,7 +55,7 @@ export const addItemToInventory = async (userId, payload) => {
 export const removeItemFromInventory = async (userId, payload) => {
   try {
     const url = getApiPath(API.inventory.remove, { userId: userId });
-    const res = await $api.post(url, payload);
+    const res = await $apiGame.post(url, payload);
 
     return res.data;
   } catch (error) {
@@ -67,7 +67,7 @@ export const removeItemFromInventory = async (userId, payload) => {
 export const getSlotMachineConfig = async () => {
   try {
     const url = getApiPath(API.slotMachine.get);
-    const res = await $api.get(url);
+    const res = await $apiGame.get(url);
 
     return res.data;
   } catch (error) {
@@ -79,7 +79,7 @@ export const getSlotMachineConfig = async () => {
 export const setSlotMachineConfig = async (payload) => {
   try {
     const url = getApiPath(API.slotMachine.set);
-    const res = await $api.post(url, payload);
+    const res = await $apiGame.post(url, payload);
 
     return res.data;
   } catch (error) {
@@ -91,7 +91,7 @@ export const setSlotMachineConfig = async (payload) => {
 export const playSlotMachine = async ({ betX = 1 }) => {
   try {
     const url = getApiPath(API.slotMachine.play);
-    const res = await $api.post(url, betX);
+    const res = await $apiGame.post(url, betX);
 
     return res.data;
   } catch (error) {
@@ -103,7 +103,7 @@ export const playSlotMachine = async ({ betX = 1 }) => {
 export const claimEnergy = async () => {
   try {
     const url = getApiPath(API.user.claimEnergy);
-    const res = await $api.post(url);
+    const res = await $apiGame.post(url);
 
     return res.data;
   } catch (error) {
@@ -115,7 +115,7 @@ export const claimEnergy = async () => {
 export const getJackpot = async () => {
   try {
     const url = getApiPath(API.jackpot.get);
-    const res = await $api.get(url);
+    const res = await $apiGame.get(url);
 
     return res.data;
   } catch (error) {
@@ -127,7 +127,7 @@ export const getJackpot = async () => {
 export const setJackpot = async (payload) => {
   try {
     const url = getApiPath(API.jackpot.set);
-    const res = await $api.post(url, payload);
+    const res = await $apiGame.post(url, payload);
 
     return res.data;
   } catch (error) {
@@ -139,7 +139,7 @@ export const setJackpot = async (payload) => {
 export const getJackpotRewards = async () => {
   try {
     const url = getApiPath(API.jackpot.getRewards);
-    const res = await $api.get(url);
+    const res = await $apiGame.get(url);
 
     return res.data;
   } catch (error) {
@@ -150,7 +150,7 @@ export const getJackpotRewards = async () => {
 
 export const claimReward = async (rewardId) => {
   try {
-    const res = await $api.post(API.reward.claim, { rewardId });
+    const res = await $apiGame.post(API.reward.claim, { rewardId });
 
     return res.data;
   } catch (error) {
@@ -162,7 +162,7 @@ export const claimReward = async (rewardId) => {
 export const claimAllRewards = async () => {
   try {
     const url = getApiPath(API.reward.claimAll);
-    const res = await $api.post(url);
+    const res = await $apiGame.post(url);
 
     return res.data;
   } catch (error) {
@@ -173,7 +173,7 @@ export const claimAllRewards = async () => {
 export const getUnclaimedRewards = async () => {
   try {
     const url = getApiPath(API.reward.getUnclaimed);
-    const res = await $api.get(url);
+    const res = await $apiGame.get(url);
 
     return res.data;
   } catch (error) {
@@ -184,7 +184,7 @@ export const getUnclaimedRewards = async () => {
 
 export const getDailyReward = async () => {
   try {
-    const res = await $api.get(API.reward.daily);
+    const res = await $apiGame.get(API.reward.daily);
 
     return res.data;
   } catch (error) {
@@ -195,7 +195,7 @@ export const getDailyReward = async () => {
 
 export const claimDailyReward = async () => {
   try {
-    const res = await $api.post(API.reward.claimDaily);
+    const res = await $apiGame.post(API.reward.claimDaily);
 
     return res.data;
   } catch (error) {

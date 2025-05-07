@@ -3,9 +3,11 @@ import { cookies } from "@/plugins/useCookies";
 import { store } from "@store";
 import { updateAbility } from "@plugins/casl/casl";
 import { $ability } from "@/plugins/casl";
+import { useGtag } from "vue-gtag-next";
 
 const authStore = useAuthStore(store);
 const userStore = useUserStore(store);
+const gtag = useGtag();
 
 const API = {
   user: {
@@ -37,10 +39,23 @@ export const getUserInfo = async () => {
 
       $ability.update(USER_ABILITY_RULES[res.data.role] || "GUEST");
 
-      // cookies.set("user_role", res.data.role, {
-      //   path: "/",
-      //   maxAge: 60 * 60 * 24, // 24 hours
-      // });
+      gtag.event('login', {
+        user_id: res.data._id
+      });
+
+      // Set user ID (optional)
+      gtag.set({ user_id: res.data._id });
+
+      // Set user properties
+      gtag.set({
+        user_properties: {
+          telegram_id: res.data.telegram.id,
+          telegram_username: res.data.telegram.username,
+          gold: res.data.gold,
+          token: res.data.token,
+          slot_plays: res.data.slotMachinePlayed,
+        }
+      });
     }
 
     return res.data;
@@ -70,6 +85,16 @@ export const getReferralLink = async () => {
 export const getRecruitedUsers = async () => {
   try {
     const res = await $apiGame.get(API.referral.recruited);
+
+          // Set user ID (optional)
+    gtag.set({ user_id: userStore.userData._id });
+
+    // Set user properties
+    gtag.set({
+      user_properties: {
+        referral_count: res.data.count,
+      }
+    });
 
     return res.data;
   } catch (error) {

@@ -1,4 +1,9 @@
 import { $apiGame } from "@/plugins/axios";
+import { store } from "@store";
+import { useGtag } from "vue-gtag-next";
+
+const userStore = useUserStore(store);
+const gtag = useGtag();
 
 const API = {
   inventory: {
@@ -93,6 +98,13 @@ export const playSlotMachine = async ({ betX = 1 }) => {
     const url = getApiPath(API.slotMachine.play);
     const res = await $apiGame.post(url, betX);
 
+    // Set user ID (optional)
+    gtag.set({ user_id: userStore.userData._id });
+
+    gtag.event('play_slot', {
+      betX: betX
+    });
+
     return res.data;
   } catch (error) {
     console.error(error);
@@ -185,6 +197,16 @@ export const getUnclaimedRewards = async () => {
 export const getDailyReward = async () => {
   try {
     const res = await $apiGame.get(API.reward.daily);
+
+    // Set user ID (optional)
+    gtag.set({ user_id: res.data._id });
+
+    // Set user properties
+    gtag.set({
+      user_properties: {
+        daily_streak: res.data.record.streak,
+      }
+    });
 
     return res.data;
   } catch (error) {

@@ -60,6 +60,12 @@ const gameContainerRef = ref();
 const itemsContainerWidth = ref(0);
 const itemsContainerHeight = ref(0);
 const lastHeight = ref(0);
+const dailyContainerRef = ref();
+
+let isDragging = false;
+let startX = 0;
+let scrollLeft = 0;
+let moved = false;
 
 let checkTask = null;
 
@@ -310,6 +316,7 @@ const doTask = async (task) => {
 };
 
 const handleDailyCheckIn = ($event, level) => {
+  if (moved) return;
   toggleClass(
     $event,
     "tw-animate-jump tw-animate-once tw-animate-ease-linear tw-animate-duration-[1000ms]",
@@ -371,6 +378,25 @@ const getTabClass = (group) => {
     currentGroupParent.value === group ? "active-tab" : "normal-tab";
 
   return `${base} ${isActive}`;
+};
+
+const startDrag = (e) => {
+  isDragging = true;
+  moved = false;
+  startX = e.pageX || e.touches?.[0]?.pageX;
+  scrollLeft = dailyContainerRef.value.scrollLeft;
+};
+
+const onDrag = (e) => {
+  if (!isDragging) return;
+  const x = e.pageX || e.touches?.[0]?.pageX;
+  const walk = x - startX;
+  if (Math.abs(walk) > 5) moved = true;
+  dailyContainerRef.value.scrollLeft = scrollLeft - walk;
+};
+
+const stopDrag = (e) => {
+  isDragging = false;
 };
 </script>
 
@@ -454,6 +480,14 @@ const getTabClass = (group) => {
                   maxHeight: `${dailyHeight}px`,
                   minHeight: `${dailyHeight}px`,
                 }"
+                ref="dailyContainerRef"
+                @mousedown="startDrag"
+                @mousemove="onDrag"
+                @mouseup="stopDrag"
+                @mouseleave="stopDrag"
+                @touchstart="startDrag"
+                @touchmove="onDrag"
+                @touchend="stopDrag"
               >
                 <div
                   v-for="n in 30"

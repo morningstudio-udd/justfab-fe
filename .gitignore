@@ -50,5 +50,7 @@ Thumbs.db
 
 yarn.lock
 .env
-.env.*
+.env.development
+.env.production
+.env.staging
 deploy*.sh
